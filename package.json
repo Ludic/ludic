@@ -1,0 +1,29 @@
+{
+  "name": "box2d",
+  "version": "1.0.0",
+  "description": "Master will be a base, branch off with experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakoWare/Box2d.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MakoWare/Box2d/issues"
+  },
+  "homepage": "https://github.com/MakoWare/Box2d#readme",
+  "jspm": {
+    "dependencies": {
+      "jquery": "github:components/jquery@^2.1.4"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}
