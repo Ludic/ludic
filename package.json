@@ -1,21 +1,21 @@
 {
-  "name": "box2d",
+  "name": "Ludic",
   "version": "1.0.0",
-  "description": "Master will be a base, branch off with experiments",
+  "description": "JS Game Engine",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MakoWare/Box2d.git"
+    "url": "git+https://github.com/SoftwareSyndicate/Ludic.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MakoWare/Box2d/issues"
+    "url": "https://github.com/SoftwareSyndicate/Ludic/issues"
   },
-  "homepage": "https://github.com/MakoWare/Box2d#readme",
+  "homepage": "https://github.com/SoftwareSyndicate/Ludic#readme",
   "jspm": {
     "dependencies": {
       "jquery": "github:components/jquery@^2.1.4"
