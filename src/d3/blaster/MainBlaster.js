@@ -1,6 +1,5 @@
 import Blaster from 'src/d3/blaster/Blaster';
 import MainBlasterBullet from 'src/d3/bullet/MainBlasterBullet';
-import App from 'src/components/app/app';
 import Box2D from 'src/components/box2d/box2d';
 import EntityManager from 'src/components/engine/EntityManager';
 

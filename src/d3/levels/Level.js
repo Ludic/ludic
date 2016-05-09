@@ -4,7 +4,7 @@ import Wall from 'src/d3/wall/Wall';
 import Door from 'src/d3/door/Door';
 import EntityManager from 'src/components/engine/EntityManager';
 import Dimension from 'src/d3/dimensions/Dimension';
-import App from 'src/components/app/app';
+import Ludic from 'src/components/app/ludic';
 import GroundEntity from 'src/d3/dimensions/GroundEntity';
 
 
@@ -46,8 +46,8 @@ class Level extends BaseLevel {
           this.player = obj;
           this.eM.addEntity(this.player);
 
-          //App.camera.setChaseEntity(obj,this.chaseEntityMethod);
-          App.camera.setChaseEntity(obj);
+          //Ludic.camera.setChaseEntity(obj,this.chaseEntityMethod);
+          Ludic.camera.setChaseEntity(obj);
           break;
         case 'Door':
           var dimIndex = body.props.Dimension.value;
@@ -64,7 +64,7 @@ class Level extends BaseLevel {
     var initialDimension = options.level.split(".")[1];
     this.resetDimension(initialDimension);
 
-    this.inputListener = App.input.newEventListener({},true);
+    this.inputListener = Ludic.input.newEventListener({},true);
 
     this.inputListener.rightStick = (x,y,evt)=>{
       this.onRightStick(x,y,evt);
@@ -86,7 +86,7 @@ class Level extends BaseLevel {
   }
 
   destroy(){
-    App.input.removeEventListener(this.inputListener);
+    Ludic.input.removeEventListener(this.inputListener);
     this.eM.destroy();
   }
 

@@ -4,7 +4,7 @@ import Level1 from 'src/d3/levels/level1';
 import RubeLoader from 'src/components/rube/RubeLoader';
 import DebugDraw from 'src/components/box2d/debugDraw';
 import Box2D from 'src/components/box2d/box2d';
-import App from 'src/components/app/app';
+import Ludic from 'src/components/app/ludic';
 import Level from 'src/d3/levels/Level';
 
 class GameScreen extends Screen {
@@ -27,7 +27,7 @@ class GameScreen extends Screen {
     console.log(this.levelAsset);
     this.level = new Level(this.scene, this.world, this.levelAsset.options);
 
-    this.inputListener = App.input.newEventListener({
+    this.inputListener = Ludic.input.newEventListener({
       '27':'home'
     },true);
 
@@ -71,7 +71,7 @@ class GameScreen extends Screen {
 
   onDestroy(){
     console.log('destroy world');
-    App.input.removeEventListener(this.inputListener);
+    Ludic.input.removeEventListener(this.inputListener);
     AssetManager.destroyAsset(this.levelAsset);
     this.level.destroy();
     this.world.destroy();

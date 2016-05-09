@@ -3,7 +3,7 @@ import Camera from 'src/components/base/camera';
 import World from 'src/components/world/world';
 import Util from 'src/components/util/util';
 import ScreenManager from 'src/components/screen/screenManager';
-import App from 'src/components/app/app';
+import Ludic from 'src/components/app/ludic';
 import InputController from 'src/components/input/inputController';
 import Box2D from 'src/components/box2d/box2d';
 
@@ -37,13 +37,13 @@ class BaseApp {
 
     this._animate = this._animate.bind(this);
 
-    App.input = this.input = new InputController(this.canvas,this.camera);
-    App.camera = this.camera;
-    App.canvas = this.canvas;
-    App.context = this.context;
-    App.config = this.config;
-    App.b2d = Box2D;
-    App.util = this.util = window.util = Util;
+    Ludic.input = this.input = new InputController(this.canvas,this.camera);
+    Ludic.camera = this.camera;
+    Ludic.canvas = this.canvas;
+    Ludic.context = this.context;
+    Ludic.config = this.config;
+    Ludic.b2d = Box2D;
+    Ludic.util = this.util = window.util = Util;
   }
 
   setDebugDraw(debugDraw){

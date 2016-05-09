@@ -1,5 +1,4 @@
 import Bullet from 'src/d3/bullet/Bullet';
-import App from 'src/components/app/app';
 import Box2D from 'src/components/box2d/box2d';
 
 class MainBlasterBullet extends Bullet {

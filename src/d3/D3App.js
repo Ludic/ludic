@@ -2,7 +2,7 @@ import BaseApp from 'src/components/app/BaseApp';
 import LoadingScreen from 'src/d3/LoadingScreen';
 import DebugDraw from 'src/components/box2d/debugDraw';
 import GameScreen from 'src/d3/screens/GameScreen';
-import App from 'src/components/app/app';
+import Ludic from 'src/components/app/ludic';
 
 class D3App extends BaseApp {
   constructor() {
@@ -14,7 +14,7 @@ class D3App extends BaseApp {
 
     this.resetCount = 0;
 
-    this.camera.setViewCenterWorld(new App.b2d.b2Vec2(0,0), true);
+    this.camera.setViewCenterWorld(new Ludic.b2d.b2Vec2(0,0), true);
 
     this.screenListener = this.screenManager.newListener(true);
 

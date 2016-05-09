@@ -1,6 +1,6 @@
 import StatefulPolygonEntity from 'src/components/engine/StatefulPolygonEntity';
 import AssetManager from 'src/components/base/assetManager';
-import App from 'src/components/app/app';
+import Ludic from 'src/components/app/ludic';
 import Box2D from 'src/components/box2d/box2d';
 import MainBlaster from 'src/d3/blaster/MainBlaster';
 import EntityManager from 'src/components/engine/EntityManager';
@@ -51,12 +51,12 @@ class Player extends StatefulPolygonEntity {
     super.destroy();
     this.world.SetContactListener(null);
     this.world = null;
-    App.input.removeEventListener(this.inputListener);
+    Ludic.input.removeEventListener(this.inputListener);
     this.contactListener = null;
   }
 
   initMoveListeners(){
-    this.inputListener = App.input.newEventListener({
+    this.inputListener = Ludic.input.newEventListener({
       '39':'right',
       '37':'left',
       '38':'up',

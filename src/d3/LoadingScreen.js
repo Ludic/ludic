@@ -1,7 +1,7 @@
 import Screen from 'src/components/screen/screen';
 import AssetManager from 'src/components/base/assetManager';
 import World from 'src/components/world/world';
-import App from 'src/components/app/app';
+import Ludic from 'src/components/app/ludic';
 
 class LoadingScreen extends Screen {
   constructor(camera, options) {
@@ -21,7 +21,7 @@ class LoadingScreen extends Screen {
 
     this.world = new World();
 
-    camera.setViewCenterWorld(new App.b2d.b2Vec2(10,10),true);
+    camera.setViewCenterWorld(new Ludic.b2d.b2Vec2(10,10),true);
 
     //Parse level from options (passed all the way from Previous Door contact listener);
     //Just parse out and load the level for now
