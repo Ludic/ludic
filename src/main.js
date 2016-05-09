@@ -1,5 +1,5 @@
-import Util from 'src/components/util/util';
-import D3App from 'src/d3/D3App';
+import Util from './components/util/util';
+import D3App from './d3/D3App';
 
 
 var config = {
