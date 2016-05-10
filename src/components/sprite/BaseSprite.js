@@ -1,4 +1,4 @@
-import AssetManager from 'src/components/base/assetManager';
+import AssetManager from '../base/assetManager';
 
 const RIGHT = 10;
 const LEFT  = 11;

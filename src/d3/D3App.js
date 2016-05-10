@@ -1,8 +1,8 @@
-import BaseApp from 'src/components/app/BaseApp';
-import LoadingScreen from 'src/d3/LoadingScreen';
-import DebugDraw from 'src/components/box2d/debugDraw';
-import GameScreen from 'src/d3/screens/GameScreen';
-import Ludic from 'src/components/app/ludic';
+import BaseApp from '../components/app/BaseApp';
+import LoadingScreen from './LoadingScreen';
+import DebugDraw from '../components/box2d/debugDraw';
+import GameScreen from './screens/GameScreen';
+import Ludic from '../components/app/ludic';
 
 class D3App extends BaseApp {
   constructor() {

@@ -1,4 +1,4 @@
-import Asset from 'src/components/base/asset';
+import Asset from './asset';
 
 
 // TODO: get this from some config

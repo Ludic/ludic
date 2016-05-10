@@ -1,11 +1,11 @@
-import Canvas from 'src/components/canvas/canvas';
-import Camera from 'src/components/base/camera';
-import World from 'src/components/world/world';
-import Util from 'src/components/util/util';
-import ScreenManager from 'src/components/screen/screenManager';
-import Ludic from 'src/components/app/ludic';
-import InputController from 'src/components/input/inputController';
-import Box2D from 'src/components/box2d/box2d';
+import Canvas from '../canvas/canvas';
+import Camera from '../base/camera';
+import World from '../world/world';
+import Util from '../util/util';
+import ScreenManager from '../screen/screenManager';
+import Ludic from './ludic';
+import InputController from '../input/inputController';
+import Box2D from '../box2d/box2d';
 
 
 class BaseApp {

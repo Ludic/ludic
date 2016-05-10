@@ -1,5 +1,5 @@
-import Box2D from 'src/components/box2d/box2d';
-import Util from 'src/components/util/util';
+import Box2D from '../box2d/box2d';
+import Util from '../util/util';
 
 // var canvasOffset = {
 //   x: 0,

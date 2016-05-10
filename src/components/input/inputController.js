@@ -1,4 +1,4 @@
-import Util from 'src/components/util/util';
+import Util from '../util/util';
 
 let listeners = [];
 let defaultKeyConfig = {

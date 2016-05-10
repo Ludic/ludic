@@ -1,4 +1,4 @@
-import Asset from 'src/components/base/asset';
+import Asset from './asset';
 
 class ImageAsset extends Asset {
   constructor(name, url, type, options) {

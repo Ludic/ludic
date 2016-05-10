@@ -1,4 +1,4 @@
-import BaseEntity from 'src/components/engine/BaseEntity';
+import BaseEntity from '../../components/engine/BaseEntity';
 
 class Dimension  {
   constructor(scene, id) {

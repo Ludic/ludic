@@ -1,7 +1,7 @@
-import Screen from 'src/components/screen/screen';
-import AssetManager from 'src/components/base/assetManager';
-import World from 'src/components/world/world';
-import Ludic from 'src/components/app/ludic';
+import Screen from '../components/screen/screen';
+import AssetManager from '../components/base/assetManager';
+import World from '../components/world/world';
+import Ludic from '../components/app/ludic';
 
 class LoadingScreen extends Screen {
   constructor(camera, options) {

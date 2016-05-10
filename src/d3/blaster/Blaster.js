@@ -1,5 +1,5 @@
-import PolygonEntity from 'src/components/engine/PolygonEntity';
-import Box2D from 'src/components/box2d/box2d';
+import PolygonEntity from '../../components/engine/PolygonEntity';
+import Box2D from '../../components/box2d/box2d';
 
 class Blaster extends PolygonEntity {
   constructor(body, image, options, world){

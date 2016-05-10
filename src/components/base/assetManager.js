@@ -1,6 +1,6 @@
-import ImageAsset from 'src/components/base/imageAsset';
-import RubeAsset from 'src/components/base/rubeAsset';
-import RubeImageAsset from 'src/components/base/rubeImageAsset';
+import ImageAsset from './imageAsset';
+import RubeAsset from './rubeAsset';
+import RubeImageAsset from './rubeImageAsset';
 
 class AssetManager {
   constructor() {

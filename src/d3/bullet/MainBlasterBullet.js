@@ -1,5 +1,5 @@
-import Bullet from 'src/d3/bullet/Bullet';
-import Box2D from 'src/components/box2d/box2d';
+import Bullet from '../bullet/Bullet';
+import Box2D from '../../components/box2d/box2d';
 
 class MainBlasterBullet extends Bullet {
   constructor(body, image, options, world){

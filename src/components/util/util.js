@@ -1,4 +1,4 @@
-import Box2D from 'src/components/box2d/box2d';
+import Box2D from '../box2d/box2d';
 
 
 var _config = {

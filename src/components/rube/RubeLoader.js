@@ -1,5 +1,5 @@
-import Box2D from 'src/components/box2d/box2d';
-import RubeScene from 'src/components/rube/RubeScene';
+import Box2D from '../box2d/box2d';
+import RubeScene from './RubeScene';
 
 Object.prototype.hasOwnProperty = function(property) {
   return typeof(this[property]) !== 'undefined'

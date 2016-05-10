@@ -1,5 +1,5 @@
-import Asset from 'src/components/base/asset';
-import RubeLoader from 'src/components/rube/RubeLoader';
+import Asset from './asset';
+import RubeLoader from '../rube/RubeLoader';
 
 class RubeAsset extends Asset {
   constructor(name, url, type, options) {

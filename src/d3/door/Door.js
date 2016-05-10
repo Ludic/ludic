@@ -1,5 +1,5 @@
-import PolygonEntity from 'src/components/engine/PolygonEntity';
-import Util from 'src/components/util/util';
+import PolygonEntity from '../../components/engine/PolygonEntity';
+import Util from '../../components/util/util';
 
 class Door extends PolygonEntity {
   constructor(body, color, scene, world) {

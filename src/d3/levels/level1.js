@@ -1,5 +1,5 @@
-import BaseLevel from 'src/d3/levels/BaseLevel';
-import Player from 'src/d3/player/Player';
+import BaseLevel from '../levels/BaseLevel';
+import Player from '../player/Player';
 
 
 class Level1 extends BaseLevel {

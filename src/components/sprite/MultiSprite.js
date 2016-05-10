@@ -1,5 +1,5 @@
 
-import BaseSprite from 'src/components/sprite/BaseSprite';
+import BaseSprite from './BaseSprite';
 
 class MultiSprite extends BaseSprite {
   constructor(image, framesX, framesY, offsetX, offsetY) {

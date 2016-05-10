@@ -1,11 +1,11 @@
-import BaseLevel from 'src/d3/levels/BaseLevel';
-import Player from 'src/d3/player/Player';
-import Wall from 'src/d3/wall/Wall';
-import Door from 'src/d3/door/Door';
-import EntityManager from 'src/components/engine/EntityManager';
-import Dimension from 'src/d3/dimensions/Dimension';
-import Ludic from 'src/components/app/ludic';
-import GroundEntity from 'src/d3/dimensions/GroundEntity';
+import BaseLevel from '../levels/BaseLevel';
+import Player from '../player/Player';
+import Wall from '../wall/Wall';
+import Door from '../door/Door';
+import EntityManager from '../../components/engine/EntityManager';
+import Dimension from '../dimensions/Dimension';
+import Ludic from '../../components/app/ludic';
+import GroundEntity from '../dimensions/GroundEntity';
 
 
 const NONE = 0;

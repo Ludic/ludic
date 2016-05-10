@@ -1,5 +1,5 @@
-import Box2D from 'src/components/box2d/box2d';
-import AssetManager from 'src/components/base/assetManager';
+import Box2D from '../box2d/box2d';
+import AssetManager from '../base/assetManager';
 
 var imageTypes = ['HTMLImageElement', 'HTMLVideoElement', 'HTMLCanvasElement', 'ImageBitmap'];
 

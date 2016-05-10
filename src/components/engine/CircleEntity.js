@@ -1,6 +1,6 @@
-import BaseEntity from 'src/components/engine/BaseEntity';
-import AssetManager from 'src/components/base/assetManager';
-import Util from 'src/components/util/util';
+import BaseEntity from './BaseEntity';
+import AssetManager from '../base/assetManager';
+import Util from '../util/util';
 
 class CircleEntity extends BaseEntity {
 
