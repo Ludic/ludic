@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/SoftwareSyndicate/Ludic#readme",
   "jspm": {
+    "main": "main.js",
     "dependencies": {
       "jquery": "github:components/jquery@^2.1.4"
     },
