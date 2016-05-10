@@ -13,9 +13,6 @@
   },
   "author": "",
   "license": "ISC",
-  "directories": {
-    "lib": "src"
-  },
   "bugs": {
     "url": "https://github.com/SoftwareSyndicate/Ludic/issues"
   },
