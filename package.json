@@ -19,6 +19,9 @@
   "homepage": "https://github.com/SoftwareSyndicate/Ludic#readme",
   "jspm": {
     "main": "src/main.js",
+    "directories": {
+      "lib": "src/libs"
+    },
     "dependencies": {
       "fs": "github:jspm/nodelibs-fs",
       "jquery": "github:components/jquery@^2.1.4",
