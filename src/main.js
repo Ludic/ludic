@@ -1,12 +1,13 @@
 
-// import ludic from './components/app/ludic'
+// import ludic from 'Ludic/src/components/app/ludic'
 // import BaseApp from './components/app/BaseApp'
 // import ImageAsset from './components/base/imageAsset'
 // console.log(ludic);
 // console.log(ImageAsset);
 
 
-import Box2D from './components/box2d/box2d'
+// import Box2D from './components/box2d/box2d'
+// console.log(Box2D);
 
 //
 // let _Module = {
