@@ -21,7 +21,7 @@
     "main": "src/main.js",
     "files": [
       "src/components",
-      "src/main.js",
+      "src/main.js"
     ],
     "dependencies": {
       "fs": "github:jspm/nodelibs-fs",
