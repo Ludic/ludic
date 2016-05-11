@@ -6,8 +6,14 @@ System.config({
     "optional": [
       "runtime",
       "optimisation.modules.system"
-    ],
-    "ignore": "src/libs/box2d/2.3.1/Box2D_v2.3.1_min.js"
+    ]
+  },
+  meta: {
+    'src/libs/box2d/2.3.1/Box2D_v2.3.1_min.js': {
+      babelOptions: {
+        es2015: false
+      }
+    }
   },
   paths: {
     "github:*": "jspm_packages/github/*",
