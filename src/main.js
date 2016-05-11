@@ -1,3 +1,3 @@
 
-import 'src/components/app/ludic'
-import 'src/components/app/BaseApp'
+import 'Ludic/src/components/app/ludic'
+import 'Ludic/src/components/app/BaseApp'
