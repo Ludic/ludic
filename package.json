@@ -20,6 +20,7 @@
   "jspm": {
     "main": "src/main.js",
     "directories": {
+      "baseURL":"/",
       "lib": "src/libs"
     },
     "dependencies": {
