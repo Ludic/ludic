@@ -1,11 +1,10 @@
 
-import ludic from './components/app/ludic'
-import BaseApp from './components/app/BaseApp'
+// import ludic from './components/app/ludic'
+// import BaseApp from './components/app/BaseApp'
 
 
 let _Module = {
-  ludic,
-  BaseApp
+  cheese: 'moz'
 };
 
 export default _Module;
