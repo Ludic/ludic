@@ -6,8 +6,7 @@ System.config({
     "optional": [
       "runtime",
       "optimisation.modules.system"
-    ],
-    "ignore": "./src/libs/box2d/2.3.1/Box2D_v2.3.1_min"
+    ]
   }
   paths: {
     "github:*": "jspm_packages/github/*",
