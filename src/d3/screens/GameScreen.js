@@ -3,7 +3,7 @@ import AssetManager from '../../components/base/assetManager';
 import Level1 from '../levels/level1';
 import RubeLoader from '../../components/rube/RubeLoader';
 import DebugDraw from '../../components/box2d/debugDraw';
-import Box2D from '../../components/box2d/box2d';
+import Box2D from 'box2d';
 import Ludic from '../../components/app/ludic';
 import Level from '../levels/Level';
 

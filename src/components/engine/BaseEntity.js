@@ -1,4 +1,4 @@
-import Box2D from '../box2d/box2d';
+import Box2D from 'box2d';
 import AssetManager from '../base/assetManager';
 
 var imageTypes = ['HTMLImageElement', 'HTMLVideoElement', 'HTMLCanvasElement', 'ImageBitmap'];

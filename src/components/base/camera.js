@@ -1,5 +1,5 @@
 import Util from '../util/util';
-import Box2D from '../box2d/box2d';
+import Box2D from 'box2d';
 
 var PTM = 32;
 

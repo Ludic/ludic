@@ -19,19 +19,17 @@
   "homepage": "https://github.com/SoftwareSyndicate/Ludic#readme",
   "jspm": {
     "main": "src/main.js",
-    "files": [
-      "src/components",
-      "src/main.js"
-    ],
     "dependencies": {
-      "fs": "github:jspm/nodelibs-fs",
-      "jquery": "github:components/jquery@^2.1.4",
-      "path": "github:jspm/nodelibs-path"
+      "box2d": "github:SoftwareSyndicate/box2d.js@master",
+      "jquery": "github:components/jquery@^2.1.4"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
       "babel-runtime": "npm:babel-runtime@^5.8.24",
       "core-js": "npm:core-js@^1.1.4"
     }
+  },
+  "devDependencies": {
+    "jspm": "^0.16.34"
   }
 }

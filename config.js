@@ -7,7 +7,7 @@ System.config({
       "runtime",
       "optimisation.modules.system"
     ]
-  }
+  },
   paths: {
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
@@ -16,6 +16,7 @@ System.config({
   map: {
     "babel": "npm:babel-core@5.8.34",
     "babel-runtime": "npm:babel-runtime@5.8.34",
+    "box2d": "github:SoftwareSyndicate/box2d.js@master",
     "core-js": "npm:core-js@1.2.6",
     "fs": "github:jspm/nodelibs-fs@0.1.2",
     "jquery": "github:components/jquery@2.1.4",

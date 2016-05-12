@@ -1,6 +1,6 @@
 import Blaster from './Blaster';
 import MainBlasterBullet from '../bullet/MainBlasterBullet';
-import Box2D from '../../components/box2d/box2d';
+import Box2D from 'box2d';
 import EntityManager from '../../components/engine/EntityManager';
 
 const RIGHT = 10;

@@ -1,4 +1,4 @@
-import Box2D from '../box2d/box2d';
+import Box2D from 'box2d';
 import RubeScene from './RubeScene';
 
 Object.prototype.hasOwnProperty = function(property) {

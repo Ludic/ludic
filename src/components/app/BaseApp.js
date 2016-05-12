@@ -5,7 +5,7 @@ import Util from '../util/util';
 import ScreenManager from '../screen/screenManager';
 import Ludic from './ludic';
 import InputController from '../input/inputController';
-import Box2D from '../box2d/box2d';
+import Box2D from 'box2d';
 
 
 class BaseApp {

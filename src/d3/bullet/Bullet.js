@@ -1,5 +1,5 @@
 import PolygonEntity from '../../components/engine/PolygonEntity';
-import Box2D from '../../components/box2d/box2d';
+import Box2D from 'box2d';
 
 class Bullet extends PolygonEntity {
   constructor(body, image, options, world){
