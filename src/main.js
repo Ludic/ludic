@@ -1,8 +1,8 @@
 
 // app
 export * from './components/app/BaseApp'
-export {Ludic as ludic} from './components/app/ludic'
-window.ludic = ludic; // put ludic on the window
+export * from './components/app/ludic'
+
 
 // base
 export * from './components/base/asset'
