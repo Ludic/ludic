@@ -44,6 +44,7 @@ class BaseApp {
     Ludic.config = this.config;
     Ludic.b2d = Box2D;
     Ludic.util = this.util = window.util = Util;
+    window.ludic = Ludic;
   }
 
   setDebugDraw(debugDraw){
