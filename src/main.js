@@ -9,6 +9,8 @@
 // import Box2D from './components/box2d/box2d'
 // console.log(Box2D);
 
+export * from './components'
+
 //
 // let _Module = {
 //   cheese: 'moz'
