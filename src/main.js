@@ -1,49 +1,49 @@
 
 // app
-export * from './components/app/BaseApp'
-export * from './components/app/ludic'
+export {default as BaseApp} from './components/app/BaseApp'
+export {default as ludic} from './components/app/ludic'
 
 
 // base
-export * from './components/base/asset'
-export * from './components/base/assetManager'
-export * from './components/base/camera'
-export * from './components/base/fps'
-export * from './components/base/imageAsset'
-export * from './components/base/rubeAsset'
-export * from './components/base/rubeImageAsset'
+export {default as Asset} from './components/base/asset'
+export {default as AssetManager} from './components/base/assetManager'
+export {default as Camera} from './components/base/camera'
+export {default as fps} from './components/base/fps'
+export {default as ImageAsset} from './components/base/imageAsset'
+export {default as RubeAsset} from './components/base/rubeAsset'
+export {default as RubeImageAsset} from './components/base/rubeImageAsset'
 
 // box2d
-export * from './components/box2d/debugDraw'
+export {default as DebugDraw} from './components/box2d/debugDraw'
 
 // canvas
-export * from './components/canvas/canvas'
+export {default as Canvas} from './components/canvas/canvas'
 
 // engine
-export * from './components/engine/BaseEntity'
-export * from './components/engine/CircleEntity'
-export * from './components/engine/EntityManager'
-export * from './components/engine/PolygonEntity'
-export * from './components/engine/StatefulPolygonEntity'
+export {default as BaseEntity} from './components/engine/BaseEntity'
+export {default as CircleEntity} from './components/engine/CircleEntity'
+export {default as EntityManager} from './components/engine/EntityManager'
+export {default as PolygonEntity} from './components/engine/PolygonEntity'
+export {default as StatefulPolygonEntity} from './components/engine/StatefulPolygonEntity'
 
 // input
-export * from './components/input/inputController'
+export {default as InputController} from './components/input/inputController'
 
 // rube
-export * from './components/rube/RubeLoader'
-export * from './components/rube/RubeScene'
+export {default as RubeLoader} from './components/rube/RubeLoader'
+export {default as RubeScene} from './components/rube/RubeScene'
 
 // screen
-export * from './components/screen/screen'
-export * from './components/screen/screenManager'
+export {default as Screen} from './components/screen/screen'
+export {default as ScreenManager} from './components/screen/screenManager'
 
 // sprite
-export * from './components/sprite/BaseSprite'
-export * from './components/sprite/MultiSprite'
+export {default as BaseSprite} from './components/sprite/BaseSprite'
+export {default as MultiSprite} from './components/sprite/MultiSprite'
 
 // util
-export * from './components/util/util'
+export {default as Util} from './components/util/util'
 
 // world
-export * from './components/world/world'
-export * from './components/world/worldConfig'
+export {default as World} from './components/world/world'
+export {default as WorldConfig} from './components/world/worldConfig'
