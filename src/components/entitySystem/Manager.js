@@ -1,4 +1,4 @@
-import Utils from '../utils/utils.js'
+import Utils from '../util/util.js'
 
 class EntityManager {
   constructor(){
