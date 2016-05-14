@@ -51,5 +51,5 @@ export {default as WorldConfig} from './components/world/worldConfig'
 // Entity System
 export {default as BaseEntity} from './components/entitySystem/BaseEntity'
 export {default as BaseEvent} from './components/entitySystem/BaseEvent'
-export {default as baseSystem} from './components/entitySystem/BaseSystem'
+export {default as BaseSystem} from './components/entitySystem/BaseSystem'
 export {default as Manager} from './components/entitySystem/Manager'
