@@ -146,7 +146,8 @@ class InputController {
     prevMousePosPixel = mousePosPixel;
     this.updateMousePos(canvas, evt);
 
-    console.log(mousePosPixel, mousePosWorld);
+    // console.log(mousePosPixel, mousePosWorld);
+    
     // updateStats();
     // if ( shiftDown ) {
     //   canvasOffset.x += (mousePosPixel.x - prevMousePosPixel.x);

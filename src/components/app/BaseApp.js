@@ -5,7 +5,6 @@ import Util from '../util/util';
 import ScreenManager from '../screen/screenManager';
 import Ludic from './ludic';
 import InputController from '../input/inputController';
-import Box2D from 'box2d';
 
 // master record; all systems report actions to parent manager for master record of all entities:entity/system
 class BaseApp {
@@ -42,7 +41,6 @@ class BaseApp {
     Ludic.canvas = this.canvas;
     Ludic.context = this.context;
     Ludic.config = this.config;
-    Ludic.b2d = Box2D;
     Ludic.util = this.util = window.util = Util;
     window.ludic = Ludic;
   }

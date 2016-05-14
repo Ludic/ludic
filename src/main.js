@@ -14,7 +14,7 @@ export {default as RubeAsset} from './components/base/rubeAsset'
 export {default as RubeImageAsset} from './components/base/rubeImageAsset'
 
 // box2d
-export {default as DebugDraw} from './components/box2d/debugDraw'
+// export {default as DebugDraw} from './components/box2d/debugDraw'
 
 // canvas
 export {default as Canvas} from './components/canvas/canvas'

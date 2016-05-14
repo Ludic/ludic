@@ -1,5 +1,11 @@
-import Util from './components/util/util';
-import D3App from './d3/D3App';
+// import Util from './components/util/util';
+// import D3App from './d3/D3App';
+
+import {DebugDraw} from 'box2d';
+import {Box2D} from 'box2d';
+
+console.log(DebugDraw);
+console.log(Box2D);
 
 
 var config = {
@@ -27,10 +33,10 @@ var config = {
   }
 };
 
-Util.setConfig(config);
+// Util.setConfig(config);
 
 
 
 
-var app = new D3App();
-app.run();
+// var app = new D3App();
+// app.run();

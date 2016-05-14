@@ -4,6 +4,9 @@ import DebugDraw from '../components/box2d/debugDraw';
 import GameScreen from './screens/GameScreen';
 import Ludic from '../components/app/ludic';
 
+// to be removed
+import Box2D from 'box2d';
+
 class D3App extends BaseApp {
   constructor() {
     super();
@@ -14,6 +17,8 @@ class D3App extends BaseApp {
 
     this.resetCount = 0;
 
+    Ludic.b2d = Box2D;
+    console.log(Box2D);
     this.camera.setViewCenterWorld(new Ludic.b2d.b2Vec2(0,0), true);
 
     this.screenListener = this.screenManager.newListener(true);
