@@ -9,7 +9,7 @@ class RubeScene {
     // this.bodies = null;
     // this.joints = null;
     // this.objects = null;
-    for(key in this){
+    for(let key in this){
       this[key] = null;
     }
   }
