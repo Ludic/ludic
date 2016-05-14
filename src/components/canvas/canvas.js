@@ -1,4 +1,5 @@
 import Util from '../util/util';
+import $ from 'jquery';
 
 class Canvas {
   constructor() {

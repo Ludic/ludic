@@ -1,4 +1,5 @@
 import AssetManager from '../base/assetManager';
+import $ from 'jquery';
 
 const RIGHT = 10;
 const LEFT  = 11;
