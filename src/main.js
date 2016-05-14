@@ -19,12 +19,12 @@ export {default as DebugDraw} from './components/box2d/debugDraw'
 // canvas
 export {default as Canvas} from './components/canvas/canvas'
 
-// engine
-/* export {default as BaseEntity} from './components/engine/BaseEntity' */
-export {default as CircleEntity} from './components/engine/CircleEntity'
-export {default as EntityManager} from './components/engine/EntityManager'
-export {default as PolygonEntity} from './components/engine/PolygonEntity'
-export {default as StatefulPolygonEntity} from './components/engine/StatefulPolygonEntity'
+// engine - TODO CURRENTLY BEING REFACTOR ed
+/* export {default as BaseEntity} from './components/engine/BaseEntity'
+   export {default as CircleEntity} from './components/engine/CircleEntity'
+   export {default as EntityManager} from './components/engine/EntityManager'
+   export {default as PolygonEntity} from './components/engine/PolygonEntity'
+   export {default as StatefulPolygonEntity} from './components/engine/StatefulPolygonEntity' */
 
 // input
 export {default as InputController} from './components/input/inputController'
@@ -52,4 +52,4 @@ export {default as WorldConfig} from './components/world/worldConfig'
 export {default as BaseEntity} from './components/entitySystem/BaseEntity'
 export {default as BaseEvent} from './components/entitySystem/BaseEvent'
 export {default as BaseSystem} from './components/entitySystem/BaseSystem'
-export {default as Manager} from './components/entitySystem/Manager'
+export {default as EntityManager} from './components/entitySystem/EntityManager'
