@@ -20,7 +20,7 @@ export {default as DebugDraw} from './components/box2d/debugDraw'
 export {default as Canvas} from './components/canvas/canvas'
 
 // engine
-export {default as BaseEntity} from './components/engine/BaseEntity'
+/* export {default as BaseEntity} from './components/engine/BaseEntity' */
 export {default as CircleEntity} from './components/engine/CircleEntity'
 export {default as EntityManager} from './components/engine/EntityManager'
 export {default as PolygonEntity} from './components/engine/PolygonEntity'
@@ -47,3 +47,9 @@ export {default as Util} from './components/util/util'
 // world
 export {default as World} from './components/world/world'
 export {default as WorldConfig} from './components/world/worldConfig'
+
+// Entity System
+export {default as BaseEntity} from './components/entitySystem/BaseEntity'
+export {default as BaseEvent} from './components/entitySystem/BaseEvent'
+export {default as baseSystem} from './components/entitySystem/BaseSystem'
+export {default as Mnaager} from './components/entitySystem/Manager'
