@@ -44,13 +44,6 @@ class BaseApp {
     window.ludic = Ludic;
   }
 
-  setDebugDraw(debugDraw){
-    this.debugDraw = debugDraw;
-    // if(this.debugDraw){
-    //   this.world.SetDebugDraw(this.debugDraw);
-    // }
-  }
-
   draw(){
 
   }
