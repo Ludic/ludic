@@ -1,5 +1,3 @@
-import Box2D from 'box2d';
-
 
 var _config = {
   canvas: {
@@ -147,21 +145,21 @@ class Util {
     }
   }
 
-  //to replace original C++ operator =
-  static copyVec2(vec) {
-      return new Box2D.b2Vec2(vec.get_x(), vec.get_y());
-  }
-
-  //to replace original C++ operator * (float)
-  static scaleVec2(vec, scale) {
-      vec.set_x( scale * vec.get_x() );
-      vec.set_y( scale * vec.get_y() );
-  }
-
-  //to replace original C++ operator *= (float)
-  static scaledVec2(vec, scale) {
-      return new Box2D.b2Vec2(scale * vec.get_x(), scale * vec.get_y());
-  }
+  // //to replace original C++ operator =
+  // static copyVec2(vec) {
+  //     return new Box2D.b2Vec2(vec.get_x(), vec.get_y());
+  // }
+  //
+  // //to replace original C++ operator * (float)
+  // static scaleVec2(vec, scale) {
+  //     vec.set_x( scale * vec.get_x() );
+  //     vec.set_y( scale * vec.get_y() );
+  // }
+  //
+  // //to replace original C++ operator *= (float)
+  // static scaledVec2(vec, scale) {
+  //     return new Box2D.b2Vec2(scale * vec.get_x(), scale * vec.get_y());
+  // }
 
 
   static generateGradient(color1, color2, ratio){

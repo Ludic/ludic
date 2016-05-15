@@ -1,6 +1,7 @@
-import ImageAsset from './imageAsset';
-import RubeAsset from './rubeAsset';
-import RubeImageAsset from './rubeImageAsset';
+// import ImageAsset from './imageAsset';
+// import RubeAsset from './rubeAsset';
+// import RubeImageAsset from './rubeImageAsset';
+import ImageLoader from './imageAssetLoader';
 
 class AssetManager {
   constructor() {
@@ -8,9 +9,21 @@ class AssetManager {
 
     this.loadQueue = [];
     this.promiseQueue = [];
+    this.loaders = {};
+
+    this.addLoader('image', ImageLoader);
   }
 
   loadResource(name, url, type, options, overwrite){
+    // let promise = Promise.reject({
+    //   reason: "resource load failed",
+    //   name,
+    //   url,
+    //   type,
+    //   options,
+    //   overwrite
+    // });
+    let promise = null;
     // first check if we have the asset
     if(!this.assets[name] || overwrite){
       var asset = this.NewAsset(name, url, type, options);
@@ -19,10 +32,10 @@ class AssetManager {
 
         this.loading = true;
 
-        asset.promise.then(this.onAssetResolve.bind(this), this.onAssetReject.bind(this));
+        promise = asset.promise.then(this.onAssetResolve.bind(this), this.onAssetReject.bind(this));
       }
     }
-
+    return promise;
   }
 
   getAsset(name){
@@ -49,10 +62,14 @@ class AssetManager {
   onAssetResolve(asset){
     this.assets[asset.name] = asset;
     asset.onAssetResolve(this);
+    return asset;
   }
 
   onAssetReject(){
     console.log('rejected: ',arguments);
+    return Promise.reject({
+      reason: 'onAssetReject'
+    });
   }
 
   isLoading(){
@@ -93,24 +110,42 @@ class AssetManager {
 
   NewAsset(name, url, type, options){
     type = type || 'image';
-    switch (type) {
-      case 'image':
-        return new ImageAsset(name, url, type, options);
-        break;
-      case 'rube':
-        return new RubeAsset(name, url, type, options);
-        break;
-      case 'rubeImage':
-        return new RubeImageAsset(name, url, type, options);
-        break;
-      default:
-        return null;
+    // switch (type) {
+    //   case 'image':
+    //     return new ImageAsset(name, url, type, options);
+    //     break;
+    //   case 'rube':
+    //     return new RubeAsset(name, url, type, options);
+    //     break;
+    //   case 'rubeImage':
+    //     return new RubeImageAsset(name, url, type, options);
+    //     break;
+    //   default:
+    //     return null;
+    // }
+
+    let loader = this.loaders[type];
+
+    if(loader){
+      return loader.load(name, url, type, options);
+    } else {
+      return null;
     }
   }
 
   destroyAsset(asset){
     delete this.assets[asset.name];
     asset.destroy();
+  }
+
+  addLoader(fileTypes, loader){
+    if(typeof fileTypes === 'string'){
+      fileTypes = [fileTypes];
+    }
+
+    fileTypes.forEach((type)=>{
+      this.loaders[type] = loader;
+    });
   }
 }
 

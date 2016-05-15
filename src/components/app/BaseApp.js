@@ -1,6 +1,5 @@
 import Canvas from '../canvas/canvas';
 import Camera from '../base/camera';
-import World from '../world/world';
 import Util from '../util/util';
 import ScreenManager from '../screen/screenManager';
 import Ludic from './ludic';

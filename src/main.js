@@ -1,7 +1,7 @@
 
 // app
 export {default as BaseApp} from './components/app/BaseApp'
-export {default as ludic} from './components/app/ludic'
+export {default as default, default as ludic} from './components/app/ludic'
 
 
 // base
@@ -10,8 +10,8 @@ export {default as AssetManager} from './components/base/assetManager'
 export {default as Camera} from './components/base/camera'
 export {default as fps} from './components/base/fps'
 export {default as ImageAsset} from './components/base/imageAsset'
-export {default as RubeAsset} from './components/base/rubeAsset'
-export {default as RubeImageAsset} from './components/base/rubeImageAsset'
+// export {default as RubeAsset} from './components/base/rubeAsset'
+// export {default as RubeImageAsset} from './components/base/rubeImageAsset'
 
 // box2d
 // export {default as DebugDraw} from './components/box2d/debugDraw'
@@ -30,8 +30,8 @@ export {default as StatefulPolygonEntity} from './components/engine/StatefulPoly
 export {default as InputController} from './components/input/inputController'
 
 // rube
-export {default as RubeLoader} from './components/rube/RubeLoader'
-export {default as RubeScene} from './components/rube/RubeScene'
+// export {default as RubeLoader} from './components/rube/RubeLoader'
+// export {default as RubeScene} from './components/rube/RubeScene'
 
 // screen
 export {default as Screen} from './components/screen/screen'
@@ -45,5 +45,5 @@ export {default as MultiSprite} from './components/sprite/MultiSprite'
 export {default as Util} from './components/util/util'
 
 // world
-export {default as World} from './components/world/world'
-export {default as WorldConfig} from './components/world/worldConfig'
+// export {default as World} from './components/world/world'
+// export {default as WorldConfig} from './components/world/worldConfig'

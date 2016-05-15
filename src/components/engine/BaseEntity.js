@@ -1,4 +1,3 @@
-import Box2D from 'box2d';
 import AssetManager from '../base/assetManager';
 
 var imageTypes = ['HTMLImageElement', 'HTMLVideoElement', 'HTMLCanvasElement', 'ImageBitmap'];
@@ -79,16 +78,18 @@ class BaseEntity {
   }
 
   involvedInContact(contactPtr){
-    var contact = Box2D.wrapPointer(contactPtr, Box2D.b2Contact);
-    var bodyA = contact.GetFixtureA().GetBody();
-    var bodyB = contact.GetFixtureB().GetBody();
-    if(bodyA == this.body){
-      return bodyB;
-    } else if(bodyB == this.body){
-      return bodyA;
-    } else {
-      return false;
-    }
+    console.log('BaseEntity: this needs help');
+    // var contact = Box2D.wrapPointer(contactPtr, Box2D.b2Contact);
+    // var bodyA = contact.GetFixtureA().GetBody();
+    // var bodyB = contact.GetFixtureB().GetBody();
+    // if(bodyA == this.body){
+    //   return bodyB;
+    // } else if(bodyB == this.body){
+    //   return bodyA;
+    // } else {
+    //   return false;
+    // }
+    return false;
   }
 
   applyRotation(ctx,delta,pos){

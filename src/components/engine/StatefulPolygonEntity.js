@@ -27,9 +27,10 @@ class StatefulPolygonEntity extends PolygonEntity {
   }
 
   setState(){
-    if(this.states.length > 0){
-      this.body.SetTransform(new Box2D.b2Vec2(this.states[this.states.length - 1].px ,this.states[this.states.length - 1].py) , this.states[this.states.length - 1].angle);
-    }
+    console.log('StatefulPolygonEntity: breaks');
+    // if(this.states.length > 0){
+    //   this.body.SetTransform(new Box2D.b2Vec2(this.states[this.states.length - 1].px ,this.states[this.states.length - 1].py) , this.states[this.states.length - 1].angle);
+    // }
   }
 
   draw(){

@@ -1,5 +1,5 @@
 import Util from '../util/util';
-import Box2D from 'box2d';
+import Vector2 from '../engine/Vector2';
 
 var PTM = 32;
 
@@ -20,7 +20,7 @@ var offset = {
   y:0
 };
 
-var futurePos = new Box2D.b2Vec2(0,0);
+var futurePos = new Vector2(0,0);
 
 var average;
 var averageArray = [];
@@ -157,11 +157,11 @@ class Camera {
     return (y*PTM) + (this.canvas.height() - offset.y);
   }
 
-  setViewCenterWorld(b2vecpos, instantaneous, fraction) {
+  setViewCenterWorld(vector2, instantaneous, fraction) {
     var currentViewCenterWorld = this.getViewCenterWorld();
     var toMove = {};
-    toMove.x = b2vecpos.get_x() - currentViewCenterWorld.x;
-    toMove.y = b2vecpos.get_y() - currentViewCenterWorld.y;
+    toMove.x = vector2.get_x() - currentViewCenterWorld.x;
+    toMove.y = vector2.get_y() - currentViewCenterWorld.y;
     this.moveCenterBy(toMove, instantaneous, fraction);
   }
 
