@@ -20,6 +20,7 @@
   "jspm": {
     "main": "src/main.js",
     "dependencies": {
+      "box2d": "github:SoftwareSyndicate/box2d.js@master",
       "jquery": "github:components/jquery@^2.1.4"
     },
     "devDependencies": {

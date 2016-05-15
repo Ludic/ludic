@@ -1,10 +1,10 @@
 // import Util from './components/util/util';
 // import D3App from './d3/D3App';
 
-import {DebugDraw} from 'box2d';
+// import {DebugDraw} from 'box2d';
 import {Box2D} from 'box2d';
 
-console.log(DebugDraw);
+// console.log(DebugDraw);
 console.log(Box2D);
 
 
