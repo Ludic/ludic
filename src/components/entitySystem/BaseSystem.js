@@ -2,6 +2,7 @@ export default class BaseSystem {
   constructor(active = true, priority = -1){
     this.active = active;
     this.priority = priority;
+    this.entities = [];
   }
 
   //Overide
