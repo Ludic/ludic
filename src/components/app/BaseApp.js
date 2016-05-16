@@ -56,11 +56,9 @@ class BaseApp {
 
     ctx.save();
 
-
-
     // this.camera.setTransform(ctx);
 
-    this.screenManager.draw(ctx, delta);
+    this.screenManager.step(ctx, delta);
     this.draw(ctx, delta);
 
     // this.drawAxes(ctx);

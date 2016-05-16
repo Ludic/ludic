@@ -1,19 +1,16 @@
-
-
-
-class Screen {
+expart default class Screen {
   constructor(camera, options) {
     this.camera = camera;
     this.options = options || {};
   }
 
-  _draw(ctx, delta){
+  _step(ctx, delta){
     if(!this._isFinished){
-      this.draw.apply(this,arguments);
+      this.step.apply(this,arguments);
     }
   }
 
-  draw(ctx, delta){
+  step(ctx, delta){
     this.camera.update(ctx,delta);
   }
 
@@ -28,5 +25,3 @@ class Screen {
   onDestroy(){
   }
 }
-
-export default Screen;

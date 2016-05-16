@@ -7,11 +7,10 @@ class ScreenManager {
   }
 
 
-  draw(ctx, delta){
-
+  step(ctx, delta){
     if(stack.length > 0){
       let screen = stack[stack.length-1];
-      screen._draw.apply(screen,arguments);
+      screen._step.apply(screen,arguments);
 
 
       if(_listener){
