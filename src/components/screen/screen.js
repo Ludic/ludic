@@ -1,4 +1,4 @@
-expart default class Screen {
+export default class Screen {
   constructor(camera, options) {
     this.camera = camera;
     this.options = options || {};
@@ -25,3 +25,5 @@ expart default class Screen {
   onDestroy(){
   }
 }
+
+
