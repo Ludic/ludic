@@ -19,13 +19,6 @@ export {default as ImageAsset} from './components/base/imageAsset'
 // canvas
 export {default as Canvas} from './components/canvas/canvas'
 
-// engine
-export {default as BaseEntity} from './components/engine/BaseEntity'
-export {default as CircleEntity} from './components/engine/CircleEntity'
-export {default as EntityManager} from './components/engine/EntityManager'
-export {default as PolygonEntity} from './components/engine/PolygonEntity'
-export {default as StatefulPolygonEntity} from './components/engine/StatefulPolygonEntity'
-
 // input
 export {default as InputController} from './components/input/inputController'
 
@@ -49,7 +42,7 @@ export {default as Util} from './components/util/util'
    export {default as WorldConfig} from './components/world/worldConfig' */
 
 // Entity System
-/* export {default as BaseEntity} from './components/entitySystem/BaseEntity'
-   export {default as BaseEvent} from './components/entitySystem/BaseEvent'
-   export {default as BaseSystem} from './components/entitySystem/BaseSystem'
-   export {default as EntityManager} from './components/entitySystem/EntityManager' */
+export {default as BaseEntity} from './components/entitySystem/BaseEntity'
+export {default as BaseEvent} from './components/entitySystem/BaseEvent'
+export {default as BaseSystem} from './components/entitySystem/BaseSystem'
+export {default as EntityManager} from './components/entitySystem/EntityManager'
