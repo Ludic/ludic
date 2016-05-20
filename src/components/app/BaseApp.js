@@ -40,8 +40,12 @@ class BaseApp {
     Ludic.canvas = this.canvas;
     Ludic.context = this.context;
     Ludic.config = this.config;
-    Ludic.util = this.util = window.util = Util;
-    window.ludic = Ludic;
+
+    Ludic.util = this.util;
+    if(Ludic.devmode){
+      window.ludic = Ludic;
+    }
+
   }
 
   draw(){
