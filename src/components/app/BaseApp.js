@@ -9,14 +9,21 @@ import InputController from '../input/inputController';
 class BaseApp {
   constructor(config) {
     Util.setConfig(config);
-    this.canvas = new Canvas();
-    this.context = this.canvas.getContext();
-    // this.world = new World();
-    this.camera = new Camera(this.canvas);
+    Ludic.config = config;
+    Ludic.canvas = new Canvas();
+    Ludic.context = Ludic.canvas.getContext();
+    Ludic.camera = new Camera(Ludic.canvas);
+    Ludic.screenManager = new ScreenManager();
+    Ludic.input = new InputController(Ludic.canvas, Ludic.camera);
+    Ludic.util = Util;
+
+    //Put Ludic on the window in devmode
+    if(Ludic.devmode){
+      window.ludic = Ludic;
+    }
+
     this.running = false;
     this.lastTime = Date.now();
-    this.screenManager = new ScreenManager();
-    this.backgroundColor = 'black';
 
     window._requestAnimFrame = (function(){
       return  window.requestAnimationFrame       ||
@@ -34,20 +41,10 @@ class BaseApp {
     })();
 
     this._animate = this._animate.bind(this);
-
-    Ludic.input = this.input = new InputController(this.canvas,this.camera);
-    Ludic.camera = this.camera;
-    Ludic.canvas = this.canvas;
-    Ludic.context = this.context;
-    Ludic.config = this.config;
-    Ludic.util = this.util = Util;
-    if(Ludic.devmode){
-      window.ludic = Ludic;
-    }
   }
 
   step(delta) {
-    this.screenManager.step(this.context, delta);
+    this.screenManager.step(Ludic.context, delta);
   }
 
   _animate() {
