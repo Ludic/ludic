@@ -85,14 +85,14 @@ class EntityManager {
     }
   }
 
-  update(ctx, delta){
+  update(delta){
     //Sort Systems By Priority First
     Utils.sortByKey(this.systems, 'priority');
 
     //Update all active systems
     this.systems.forEach(system => {
       if(system.active){
-        system.update();
+        system.update(delta);
       }
     });
   }
