@@ -21,6 +21,7 @@ export {default as Canvas} from './components/canvas/canvas'
 
 // input
 export {default as InputController} from './components/input/inputController'
+export {default as InputSystem} from './components/input/InputSystem'
 
 // rube
 // export {default as RubeLoader} from './components/rube/RubeLoader'
