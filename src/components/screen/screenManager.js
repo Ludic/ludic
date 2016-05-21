@@ -4,14 +4,13 @@ let _listener;
 
 class ScreenManager {
   constructor() {
+
   }
 
-
-  step(ctx, delta){
+  step(delta){
     if(stack.length > 0){
       let screen = stack[stack.length-1];
       screen._step.apply(screen,arguments);
-
 
       if(_listener){
         if(screen._isFinished){
@@ -22,18 +21,11 @@ class ScreenManager {
   }
 
   addScreen(screen, replace){
-    // if(replace){
-    //   stack.splice(stack.length-1, 1, screen);
-    // } else {
-    //   stack.push(screen);
-    // }
-
     if(replace){
       stack.splice(stack.length-1,1,screen);
     } else {
       stack.push(screen);
     }
-    // console.log('add screen:',stack.length,replace);
   }
 
   getStack(){
