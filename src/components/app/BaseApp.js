@@ -19,7 +19,7 @@ class BaseApp {
 
     //Put Ludic on the window in devmode
     if(Ludic.devmode){
-      window.ludic = Ludic;
+      window.Ludic = Ludic;
     }
 
     this.running = false;
