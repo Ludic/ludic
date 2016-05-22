@@ -1,5 +1,5 @@
-# Ludic.js
-**Small JavaScript library for Game Development**
+# Ludic.js **A small JavaScript library for Game Development**
+
 
 ## Installing
 `jspm install Ludic=github:SoftwareSyndicate/Ludic@dev`
