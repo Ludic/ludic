@@ -1,5 +1,6 @@
 import Util from '../util/util';
 import Vector2 from '../engine/Vector2';
+import BaseSystem from '../entitySystem/BaseSystem'
 
 var PTM = 32;
 
@@ -29,9 +30,10 @@ var averageCount = 60;
 
 var _frames = 0;
 
-class Camera {
+class Camera extends BaseSystem{
 
-  constructor(canvas) {
+  constructor(canvas, active, priority) {
+    super(active, priority);
     this.canvas = canvas;
     this.context = this.canvas.getContext();
     this.config = Util.readConfig('camera');
@@ -48,7 +50,9 @@ class Camera {
     return this.canvas;
   }
 
-  update(ctx, delta){
+  update(delta){
+    let ctx = this.context;
+
     this.setTransform(ctx);
     if(this.chaseEntity){
       if(this.chaseMethod){

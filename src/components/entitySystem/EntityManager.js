@@ -70,6 +70,7 @@ class EntityManager {
     } else {
       system._id = this.nextSystemId++;
       this.systems.push(system);
+      this._sortSystems();
       return true;
     }
   }
@@ -78,6 +79,7 @@ class EntityManager {
     let index = this.systems.indexOf(system);
     if(index > -1){
       this.systems.splice(index, 1);
+      this._sortSystems();
       return true;
     } else {
       console.warn("EntityManager.removeSystem(): Attempted to remove a System not in this.systems");
@@ -85,9 +87,13 @@ class EntityManager {
     }
   }
 
+  _sortSystems(){
+    this.systems.sort((a,b) => (a.priority - b.priority));
+  }
+
   update(delta){
     //Sort Systems By Priority First
-    Utils.sortByKey(this.systems, 'priority');
+    // Utils.sortByKey(this.systems, 'priority');
 
     //Update all active systems
     this.systems.forEach(system => {

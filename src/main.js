@@ -38,6 +38,9 @@ export {default as MultiSprite} from './components/sprite/MultiSprite'
 // util
 export {default as Util} from './components/util/util'
 
+// vectors
+export {default as Vector2} from './components/engine/Vector2'
+
 // world
 /* export {default as World} from './components/world/world'
    export {default as WorldConfig} from './components/world/worldConfig' */
@@ -47,3 +50,4 @@ export {default as BaseEntity} from './components/entitySystem/BaseEntity'
 export {default as BaseEvent} from './components/entitySystem/BaseEvent'
 export {default as BaseSystem} from './components/entitySystem/BaseSystem'
 export {default as EntityManager} from './components/entitySystem/EntityManager'
+export {default as ClearSystem} from './components/entitySystem/ClearSystem'
