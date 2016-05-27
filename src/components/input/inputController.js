@@ -126,59 +126,54 @@ class InputController {
   //  -- mouse
   initMouse(){
     canvas.addEventListener('mousemove', function(evt) {
-      this.onMouseMove(canvas,evt);
+      this.onMouseEvent('mouseMove',canvas,evt);
     }.bind(this), false);
 
-    // canvas.addEventListener('mousedown', function(evt) {
-    //   this.onMouseDown(canvas,evt);
-    // }.bind(this), false);
-    //
-    // canvas.addEventListener('mouseup', function(evt) {
-    //   this.onMouseUp(canvas,evt);
-    // }.bind(this), false);
-    //
-    // canvas.addEventListener('mouseout', function(evt) {
-    //   this.onMouseOut(canvas,evt);
-    // }.bind(this), false);
+    canvas.addEventListener('mousedown', function(evt) {
+      this.onMouseEvent('mouseDown',canvas,evt);
+    }.bind(this), false);
+
+    canvas.addEventListener('mouseup', function(evt) {
+      this.onMouseEvent('mouseUp',canvas,evt);
+    }.bind(this), false);
+
+    canvas.addEventListener('mouseout', function(evt) {
+      this.onMouseEvent('mouseOut',canvas,evt);
+    }.bind(this), false);
+
+    // touch events
+    canvas.addEventListener('touchstart', function(evt) {
+      this.onMouseEvent('touchStart',canvas,evt);
+    }.bind(this), false);
+
+    canvas.addEventListener('touchend', function(evt) {
+      this.onMouseEvent('touchEnd',canvas,evt);
+    }.bind(this), false);
+
+    canvas.addEventListener('touchmove', function(evt) {
+      this.onMouseEvent('touchMove',canvas,evt);
+    }.bind(this), false);
+
+    canvas.addEventListener('touchcancel', function(evt) {
+      this.onMouseEvent('touchCancel',canvas,evt);
+    }.bind(this), false);
   }
 
-  onMouseMove(canvas, evt) {
+  onMouseEvent(key, canvas, evt){
     prevMousePosPixel = mousePosPixel;
     this.updateMousePos(canvas, evt);
 
-    // console.log(mousePosPixel, mousePosWorld);
-    
-    // updateStats();
-    // if ( shiftDown ) {
-    //   canvasOffset.x += (mousePosPixel.x - prevMousePosPixel.x);
-    //   canvasOffset.y -= (mousePosPixel.y - prevMousePosPixel.y);
-    //   draw();
-    // }
-    // else if ( mouseDown && mouseJoint != null ) {
-    //   mouseJoint.SetTarget( new Box2D.b2Vec2(mousePosWorld.x, mousePosWorld.y) );
-    // }
-  }
-
-  onMouseDown(canvas, evt) {
-    updateMousePos(canvas, evt);
-    if ( !mouseDown )
-      startMouseJoint();
-    mouseDown = true;
-    updateStats();
-  }
-
-  onMouseUp(canvas, evt) {
-    mouseDown = false;
-    updateMousePos(canvas, evt);
-    updateStats();
-    if ( mouseJoint != null ) {
-      world.DestroyJoint(mouseJoint);
-      mouseJoint = null;
+    for(var i=listeners.length-1; i>=0; i--){
+      let l = listeners[i];
+      if(l){
+        if(l.hasOwnProperty(key)){
+          var b = l[key].call(l,mousePosPixel,mousePosWorld,evt);
+          if(b === true){
+            return;
+          }
+        }
+      }
     }
-  }
-
-  onMouseOut(canvas, evt) {
-    onMouseUp(canvas,evt);
   }
 
   //    -- mouse helper function
@@ -245,6 +240,10 @@ class InputController {
   }
 
   step(){
+    this._stepGamepads();
+  }
+
+  _stepGamepads(){
     var gps = this.getGamepads();
     var gp;
     for(var i in gps){
@@ -533,6 +532,11 @@ class InputEventListener {
 
   rightStick(x,y,event){
     return null;
+  }
+
+  // mouse events
+  mouseMove(){
+
   }
 }
 
