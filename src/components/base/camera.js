@@ -1,6 +1,5 @@
 import Util from '../util/util';
 import Vector2 from '../engine/Vector2';
-import BaseSystem from '../entitySystem/BaseSystem'
 
 var PTM = 32;
 
@@ -30,10 +29,9 @@ var averageCount = 60;
 
 var _frames = 0;
 
-class Camera extends BaseSystem{
+class Camera {
 
-  constructor(canvas, active, priority) {
-    super(active, priority);
+  constructor(canvas){
     this.canvas = canvas;
     this.context = this.canvas.getContext();
     this.config = Util.readConfig('camera');
