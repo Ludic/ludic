@@ -46,8 +46,13 @@ class InputController {
     listeners.push(listener);
   }
 
-  newEventListener(keyConfig, alsoAdd){
-    var l = new InputEventListener(keyConfig);
+  newEventListener(keyConfig, binder, alsoAdd){
+    if(typeof alsoAdd === 'undefined' && typeof binder === 'boolean'){
+      // alsoAdd was the second param, without binder
+      alsoAdd = binder;
+      binder = null;
+    }
+    var l = new InputEventListener(keyConfig, binder);
     if(alsoAdd){
       this.addEventListener(l);
     }
@@ -86,10 +91,11 @@ class InputController {
       l = listeners[i];
       if(!l){ continue;}
 
-      var cfg = l.keyConfig;
-      var key = cfg[evt.keyCode];
+      let cfg = l.keyConfig;
+      let key = cfg[evt.keyCode];
+      let bndr = l.binder || l;
       if(key){
-        var b = l[key].call(l,true,evt)
+        var b = l[key].call(bndr,true,evt)
         if(b === true){
           return;
         }
@@ -109,10 +115,11 @@ class InputController {
     for(var i=listeners.length-1; i>=0; i--){
       l = listeners[i];
       if(l){
-        var cfg = l.keyConfig;
-        var key = cfg[evt.keyCode];
+        let cfg = l.keyConfig;
+        let key = cfg[evt.keyCode];
+        let bndr = l.binder || l;
         if(key){
-          var b = l[key].call(l,false,evt);
+          var b = l[key].call(bndr,false,evt);
           if(b === true){
             return;
           }
@@ -167,7 +174,8 @@ class InputController {
       let l = listeners[i];
       if(l){
         if(l.hasOwnProperty(key)){
-          var b = l[key].call(l,mousePosPixel,mousePosWorld,evt);
+          let bndr = l.binder || l;
+          let b = l[key].call(bndr,mousePosPixel,mousePosWorld,evt);
           if(b === true){
             return;
           }
@@ -378,9 +386,10 @@ class InputController {
     for(var i=listeners.length-1; i>=0; i--){
       l = listeners[i];
       if(!l){ continue;}
-      var func = l[evt.keyIdentifier];
+      let func = l[evt.keyIdentifier];
       if(!func){ continue;}
-      var b = func.call(l,true,evt);
+      let bndr = l.binder || l;
+      let b = func.call(bndr,true,evt);
       if(b === true){
         return;
       }
@@ -395,9 +404,10 @@ class InputController {
     for(var i=listeners.length-1; i>=0; i--){
       l = listeners[i];
       if(!l){ continue;}
-      var func = l[evt.keyIdentifier];
+      let func = l[evt.keyIdentifier];
       if(!func){ continue;}
-      if(func.call(l,false,evt) === true){
+      let bndr = l.binder || l;
+      if(func.call(bndr,false,evt) === true){
         return;
       }
     }
@@ -438,9 +448,10 @@ class InputController {
     for(var i=listeners.length-1; i>=0; i--){
       l = listeners[i];
       if(!l){ continue;}
-      var func = l[evt.stick];
+      let func = l[evt.stick];
       if(!func){ continue;}
-      if(func.call(l,evt.values.x,evt.values.y,evt) === false){
+      let bndr = l.binder || l;
+      if(func.call(bndr,evt.values.x,evt.values.y,evt) === false){
         continue;
       }
       return;
@@ -450,8 +461,9 @@ class InputController {
 }
 
 class InputEventListener {
-  constructor(keyConfig) {
+  constructor(keyConfig, binder) {
     this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
+    this.binder = binder;
   }
 
   start(){
@@ -532,11 +544,6 @@ class InputEventListener {
 
   rightStick(x,y,event){
     return null;
-  }
-
-  // mouse events
-  mouseMove(){
-
   }
 }
 
