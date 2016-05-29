@@ -62,6 +62,16 @@ class EntityManager {
     return entities;
   }
 
+  getEntitiesByClassName(className){
+    let entities = [];
+    this.entities.forEach(entity => {
+      if(entity.constructor.name === className){
+        entities.push(entity);
+      }
+    });
+    return entities;
+  }
+
   /* Systems */
   addSystem(system){
     if(system.hasOwnProperty("_id")){
