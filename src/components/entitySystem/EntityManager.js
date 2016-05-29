@@ -108,7 +108,7 @@ class EntityManager {
     //Update all active systems
     this.systems.forEach(system => {
       if(system.active){
-        system.update(delta);
+        system.update(delta, this);
       }
     });
   }
