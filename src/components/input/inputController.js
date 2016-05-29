@@ -92,7 +92,7 @@ class InputController {
       if(!l){ continue;}
 
       let cfg = l.keyConfig;
-      let key = cfg[evt.keyCode];
+      let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.down`];
       let bndr = l.binder || l;
       if(key){
         var b = l[key].call(bndr,true,evt)
@@ -116,7 +116,7 @@ class InputController {
       l = listeners[i];
       if(l){
         let cfg = l.keyConfig;
-        let key = cfg[evt.keyCode];
+        let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.up`];
         let bndr = l.binder || l;
         if(key){
           var b = l[key].call(bndr,false,evt);
