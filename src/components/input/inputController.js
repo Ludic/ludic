@@ -71,18 +71,22 @@ class InputController {
   initKeys() {
     this.canvas.addEventListener('keydown', function(evt) {
       // evt.preventDefault();
-      this.onKeyDown(this.canvas,evt);
+      // this.onKeyDown(this.canvas,evt);
+      this.onKeyEvent(this.canvas,evt);
     }.bind(this), false);
 
     this.canvas.addEventListener('keyup', function(evt) {
       // evt.preventDefault();
-      this.onKeyUp(this.canvas,evt);
+      // this.onKeyUp(this.canvas,evt);
+      this.onKeyEvent(this.canvas,evt);
     }.bind(this), false);
   }
 
-  onKeyDown(canvas, evt) {
+  onKeyEvent(canvas, evt) {
     // console.log(evt);
     var l;
+    let down = evt.type === 'keydown';
+    let dir = down?'down':'up';
 
     if(this.config.logAllKeys){
       console.log(evt.keyCode);
@@ -92,12 +96,33 @@ class InputController {
       if(!l){ continue;}
 
       let cfg = l.keyConfig;
-      let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.down`];
-      let bndr = l.binder || l;
+      let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.${dir}`];
+      let binder = l.binder || l;
       if(key){
-        var b = l[key].call(bndr,true,evt)
-        if(b === true){
-          return;
+        if(typeof key === 'object') {
+          let modifiers = false;
+          let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
+          let method = key.hasOwnProperty('method') && key.method;
+
+          // logic for modifiers
+          if(!!key.shiftKey == evt.shiftKey && !!key.altKey == evt.altKey && !!key.ctrlKey == evt.ctrlKey){
+            modifiers = true;
+          }
+
+          if(method && modifiers && direction){
+            binder = key.binder || binder;
+            var b = this._execCommand(l,method,binder,down,evt);
+            if(b === true){
+              return;
+            }
+          }
+        } else if(typeof key === 'string' || typeof key === 'function'){
+          var b = this._execCommand(l,method,binder,down,evt);
+          if(b === true){
+            return;
+          }
+        } else {
+          console.warn(`InputController: Unsupported key config type '${key}'`);
         }
       }
       // else {
@@ -109,25 +134,15 @@ class InputController {
 
   }
 
-  onKeyUp(canvas, evt) {
-    // console.log(evt.keyCode);
-    var l;
-    for(var i=listeners.length-1; i>=0; i--){
-      l = listeners[i];
-      if(l){
-        let cfg = l.keyConfig;
-        let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.up`];
-        let bndr = l.binder || l;
-        if(key){
-          var b = l[key].call(bndr,false,evt);
-          if(b === true){
-            return;
-          }
-        }
-      }
+  _execCommand(listener, method, binder, ...args){
+    if(typeof method === 'string'){
+      return listener[method].call(binder,...args);
+    } else if(typeof method === 'function'){
+      return method.call(binder,...args);
+    } else {
+      return false;
     }
   }
-
 
 
   //  -- mouse
