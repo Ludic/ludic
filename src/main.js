@@ -45,6 +45,6 @@ export {default as Vector2} from './components/engine/Vector2'
 /* export {default as World} from './components/world/world'
    export {default as WorldConfig} from './components/world/worldConfig' */
 
-// TODO maybe move these systems, into components/canvas and components/camera?
+// TODO maybe move these systems, into components/canvas and components/camera
 export {default as ClearSystem} from './components/entitySystem/ClearSystem'
 export {default as CameraSystem} from './components/entitySystem/CameraSystem'
