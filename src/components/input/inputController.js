@@ -99,25 +99,34 @@ class InputController {
       let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.${dir}`];
       let binder = l.binder || l;
       if(key){
-        if(typeof key === 'object') {
-          let modifiers = false;
-          let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
-          let method = key.hasOwnProperty('method') && key.method;
-
-          // logic for modifiers
-          if(!!key.shiftKey == evt.shiftKey && !!key.altKey == evt.altKey && !!key.ctrlKey == evt.ctrlKey){
-            modifiers = true;
+        if(typeof key === 'object' || Array.isArray(key)) {
+          let keys;
+          if(Array.isArray(key)){
+            keys = key;
+          } else {
+            keys = [key];
           }
+          
+          for(let key of keys){
+            let modifiers = false;
+            let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
+            let method = key.hasOwnProperty('method') && key.method;
 
-          if(method && modifiers && direction){
-            binder = key.binder || binder;
-            var b = this._execCommand(l,method,binder,down,evt);
-            if(b === true){
-              return;
+            // logic for modifiers
+            if(!!key.shiftKey == evt.shiftKey && !!key.altKey == evt.altKey && !!key.ctrlKey == evt.ctrlKey){
+              modifiers = true;
+            }
+
+            if(method && modifiers && direction){
+              binder = key.binder || binder;
+              var b = this._execCommand(l,method,binder,down,evt);
+              if(b === true){
+                return;
+              }
             }
           }
         } else if(typeof key === 'string' || typeof key === 'function'){
-          var b = this._execCommand(l,method,binder,down,evt);
+          var b = this._execCommand(l,key,binder,down,evt);
           if(b === true){
             return;
           }
