@@ -46,13 +46,13 @@ class InputController {
     listeners.push(listener);
   }
 
-  newEventListener(keyConfig, binder, alsoAdd){
+  newEventListener(options, binder, alsoAdd){
     if(typeof alsoAdd === 'undefined' && typeof binder === 'boolean'){
       // alsoAdd was the second param, without binder
       alsoAdd = binder;
       binder = null;
     }
-    var l = new InputEventListener(keyConfig, binder);
+    var l = new InputEventListener(options, binder);
     if(alsoAdd){
       this.addEventListener(l);
     }
@@ -106,7 +106,7 @@ class InputController {
           } else {
             keys = [key];
           }
-          
+
           for(let key of keys){
             let modifiers = false;
             let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
@@ -282,20 +282,6 @@ class InputController {
       gp = gps[i];
       if(gp){
 
-        if(gp.timestamp!=this.lastTimestamp){
-          // console.log(gp.timestamp);
-
-          this.lastTimestamp = gp.timestamp;
-        }
-
-        if(!this.__gp){
-          this.__gp = gp;
-          console.log(gp);
-        } else {
-
-          // console.log(this.__gp.buttons[0].pressed);
-        }
-
         gp.buttons.forEach( (b,ix)=>{
           // console.log(b.pressed, b.value);
           var lastState = this.getLastState(i,ix);
@@ -391,29 +377,39 @@ class InputController {
   gamepadButtonEvent(gamepad,button,down) {
     button.id = gamepadMaps[gamepad.id].buttons[button.index];
     if(button.id){
-      if(down){
-        this.onGamepadDown(new GamepadButtonEvent(gamepad,button,down));
-      } else {
-        this.onGamepadUp(new GamepadButtonEvent(gamepad,button,down));
-      }
+      // if(down){
+      //   this.onGamepadDown(new GamepadButtonEvent(gamepad,button,down));
+      // } else {
+      //   this.onGamepadUp(new GamepadButtonEvent(gamepad,button,down));
+      // }
+      this.onGamepadButtonEvent(new GamepadButtonEvent(gamepad,button,down));
     } else {
       console.log(arguments);
     }
   }
 
-  onGamepadDown(evt){
+  onGamepadButtonEvent(evt){
     var l;
+    let down = evt.down;
 
-    if(this.config.logAllKeys){
-      console.log(evt.keyCode,evt.keyIdentifier);
-    }
-    for(var i=listeners.length-1; i>=0; i--){
+    // if(this.config.logAllKeys){
+    //   console.log(evt.keyCode,evt.keyIdentifier);
+    // }
+    for(let i=listeners.length-1; i>=0; i--){
       l = listeners[i];
-      if(!l){ continue;}
+      if(!l){
+        continue;
+      }
       let func = l[evt.keyIdentifier];
-      if(!func){ continue;}
+      if(!func){
+        continue;
+      }
+      if(l.gamepadIndex >= 0 && l.gamepadIndex !== evt.gamepadIndex){
+        continue;
+      }
+
       let bndr = l.binder || l;
-      let b = func.call(bndr,true,evt);
+      let b = func.call(bndr,down,evt);
       if(b === true){
         return;
       }
@@ -421,20 +417,6 @@ class InputController {
     // if(this.config.logUnmappedKeys){
     //   console.log(evt.keyCode,evt.keyIdentifier,evt.button.value, listeners.length===0?"No listeners":"");
     // }
-  }
-
-  onGamepadUp(evt){
-    var l;
-    for(var i=listeners.length-1; i>=0; i--){
-      l = listeners[i];
-      if(!l){ continue;}
-      let func = l[evt.keyIdentifier];
-      if(!func){ continue;}
-      let bndr = l.binder || l;
-      if(func.call(bndr,false,evt) === true){
-        return;
-      }
-    }
   }
 
   getGamepadMap(gamepadId){
@@ -471,9 +453,19 @@ class InputController {
     var l;
     for(var i=listeners.length-1; i>=0; i--){
       l = listeners[i];
-      if(!l){ continue;}
+      if(!l){
+        continue;
+      }
+
       let func = l[evt.stick];
-      if(!func){ continue;}
+      if(!func){
+        continue;
+      }
+      // only fire for correct gamepadIndex
+      if(l.gamepadIndex >= 0 && l.gamepadIndex !== evt.gamepadIndex){
+        continue;
+      }
+
       let bndr = l.binder || l;
       if(func.call(bndr,evt.values.x,evt.values.y,evt) === false){
         continue;
@@ -485,8 +477,18 @@ class InputController {
 }
 
 class InputEventListener {
-  constructor(keyConfig, binder) {
+  constructor(options, binder) {
+    let keyConfig = options;
+    if(options.hasOwnProperty('keyConfig')){
+      keyConfig = options.keyConfig;
+    }
+    if(options.hasOwnProperty('gamepadIndex')){
+      this.gamepadIndex = options.gamepadIndex;
+    } else {
+      this.gamepadIndex = -1;
+    }
     this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
+    this.options = options;
     this.binder = binder;
   }
 
@@ -574,6 +576,7 @@ class InputEventListener {
 class GamepadButtonEvent {
   constructor(gamepad,button,down) {
     this.gamepad = gamepad;
+    this.gamepadIndex = gamepad.index;
     this.button = button;
     this.down = down;
     this.type = 'gamepadButtonEvent';
@@ -587,6 +590,7 @@ class GamepadButtonEvent {
 class GamepadAxisEvent {
   constructor(gamepad,axis) {
     this.gamepad = gamepad;
+    this.gamepadIndex = gamepad.index;
     this.axis = axis;
     this.stick = axis.stick;
     this.keyCode = 200+axis.index;
