@@ -45,10 +45,9 @@ export {default as Vector2} from './components/engine/Vector2'
 /* export {default as World} from './components/world/world'
    export {default as WorldConfig} from './components/world/worldConfig' */
 
-// Entity System
-export {default as BaseEntity} from './components/entitySystem/BaseEntity'
-export {default as BaseEvent} from './components/entitySystem/BaseEvent'
+// TODO BaseSystem is currently being used by Box2D DebugDrawSystem, should it be dependant on that?
 export {default as BaseSystem} from './components/entitySystem/BaseSystem'
-export {default as EntityManager} from './components/entitySystem/EntityManager'
+
+// TODO maybe move these systems?
 export {default as ClearSystem} from './components/entitySystem/ClearSystem'
 export {default as CameraSystem} from './components/entitySystem/CameraSystem'

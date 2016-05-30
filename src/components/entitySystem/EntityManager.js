@@ -1,5 +1,3 @@
-import Utils from '../util/util.js'
-
 class EntityManager {
   constructor(){
     this.entities = [];
