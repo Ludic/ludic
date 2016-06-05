@@ -1,4 +1,5 @@
-# Ludic.js **A small JavaScript library for Game Development**
+# Ludic.js 
+A small JavaScript library for Game Development
 
 
 ## Installing
@@ -6,8 +7,9 @@
 
 ## Resources
 
-* [Example Games](/SoftwareSyndicate/wiki/ExampleGames)
-* [API Reference](/SoftwareSyndicate/wiki/API)
+* [Example Games](/SoftwareSyndicate/Ludic/wiki/ExampleGames)
+* [API Guide](/SoftwareSyndicate/Ludic/wiki/API-Guide)
+* [API Reference](/SoftwareSyndicate/Ludic/wiki/API-Reference)
 
 ***
 
