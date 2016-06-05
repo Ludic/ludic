@@ -8,8 +8,7 @@ A small JavaScript library for Game Development
 ## Resources
 
 * [Example Games](/SoftwareSyndicate/Ludic/wiki/ExampleGames)
-* [API Guide](/SoftwareSyndicate/Ludic/wiki/API-Guide)
-* [API Reference](/SoftwareSyndicate/Ludic/wiki/API-Reference)
+* [API Reference](https://github.com/SoftwareSyndicate/Ludic/wiki/API-Reference)
 
 ***
 
