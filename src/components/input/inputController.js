@@ -1,10 +1,9 @@
 import Util from '../util/util';
+import KeyCodeMap from './keyCodeMap';
 
 let listeners = [];
 let defaultKeyConfig = {
-  options: {
-    preventDefault: true
-  }
+  preventDefault: true
 }
 let ps4Mapping = {
   buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
@@ -96,7 +95,7 @@ class InputController {
       if(!l){ continue;}
 
       let cfg = l.keyConfig;
-      let key = cfg[evt.keyCode] || cfg[`${evt.keyCode}.${dir}`];
+      let key = cfg[evt.keyCode];
       let binder = l.binder || l;
       if(key){
         if(typeof key === 'object' || Array.isArray(key)) {
@@ -111,33 +110,30 @@ class InputController {
             let modifiers = false;
             let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
             let method = key.hasOwnProperty('method') && key.method;
+            key._once = down?key._once:false;
 
             // logic for modifiers
             if(!!key.shiftKey == evt.shiftKey && !!key.altKey == evt.altKey && !!key.ctrlKey == evt.ctrlKey){
               modifiers = true;
             }
 
-            if(method && modifiers && direction){
+            if(method && modifiers && direction && !key._once){
               binder = key.binder || binder;
               var b = this._execCommand(l,method,binder,down,evt);
+              key._once = key.once && down;
+
+              // TODO: refactor this, has to move out of this loop to outer one
               if(b === true){
                 return;
               }
             }
-          }
-        } else if(typeof key === 'string' || typeof key === 'function'){
-          var b = this._execCommand(l,key,binder,down,evt);
-          if(b === true){
-            return;
           }
         } else {
           console.warn(`InputController: Unsupported key config type '${key}'`);
         }
       }
       // else {
-      //   if(this.config.logUnmappedKeys){
-      //     console.log(evt.keyCode);
-      //   }
+      //   console.log('no config for keycode', evt.keyCode, key);
       // }
     }
 
@@ -476,6 +472,67 @@ class InputController {
 
 }
 
+let stripModifiers = function(key){
+  let mods = key.split('.');
+  key = mods[0];
+  let ret = {key, config:{}};
+  if(mods.length > 1){
+    for(let i=1; i<mods.length; i++){
+      let mod = mods[i];
+      switch (mod) {
+        case 'alt':
+        case 'altKey':
+          ret.config.altKey = true;
+          break;
+        case 'shift':
+        case 'shiftKey':
+          ret.config.shiftKey = true;
+          break;
+        case 'ctrl':
+        case 'ctrlKey':
+          ret.config.ctrlKey = true;
+          break;
+        case 'up':
+          ret.config.direction = 'up';
+          break;
+        case 'down':
+          ret.config.direction = 'down';
+          break;
+        case 'once':
+          ret.config.once = true;
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  return ret;
+}
+
+let importKeyConfig = function(keyConfig){
+  let config = {};
+  for(let key in keyConfig){
+    let mods = stripModifiers(key);
+    let _key = key;
+    let cfg = keyConfig[key];
+    key = KeyCodeMap[mods.key] || mods.key;
+
+    // everything needs to be an array of objects
+    if(typeof cfg === 'string' || typeof cfg === 'function'){
+      config[key] = [Object.assign({},{method:cfg},mods.config)];
+    } else if(typeof cfg === 'object' && !Array.isArray(cfg)){
+      config[key] = [Object.assign({},mods.config,cfg)];
+    } else if(Array.isArray(cfg)){
+      config[key] = cfg.map((conf)=>{
+        return Object.assign({},mods.config,conf);
+      });
+    } else {
+      console.warn(`InputController: Unsupported key config type '${typeof cfg}' for '${key}'`, cfg);
+    }
+  }
+  return config;
+}
+
 class InputEventListener {
   constructor(options, binder) {
     let keyConfig = options;
@@ -487,7 +544,8 @@ class InputEventListener {
     } else {
       this.gamepadIndex = -1;
     }
-    this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
+    // this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
+    this.keyConfig = importKeyConfig.call(this,keyConfig);
     this.options = options;
     this.binder = binder;
   }
