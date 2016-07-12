@@ -47,15 +47,16 @@ class BaseApp {
     this.screenManager.step(Ludic.context, delta);
   }
 
-  _animate() {
+  _animate(time) {
     if(this.running){
       window._requestAnimFrame(this._animate);
 
-      var dateNow = Date.now(),
-          delta = (dateNow - this.lastTime) / 1000;
+      var delta = (time - this.lastTime) / 1000;
+      this.lastTime = Ludic._time = time;
 
-      this.lastTime = dateNow;
-      this.step(delta);
+      if(!Number.isNaN(delta)){
+        this.step(delta,time);
+      }
     }
   }
 

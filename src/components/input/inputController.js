@@ -68,6 +68,9 @@ class InputController {
 
   //  -- keyboard
   initKeys() {
+    // object for all key states
+    this.allKeys = {};
+
     this.canvas.addEventListener('keydown', function(evt) {
       // evt.preventDefault();
       // this.onKeyDown(this.canvas,evt);
@@ -86,6 +89,10 @@ class InputController {
     var l;
     let down = evt.type === 'keydown';
     let dir = down?'down':'up';
+
+    // give the event a list of all keys states
+    this.allKeys[evt.keyCode] = this.allKeys[evt.key] = down;
+    evt.allKeys = this.allKeys;
 
     if(this.config.logAllKeys){
       console.log(evt.keyCode);
@@ -543,6 +550,9 @@ class InputEventListener {
       this.gamepadIndex = options.gamepadIndex;
     } else {
       this.gamepadIndex = -1;
+    }
+    if(options.hasOwnProperty('binder')){
+      binder = options.binder;
     }
     // this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
     this.keyConfig = importKeyConfig.call(this,keyConfig);
