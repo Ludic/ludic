@@ -554,10 +554,53 @@ class InputEventListener {
     if(options.hasOwnProperty('binder')){
       binder = options.binder;
     }
+
+
     // this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
     this.keyConfig = importKeyConfig.call(this,keyConfig);
     this.options = options;
     this.binder = binder;
+
+    if(options.hasOwnProperty('methods')){
+      this._loadListener(options.methods);
+    }
+  }
+
+  _loadListener(listener){
+    let avail = ['start', 'select', 'home', 'left', 'right', 'up', 'down', 'l1', 'l2', 'l3', 'r1', 'r2', 'r3', 'triangle', 'square', 'circle', 'cross', 'extra', 'leftStick', 'rightStick'];
+
+    for(let key of avail){
+      if(key in listener){
+        let method = listener[key];
+
+        if(typeof method === 'function'){
+          this[key] = method;
+        } else if(typeof method === 'string'){
+          console.log(this.keyConfig);
+          let code = method;
+
+          if(Number.isNaN(parseInt(code))){
+            // need to convert char
+            let _code = KeyCodeMap[code];
+            if(_code){
+              code = _code;
+            } else {
+              console.warn('There is no mapping for: ', method);
+              continue;
+            }
+          }
+
+          let arr = this.keyConfig[code];
+
+          if(arr.length === 1){
+            this[key] = arr[0].method
+          } else {
+            console.warn('multiple entries per keycode is not supported at this yet.', key, arr, method);
+          }
+        }
+
+      }
+    }
   }
 
   start(){
