@@ -25,6 +25,11 @@ export {default as ScreenManager} from './components/screen/screenManager'
 export {default as BaseSprite} from './components/sprite/BaseSprite'
 export {default as MultiSprite} from './components/sprite/MultiSprite'
 
+// ui
+export {default as HUD} from './components/ui/Hud'
+export {default as HUDElement} from './components/ui/HUDElement'
+export {default as Text} from './components/ui/Text'
+
 // util
 export {default as Util} from './components/util/util'
 

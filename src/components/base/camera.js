@@ -249,6 +249,13 @@ class Camera {
     ctx.scale(this.getPTM(),this.getPTM());
     ctx.lineWidth /= this.getPTM();
   }
+
+  resetTransform(ctx){
+    ctx.scale(1,-1);
+    ctx.scale(1 / this.getPTM(),1 / this.getPTM());
+    ctx.lineWidth *= this.getPTM();
+    ctx.translate(-this.getOffsetX(), -this.getOffsetY());
+  }
 }
 
 
