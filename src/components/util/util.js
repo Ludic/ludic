@@ -106,7 +106,6 @@ class Util {
       }
     } catch (e) {
       obj = null;
-      console.error(e);
     } finally {
       obj = obj || def;
     }

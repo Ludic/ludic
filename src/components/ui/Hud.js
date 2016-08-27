@@ -17,7 +17,9 @@ export default class HUD {
     this.drawAxes(delta);
 
     for(let el of this.elements){
-      el.render(delta, this.ctx);
+      if(el.visible){
+        el.render(delta, this.ctx);
+      }
     }
 
     this.ctx.restore();

@@ -61,7 +61,6 @@ class InputController {
   removeEventListener(listener){
     var ix = listeners.indexOf(listener);
     if(ix>-1){
-      console.log('remove event listener');
       listeners.splice(ix,1);
     }
   }
@@ -107,12 +106,14 @@ class InputController {
       if(key){
         if(typeof key === 'object' || Array.isArray(key)) {
           let keys;
+          // make array out of single object, treat everything like an array
           if(Array.isArray(key)){
             keys = key;
           } else {
             keys = [key];
           }
 
+          // loop through all key configs
           for(let key of keys){
             let modifiers = false;
             let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
@@ -128,11 +129,6 @@ class InputController {
               binder = key.binder || binder;
               var b = this._execCommand(l,method,binder,down,evt);
               key._once = key.once && down;
-
-              // TODO: refactor this, has to move out of this loop to outer one
-              if(b === true){
-                return;
-              }
             }
           }
         } else {
@@ -142,6 +138,11 @@ class InputController {
       // else {
       //   console.log('no config for keycode', evt.keyCode, key);
       // }
+
+      // check for if listener wants the only control
+      if(l.stopPropagation){
+        break;
+      }
     }
 
   }
@@ -159,37 +160,37 @@ class InputController {
 
   //  -- mouse
   initMouse(){
-    canvas.addEventListener('mousemove', function(evt) {
-      this.onMouseEvent('mouseMove',canvas,evt);
+    this.canvas.addEventListener('mousemove', function(evt) {
+      this.onMouseEvent('mouseMove',this.canvas.el,evt);
     }.bind(this), false);
 
-    canvas.addEventListener('mousedown', function(evt) {
-      this.onMouseEvent('mouseDown',canvas,evt);
+    this.canvas.addEventListener('mousedown', function(evt) {
+      this.onMouseEvent('mouseDown',this.canvas.el,evt);
     }.bind(this), false);
 
-    canvas.addEventListener('mouseup', function(evt) {
-      this.onMouseEvent('mouseUp',canvas,evt);
+    this.canvas.addEventListener('mouseup', function(evt) {
+      this.onMouseEvent('mouseUp',this.canvas.el,evt);
     }.bind(this), false);
 
-    canvas.addEventListener('mouseout', function(evt) {
-      this.onMouseEvent('mouseOut',canvas,evt);
+    this.canvas.addEventListener('mouseout', function(evt) {
+      this.onMouseEvent('mouseOut',this.canvas.el,evt);
     }.bind(this), false);
 
     // touch events
-    canvas.addEventListener('touchstart', function(evt) {
-      this.onMouseEvent('touchStart',canvas,evt);
+    this.canvas.addEventListener('touchstart', function(evt) {
+      this.onMouseEvent('touchStart',this.canvas.el,evt);
     }.bind(this), false);
 
-    canvas.addEventListener('touchend', function(evt) {
-      this.onMouseEvent('touchEnd',canvas,evt);
+    this.canvas.addEventListener('touchend', function(evt) {
+      this.onMouseEvent('touchEnd',this.canvas.el,evt);
     }.bind(this), false);
 
-    canvas.addEventListener('touchmove', function(evt) {
-      this.onMouseEvent('touchMove',canvas,evt);
+    this.canvas.addEventListener('touchmove', function(evt) {
+      this.onMouseEvent('touchMove',this.canvas.el,evt);
     }.bind(this), false);
 
-    canvas.addEventListener('touchcancel', function(evt) {
-      this.onMouseEvent('touchCancel',canvas,evt);
+    this.canvas.addEventListener('touchcancel', function(evt) {
+      this.onMouseEvent('touchCancel',this.canvas,evt);
     }.bind(this), false);
   }
 
@@ -224,7 +225,6 @@ class InputController {
   //  -- gamepad
   initGamepads(){
     this.gamepads = {};
-    this.lastGamepads = {};
     this.lastButtonStates = [
       [], // gamepad index 0
       [], // gamepad index 1
@@ -256,10 +256,6 @@ class InputController {
     window.addEventListener('gamepadbuttonup', (e)=>{
       console.log('gamepad button up: ',e);
     });
-    // console.log(navigator.getGamepads());
-
-    // temp
-    this.most = this.least = 0;
   }
 
   getGamepads(){
@@ -282,57 +278,48 @@ class InputController {
     var gps = this.getGamepads();
     var gp;
     for(var i in gps){
-      gp = gps[i];
+      gp = gps[i]; // gamepad instance from api
       if(gp){
 
+        // for each gamepad that the api reads; poll the state of each button,
+        //  sending an event when pressed
         gp.buttons.forEach( (b,ix)=>{
-          // console.log(b.pressed, b.value);
+          // get the last known state of the button
           var lastState = this.getLastState(i,ix);
-          b.index = ix;
+          b.index = ix; // tell the button what it's index is
+          b.lastState = lastState;
 
           if(b.pressed){
-            // b.index = ix;
+            // if pressed, create a button event and set the buttons last known state
             this.gamepadButtonEvent(gp,b,true);
             this.setLastState(i,ix,true);
           } else {
             if(lastState) {
-
+              // if the button is not pressed but its last state was pressed, create a 'button up' event
               if(lastState.pressed) {
-                // console.log('button up: ', ix);
                 this.gamepadButtonEvent(gp,b,false);
-                // this.setLastState(i,ix,false);
-              } else {
-                // console.log('last state !pressed');
               }
-            } else {
-
             }
+            // set the buttons last known state for not pressed
             this.setLastState(i,ix,false);
           }
-
-
-
         });
 
+        // do the same thing for each of the axis (analog sticks)
+        // loop through each and poll state
         gp.axes.forEach( (value,axis)=>{
+          // get the deadZone associated with each axis
           var dz = this.getDeadZone(axis);
+          // get the last known state for the axis
           var lastState = this.getLastAxisState(i,axis);
 
+          // if the value of the axis is withing the bounds of the deadzone
+          //  create an axis event
           if( value < -dz || value > dz ){
-            // if(value > this.most){
-            //   this.most = value;
-            // }
-            // if(value < this.least){
-            //   this.least = value;
-            // }
-            // console.log(dz,this.least,this.most);
             this.gamepadAxisEvent(gp,axis,value,false);
-            // this.setLastAxisState(i,axis,false);
           } else if(!lastState.zeroed){
             this.gamepadAxisEvent(gp,axis,0,true);
-            // this.setLastAxisState(i,axis,true);
           }
-
         });
       } else {
         console.log('no gamepad!',i);
@@ -380,11 +367,6 @@ class InputController {
   gamepadButtonEvent(gamepad,button,down) {
     button.id = gamepadMaps[gamepad.id].buttons[button.index];
     if(button.id){
-      // if(down){
-      //   this.onGamepadDown(new GamepadButtonEvent(gamepad,button,down));
-      // } else {
-      //   this.onGamepadUp(new GamepadButtonEvent(gamepad,button,down));
-      // }
       this.onGamepadButtonEvent(new GamepadButtonEvent(gamepad,button,down));
     } else {
       console.log(arguments);
@@ -415,6 +397,10 @@ class InputController {
       let b = func.call(bndr,down,evt);
       if(b === true){
         return;
+      }
+      // check for if listener wants the only control
+      if(l.stopPropagation){
+        break;
       }
     }
     // if(this.config.logUnmappedKeys){
@@ -555,6 +541,7 @@ class InputEventListener {
       binder = options.binder;
     }
 
+    this.stopPropagation = options.stopPropagation;
 
     // this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
     this.keyConfig = importKeyConfig.call(this,keyConfig);
@@ -598,7 +585,6 @@ class InputEventListener {
             console.warn('multiple entries per keycode is not supported at this yet.', key, arr, method);
           }
         }
-
       }
     }
   }
@@ -683,6 +669,9 @@ class InputEventListener {
     return null;
   }
 }
+// assign the InputEventListener class as a static property on InputController
+//  so it can be instantiated properly outside of this module
+InputController.InputEventListener = InputEventListener;
 
 class GamepadButtonEvent {
   constructor(gamepad,button,down) {

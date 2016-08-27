@@ -29,6 +29,8 @@ export {default as MultiSprite} from './components/sprite/MultiSprite'
 export {default as HUD} from './components/ui/Hud'
 export {default as HUDElement} from './components/ui/HUDElement'
 export {default as Text} from './components/ui/Text'
+export {default as Dialog} from './components/ui/Dialog'
+export {default as MenuDialog} from './components/ui/MenuDialog'
 
 // util
 export {default as Util} from './components/util/util'
