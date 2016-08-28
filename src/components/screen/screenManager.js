@@ -7,7 +7,7 @@ class ScreenManager {
 
   }
 
-  step(delta){
+  update(delta){
     if(stack.length > 0){
       let screen = stack[stack.length-1];
       screen._step.apply(screen,arguments);

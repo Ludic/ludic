@@ -45,7 +45,29 @@ class InputController {
     listeners.push(listener);
   }
 
+  // to be deprecated for `newInputListener`
   newEventListener(options, binder, alsoAdd){
+    if(typeof alsoAdd === 'undefined' && typeof binder === 'boolean'){
+      // alsoAdd was the second param, without binder
+      alsoAdd = binder;
+      binder = null;
+    }
+    var l = new InputEventListener(options, binder);
+    if(alsoAdd){
+      this.addEventListener(l);
+    }
+    return l;
+  }
+
+  /**
+   * Instantiates and returns a new InputEventListener
+   * @param {Object} options - passed along to new InputEventListener
+   * @param {Binder} binder (optional) - passed along to new InputEventListener
+   * @param {Boolean} alsoAdd (optional) - determines whether the returning InputEventListener should also be added to this
+   *
+   * @return {InputEventListener} - listener object used to attached handlers for input events
+   */
+  newInputListener(options, binder, alsoAdd){
     if(typeof alsoAdd === 'undefined' && typeof binder === 'boolean'){
       // alsoAdd was the second param, without binder
       alsoAdd = binder;
@@ -270,7 +292,7 @@ class InputController {
     return this.gamepads;
   }
 
-  step(){
+  update(){
     this._stepGamepads();
   }
 

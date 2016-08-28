@@ -5,8 +5,7 @@ import ScreenManager from '../screen/screenManager';
 import Ludic from './ludic';
 import InputController from '../input/inputController';
 
-// master record; all systems report actions to parent manager for master record of all entities:entity/system
-class BaseApp {
+export default class LudicApp {
   constructor(config) {
     Util.setConfig(config);
     Ludic.config = config;
@@ -43,8 +42,7 @@ class BaseApp {
     this._animate = this._animate.bind(this);
   }
 
-  step(delta) {
-    this.screenManager.step(Ludic.context, delta);
+  update(delta) {
   }
 
   _animate(time) {
@@ -55,7 +53,7 @@ class BaseApp {
       this.lastTime = Ludic._time = time;
 
       if(!Number.isNaN(delta)){
-        this.step(delta,time);
+        this.update(delta,time);
       }
     }
   }
@@ -71,5 +69,3 @@ class BaseApp {
     this._animate();
   }
 }
-
-export default BaseApp;

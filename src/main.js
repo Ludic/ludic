@@ -1,6 +1,6 @@
 
 // app
-export {default as BaseApp} from './components/app/BaseApp'
+export {default as App} from './components/app/App'
 export {default as default, default as Ludic} from './components/app/ludic'
 
 

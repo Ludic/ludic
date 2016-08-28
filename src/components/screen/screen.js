@@ -6,12 +6,11 @@ export default class Screen {
 
   _step(ctx, delta){
     if(!this._isFinished){
-      this.step.apply(this,arguments);
+      this.update.apply(this,arguments);
     }
   }
 
-  step(ctx, delta){
-    this.camera.update(ctx,delta);
+  update(ctx, delta){
   }
 
   finish(data){
@@ -25,5 +24,3 @@ export default class Screen {
   onDestroy(){
   }
 }
-
-
