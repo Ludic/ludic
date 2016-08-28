@@ -53,7 +53,9 @@ export default class LudicApp {
       this.lastTime = Ludic._time = time;
 
       if(!Number.isNaN(delta)){
+        Ludic.context.save();
         this.update(delta,time);
+        Ludic.context.restore();
       }
     }
   }
