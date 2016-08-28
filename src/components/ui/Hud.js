@@ -45,7 +45,11 @@ export default class HUD {
   addElement(element, ref){
     this.elements.push(element);
     if(ref){
-      this.$refs[ref] = element;
+      if(!this.$refs.hasOwnProperty(ref)){
+        this.$refs[ref] = element;
+      } else {
+        console.warn(`Ref "${ref}" is already taken`);
+      }
     }
     return this;
   }

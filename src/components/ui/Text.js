@@ -9,9 +9,12 @@ export default class Text extends HUDElement{
     color = 'black',
     drawStyle = 'fill',
 
-    adjustOrigin = true
+    adjustOrigin = true,
+    visible = true
   } = {}) {
     super();
+
+    this.visible = true;
 
     this._adjustOrigin = true;
     this.drawStyle = drawStyle;
