@@ -1,5 +1,4 @@
 import AssetManager from '../base/assetManager';
-import $ from 'jquery';
 
 const RIGHT = 10;
 const LEFT  = 11;
@@ -17,15 +16,6 @@ class BaseSprite {
       console.warn('Sprite created without an image', this);
       return;
     }
-
-    this.$image = $(image);
-    // this.$image.css({
-    //   '-moz-transform': 'scale(-1, 1)',
-    //   '-webkit-transform': 'scale(-1, 1)',
-    //   '-o-transform': 'scale(-1, 1)',
-    //   'transform': 'scale(-1, 1)',
-    //   'filter': 'FlipH'
-    // });
 
     this.width = this.image.width;
     this.height = this.image.height;

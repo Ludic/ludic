@@ -37,9 +37,6 @@ class Camera {
     this.config = Util.readConfig('camera');
     PTM = Util.readConfig('camera', 'ptm', 32);
 
-    // this.fpsWorker = new Worker('src/components/base/fps.js');
-    // this.fpsWorker.onmessage = this.onFPS.bind(this);
-
     this.updateEnvironmentVariables();
     window.addEventListener('resize', this.updateEnvironmentVariables.bind(this), false);
   }
@@ -63,13 +60,6 @@ class Camera {
         this.setViewCenterWorld( futurePos );
       }
 
-    }
-
-    if(this.config.fps){
-      // this.fpsWorker.postMessage(delta);
-      // console.log('draw fps');
-      this.calculateFPS(delta);
-      this.canvas.$fps.html(this.fps);
     }
 
     if(this.config.extras){
@@ -116,10 +106,6 @@ class Camera {
     // ctx.moveTo(0, 0);
     // ctx.lineTo(0, 1);
     // ctx.stroke();
-  }
-
-  onFPS(event){
-    this.canvas.$fps.html(Math.ceil(event.data));
   }
 
   setChaseEntity(ent,chaseMethod){

@@ -1,5 +1,4 @@
 import Util from '../util/util';
-import $ from 'jquery';
 
 class Canvas {
   constructor() {
@@ -15,32 +14,44 @@ class Canvas {
     var fullscreen = Util.readConfig('canvas', 'fullscreen', false);
     var fps = Util.readConfig('camera', 'fps');
 
-    var body = $('body');
-    var container = $(`#${ludicContainerId}`);
-
-    // setup fps
-    // this.$fps = $('#fps');
-    // (this.$fps.length && fps) ? this.$fps.show(): this.$fps.hide();
+    var body = document.querySelector('body');
+    var container = document.querySelector(`#${ludicContainerId}`);
 
     // create ludic container if no container was found
-    if(!container.length){
-      container = $(`<div id=${ludicContainerId}></div>`).appendTo(body);
+    if(!container){
+      container = document.createElement('div');
+      container.id = `${ludicContainerId}`;
+      body.appendChild(container);
     }
 
     if(fullscreen){
       // add correct divs
-      var canvas = $('<canvas id="'+canvasId+'" tabindex="1"></canvas>').appendTo(container);
+      var canvas = document.createElement('canvas');
+      canvas.id = canvasId;
+      canvas.setAttribute('tabindex', 1);
+      container.appendChild(canvas);
 
-      this.set$Element(canvas);
+      this.setElement(canvas);
 
       window.addEventListener('resize', this.resize.bind(this), false);
       this.resize();
     } else {
-      var wrapper = $('<div style="text-align:center"></div>').appendTo(container);
-      var canvasWrapper = $('<div style="margin:auto;width:640px;padding:2px;border:1px solid #888;text-align:left"></div>').appendTo(wrapper);
-      var canvas = $('<canvas id="'+canvasId+'" width="640" height="480" tabindex="1"></canvas>').appendTo(canvasWrapper);
+      var wrapper = document.createElement('div');
+      wrapper.setAttribute('style', 'text-align:center');
+      container.appendChild(wrapper);
 
-      this.set$Element(canvas);
+      var canvasWrapper = document.createElement('div');
+      canvasWrapper.setAttribute('style', 'margin:auto;width:640px;padding:2px;border:1px solid #888;text-align:left');
+      container.appendChild(canvasWrapper);
+
+      var canvas = document.createElement('canvas');
+      canvas.id = canvasId;
+      canvas.setAttribute('width', 640);
+      canvas.setAttribute('height', 480);
+      canvas.setAttribute('tabindex', 1);
+      canvasWrapper.appendChild(canvas);
+
+      this.setElement(canvas);
     }
   }
 
@@ -57,9 +68,8 @@ class Canvas {
     return this.el;
   }
 
-  set$Element(canvas){
-    this.$el = canvas;
-    this.el = this.$el[0];
+  setElement(canvas){
+    this.el = canvas;
   }
 
   addEventListener(){
