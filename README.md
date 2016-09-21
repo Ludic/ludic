@@ -2,15 +2,22 @@
 
 
 ## Installing
-`jspm install Ludic=github:SoftwareSyndicate/Ludic@dev`
+
+#### jspm
+
+`jspm install Ludic=github:Ludic/ludic@dev`
+
+#### webpack
+
+`npm install github:Ludic/ludic#dev`
 
 ## Resources
 
-* [Example Games](/SoftwareSyndicate/wiki/ExampleGames)
-* [API Reference](/SoftwareSyndicate/wiki/API)
+* [Example Games](/Ludic/wiki/ExampleGames)
+* [API Reference](/Ludic/wiki/API)
 
 ***
 
 ## Browser / Platform Support
 
-Chrome, probably just Chrome. 
+Chrome, probably just Chrome.

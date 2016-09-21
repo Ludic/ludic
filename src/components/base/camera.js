@@ -153,6 +153,10 @@ class Camera {
     this.moveCenterBy(toMove, instantaneous, fraction);
   }
 
+  centerWorldToCanvas(){
+    this.setViewCenterWorld(new Vector2(), true);
+  }
+
   getViewCenterWorld(){
     return this.getWorldPointFromPixelPoint( viewCenterPixel );
   }
