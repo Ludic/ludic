@@ -24,14 +24,14 @@ export default class LudicApp {
     this.running = false;
     this.lastTime = Date.now();
 
-    window._requestAnimFrame = (function(){
+    this._requestAnimFrame = (()=>{
       return  window.requestAnimationFrame       ||
               window.webkitRequestAnimationFrame ||
               window.mozRequestAnimationFrame    ||
               window.oRequestAnimationFrame      ||
               window.msRequestAnimationFrame     ||
               (function(){
-                console.log('falling back to basic requestAnimationFrame');
+                console.warn('LudicApp: falling back to basic requestAnimationFrame');
                 return false;
               })()                               ||
               function( callback ){
@@ -39,6 +39,8 @@ export default class LudicApp {
               };
     })();
 
+    // do some binding
+    this._requestAnimFrame = this._requestAnimFrame.bind(window);
     this._animate = this._animate.bind(this);
   }
 
@@ -47,7 +49,7 @@ export default class LudicApp {
 
   _animate(time) {
     if(this.running){
-      window._requestAnimFrame(this._animate);
+      this._requestAnimFrame(this._animate);
 
       var delta = (time - this.lastTime) / 1000;
       this.lastTime = Ludic._time = time;
@@ -70,4 +72,5 @@ export default class LudicApp {
     this.running = true;
     this._animate();
   }
+
 }

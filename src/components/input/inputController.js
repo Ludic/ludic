@@ -576,7 +576,11 @@ class InputEventListener {
   }
 
   _loadListener(listener){
-    let avail = ['start', 'select', 'home', 'left', 'right', 'up', 'down', 'l1', 'l2', 'l3', 'r1', 'r2', 'r3', 'triangle', 'square', 'circle', 'cross', 'extra', 'leftStick', 'rightStick'];
+    let avail = ['start', 'select', 'home', 'left', 'right', 'up', 'down',
+      'l1', 'l2', 'l3', 'r1', 'r2', 'r3', 'triangle', 'square', 'circle', 'cross',
+      'extra', 'leftStick', 'rightStick', 'mouseMove', 'mouseDown', 'mouseUp', 'mouseOut',
+      'touchStart', 'touchEnd', 'touchMove', 'touchCancel',
+    ];
 
     for(let key of avail){
       if(key in listener){

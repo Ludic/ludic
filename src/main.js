@@ -1,6 +1,6 @@
 
 // app
-export {default as App} from './components/app/App'
+export {default as LudicApp} from './components/app/LudicApp'
 export {default as default, default as Ludic} from './components/app/ludic'
 
 
@@ -16,6 +16,14 @@ export {default as Canvas} from './components/canvas/canvas'
 
 // input
 export {default as InputController} from './components/input/inputController'
+
+// patches
+/*
+  patches that are prototype extensions, just import here
+  patches that require a parameter (monkey patch) export function name with prefix `Patch`
+    i.e. export {default as PatchFixSomeClass} from './components/patches/fixSomeClass'
+*/
+import Path2D from './components/patches/Path2D';
 
 // screen
 export {default as Screen} from './components/screen/screen'
@@ -34,6 +42,12 @@ export {default as MenuDialog} from './components/ui/MenuDialog'
 
 // util
 export {default as Util} from './components/util/util'
+export * from './components/util/utilities'
 
 // vectors
 export {default as Vector2} from './components/engine/Vector2'
+
+// mixin
+import * as mixwith from 'mixwith'
+export {mixwith}
+export {mix as extend, Interface} from 'mixwith'

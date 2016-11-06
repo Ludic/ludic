@@ -19,8 +19,7 @@
   "homepage": "https://github.com/SoftwareSyndicate/Ludic#readme",
   "jspm": {
     "main": "src/main.js",
-    "dependencies": {
-    },
+    "dependencies": {},
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
       "babel-runtime": "npm:babel-runtime@^5.8.24",
@@ -28,6 +27,7 @@
     }
   },
   "devDependencies": {
-    "jspm": "^0.16.34"
+    "jspm": "^0.16.34",
+    "mixwith": "github:Ludic/mixwith"
   }
 }
