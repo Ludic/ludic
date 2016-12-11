@@ -34,7 +34,6 @@ class Camera {
   constructor(canvas){
     this.canvas = canvas;
     this.context = this.canvas.getContext();
-    this.config = Util.readConfig('camera');
     PTM = Util.readConfig('camera', 'ptm', 32);
 
     this.updateEnvironmentVariables();
@@ -62,23 +61,6 @@ class Camera {
 
     }
 
-    if(this.config.extras){
-      this.drawExtras();
-    }
-  }
-
-  drawExtras(ctx){
-    ctx = this.context;
-
-
-    if(ctx && this.config.extras.axes){
-      this.drawAxes(ctx);
-    }
-
-    // not ready yet
-    // if(ctx && this.config.extras.grid){
-    //   this.drawGrid(ctx);
-    // }
   }
 
   drawAxes(ctx) {
@@ -92,20 +74,6 @@ class Camera {
     ctx.moveTo(0, 0);
     ctx.lineTo(0, 1);
     ctx.stroke();
-  }
-
-  drawGrid(ctx){
-    var bounds = this.getViewportBounds();
-    ctx.strokeStyle = 'rgb(0,192,0)';
-    ctx.beginPath();
-    ctx.moveTo(bounds.w/2, 0);
-    ctx.lineTo(bounds.w/2, bounds.h);
-    ctx.stroke();
-    // ctx.strokeStyle = 'rgb(0,192,0)';
-    // ctx.beginPath();
-    // ctx.moveTo(0, 0);
-    // ctx.lineTo(0, 1);
-    // ctx.stroke();
   }
 
   setChaseEntity(ent,chaseMethod){

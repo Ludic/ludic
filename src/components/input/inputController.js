@@ -32,7 +32,9 @@ class InputController {
   constructor(canvas, camera) {
     this.canvas = canvas;
     this.camera = camera;
-    this.config = Util.readConfig('input');
+    // this.config = Util.readConfig('input');
+    // TODO: refactor config
+    this.config = {};
 
     this.initKeys();
     this.initMouse();
