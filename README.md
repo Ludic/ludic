@@ -9,12 +9,18 @@
 
 #### webpack
 
-`npm install github:Ludic/ludic#dev`
+`npm install github:Ludic/ludic`
 
 ## Resources
 
 * [Example Games](/Ludic/wiki/ExampleGames)
 * [API Reference](/Ludic/wiki/API)
+
+## Documentation
+[docs](https://github.com/ludic/ludic/blob/master/docs)
+
+## Developing
+see [developing](https://github.com/ludic/ludic/blob/master/docs/DEVELOPING.md)
 
 ***
 

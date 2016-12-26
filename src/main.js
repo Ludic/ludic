@@ -46,8 +46,3 @@ export * from './components/util/utilities'
 
 // vectors
 export {default as Vector2} from './components/engine/Vector2'
-
-// mixin
-import * as mixwith from 'mixwith'
-export {mixwith}
-export {mix as extend, Interface} from 'mixwith'

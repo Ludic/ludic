@@ -3,5 +3,8 @@ node_modules
 *rube-backups
 heap_analysis
 
+# npm stuff
+npm-debug.log
 
+# mac stuff
 .DS*
