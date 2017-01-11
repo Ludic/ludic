@@ -11,9 +11,8 @@ export default class LudicApp {
     Ludic.config = config;
     Ludic.canvas = new Canvas();
     Ludic.context = Ludic.canvas.getContext();
-    Ludic.camera = new Camera(Ludic.canvas);
     Ludic.screenManager = new ScreenManager();
-    Ludic.input = new InputController(Ludic.canvas, Ludic.camera);
+    Ludic.input = new InputController(Ludic.canvas);
     Ludic.util = Util;
 
     //Put Ludic on the window in devmode
@@ -44,8 +43,8 @@ export default class LudicApp {
     this._animate = this._animate.bind(this);
   }
 
-  update(delta) {
-  }
+  // override
+  update(delta) {}
 
   _animate(time) {
     if(this.running){
@@ -68,8 +67,11 @@ export default class LudicApp {
       this._animate();
   }
 
-  run(){
+  run(updateFunction){
     this.running = true;
+    if(updateFunction != null){
+      this.update = updateFunction;
+    }
     this._animate();
   }
 

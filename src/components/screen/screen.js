@@ -1,17 +1,18 @@
+import BaseSystem from 'components/ein/BaseSystem'
+
 export default class Screen {
-  constructor(camera, options) {
-    this.camera = camera;
+  constructor(options) {
     this.options = options || {};
   }
 
-  _step(ctx, delta){
+  _step(delta,...rest){
     if(!this._isFinished){
       this.update.apply(this,arguments);
     }
   }
 
-  update(ctx, delta){
-  }
+  // override
+  update(delta,...rest){}
 
   finish(data){
     if(!this._isFinished){
@@ -21,6 +22,7 @@ export default class Screen {
     }
   }
 
-  onDestroy(){
-  }
+  onDestroy(){}
+  onAddedToManager(manager){}
+  onRemovedFromManager(manager){}
 }

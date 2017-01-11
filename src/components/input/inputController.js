@@ -24,14 +24,12 @@ let gamepadsAxisDeadZone = 0.08;
 let gamepadsConfig = {};
 
 let mousePosPixel = {};
-let mousePosWorld = {};
 let prevMousePosPixel = {};
 // let gamepadTypeMaps = [{id:'054c',type:'ps4'}];
 
 class InputController {
-  constructor(canvas, camera) {
+  constructor(canvas) {
     this.canvas = canvas;
-    this.camera = camera;
     // this.config = Util.readConfig('input');
     // TODO: refactor config
     this.config = {};
@@ -122,7 +120,7 @@ class InputController {
     }
     for(var i=listeners.length-1; i>=0; i--){
       l = listeners[i];
-      if(!l){ continue;}
+      if(!l || !l.enabled){ continue;}
 
       let cfg = l.keyConfig;
       let key = cfg[evt.keyCode];
@@ -224,10 +222,10 @@ class InputController {
 
     for(var i=listeners.length-1; i>=0; i--){
       let l = listeners[i];
-      if(l){
+      if(l && l.enabled){
         if(l.hasOwnProperty(key)){
           let bndr = l.binder || l;
-          let b = l[key].call(bndr,mousePosPixel,mousePosWorld,evt);
+          let b = l[key].call(bndr,mousePosPixel,evt);
           if(b === true){
             return;
           }
@@ -243,7 +241,6 @@ class InputController {
       x: evt.clientX - rect.left,
       y: canvas.height - (evt.clientY - rect.top)
     };
-    mousePosWorld = this.camera.getWorldPointFromPixelPoint(mousePosPixel);
   }
 
   //  -- gamepad
@@ -406,7 +403,7 @@ class InputController {
     // }
     for(let i=listeners.length-1; i>=0; i--){
       l = listeners[i];
-      if(!l){
+      if(!l || !l.enabled){
         continue;
       }
       let func = l[evt.keyIdentifier];
@@ -567,20 +564,28 @@ class InputEventListener {
 
     this.stopPropagation = options.stopPropagation;
 
-    // this.keyConfig = Util.extend(keyConfig, defaultKeyConfig);
     this.keyConfig = importKeyConfig.call(this,keyConfig);
     this.options = options;
     this.binder = binder;
+    this.enabled = options.hasOwnProperty('enabled') ? options.enabled : true;
 
     if(options.hasOwnProperty('methods')){
       this._loadListener(options.methods);
     }
   }
 
+  $enable(){
+    this.enabled = true;
+  }
+
+  $disable(){
+    this.enabled = false;
+  }
+
   _loadListener(listener){
-    let avail = ['start', 'select', 'home', 'left', 'right', 'up', 'down',
+    let avail = ['start', 'select', 'home', 'extra', 'left', 'right', 'up', 'down',
       'l1', 'l2', 'l3', 'r1', 'r2', 'r3', 'triangle', 'square', 'circle', 'cross',
-      'extra', 'leftStick', 'rightStick', 'mouseMove', 'mouseDown', 'mouseUp', 'mouseOut',
+      'leftStick', 'rightStick', 'mouseMove', 'mouseDown', 'mouseUp', 'mouseOut',
       'touchStart', 'touchEnd', 'touchMove', 'touchCancel',
     ];
 

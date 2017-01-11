@@ -14,9 +14,6 @@ export {default as ImageAsset} from './components/base/imageAsset'
 // canvas
 export {default as Canvas} from './components/canvas/canvas'
 
-// ein
-export * from './components/ein'
-
 // input
 export {default as InputController} from './components/input/inputController'
 
