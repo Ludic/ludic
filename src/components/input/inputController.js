@@ -41,22 +41,8 @@ class InputController {
 
   // input methods
 
-  addEventListener(listener){
+  addInputListener(listener){
     listeners.push(listener);
-  }
-
-  // to be deprecated for `newInputListener`
-  newEventListener(options, binder, alsoAdd){
-    if(typeof alsoAdd === 'undefined' && typeof binder === 'boolean'){
-      // alsoAdd was the second param, without binder
-      alsoAdd = binder;
-      binder = null;
-    }
-    var l = new InputEventListener(options, binder);
-    if(alsoAdd){
-      this.addEventListener(l);
-    }
-    return l;
   }
 
   /**
@@ -75,12 +61,12 @@ class InputController {
     }
     var l = new InputEventListener(options, binder);
     if(alsoAdd){
-      this.addEventListener(l);
+      this.addInputListener(l);
     }
     return l;
   }
 
-  removeEventListener(listener){
+  removeInputListener(listener){
     var ix = listeners.indexOf(listener);
     if(ix>-1){
       listeners.splice(ix,1);
@@ -92,17 +78,17 @@ class InputController {
     // object for all key states
     this.allKeys = {};
 
-    this.canvas.addEventListener('keydown', function(evt) {
+    this.canvas.addEventListener('keydown', (evt)=>{
       // evt.preventDefault();
       // this.onKeyDown(this.canvas,evt);
       this.onKeyEvent(this.canvas,evt);
-    }.bind(this), false);
+    }, false);
 
-    this.canvas.addEventListener('keyup', function(evt) {
+    this.canvas.addEventListener('keyup', (evt)=>{
       // evt.preventDefault();
       // this.onKeyUp(this.canvas,evt);
       this.onKeyEvent(this.canvas,evt);
-    }.bind(this), false);
+    }, false);
   }
 
   onKeyEvent(canvas, evt) {

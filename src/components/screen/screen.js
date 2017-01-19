@@ -1,4 +1,3 @@
-import BaseSystem from 'components/ein/BaseSystem'
 
 export default class Screen {
   constructor(options) {

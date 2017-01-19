@@ -23,7 +23,8 @@ export {default as InputController} from './components/input/inputController'
   patches that require a parameter (monkey patch) export function name with prefix `Patch`
     i.e. export {default as PatchFixSomeClass} from './components/patches/fixSomeClass'
 */
-import Path2D from './components/patches/Path2D';
+import path2D from './components/patches/path2D';
+import object from './components/patches/object';
 
 // screen
 export {default as Screen} from './components/screen/screen'
