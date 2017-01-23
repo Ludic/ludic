@@ -8,7 +8,7 @@ var fs = require('fs');
 module.exports = {
   entry: "./src/main.js",
   output: {
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'umd',
     path: __dirname + '/dist',
     filename: "main.js"
   },
