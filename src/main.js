@@ -16,6 +16,7 @@ export {default as Canvas} from './components/canvas/canvas'
 
 // input
 export {default as InputController} from './components/input/inputController'
+export {default as GamepadController} from './components/input/gamepadController'
 
 // patches
 /*

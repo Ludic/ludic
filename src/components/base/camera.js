@@ -1,7 +1,7 @@
 import Util from '../util/util';
 import Vector2 from '../engine/Vector2';
-import Canvas from 'components/canvas/canvas';
-import Ludic from 'components/app/ludic';
+import Canvas from '../canvas/canvas';
+import Ludic from '../app/ludic';
 
 var DEFAULT_PTM = 32;
 
