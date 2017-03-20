@@ -8,7 +8,6 @@ export {default as default, default as Ludic} from './components/app/ludic'
 export {default as Asset} from './components/base/asset'
 export {default as AssetManager} from './components/base/assetManager'
 export {default as Camera} from './components/base/camera'
-export {default as fps} from './components/base/fps'
 export {default as ImageAsset} from './components/base/imageAsset'
 
 // canvas
