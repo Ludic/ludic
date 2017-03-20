@@ -1,37 +1,31 @@
 import Util from '../util/util';
-import $ from 'jquery';
 
 class Canvas {
   constructor() {
-    this.setupFullscreen();
+    this.setupCanvas();
     this.config = Util.readConfig('canvas');
     this.focus();
 
   }
 
-  setupFullscreen(){
-    var id = Util.readConfig('canvas','id', 'canvas');
-    var fullscreen = Util.readConfig('canvas', 'fullscreen', false);
-    var fps = Util.readConfig('camera', 'fps');
+  setupCanvas(){
+    let canvasConfig = Util.readConfig('el')
+    let canvas;
 
-    var container = $('#container');
-    this.$fps = $('#fps');
-    fps ? this.$fps.show(): this.$fps.hide();
-
-    if(fullscreen){
-      // add correct divs
-      var canvas = $('<canvas id="'+id+'" tabindex="1"></canvas>').appendTo(container);
-
-      this.set$Element(canvas);
-
-      window.addEventListener('resize', this.resize.bind(this), false);
-      this.resize();
+    if(typeof canvasConfig === 'string'){
+      canvas = document.querySelector(canvasConfig)
+    } else if(canvasConfig instanceof HTMLElement){
+      canvas = canvasConfig
     } else {
-      var wrapper = $('<div style="text-align:center"></div>').appendTo(container);
-      var canvasWrapper = $('<div style="margin:auto;width:640px;padding:2px;border:1px solid #888;text-align:left"></div>').appendTo(wrapper);
-      var canvas = $('<canvas id="'+id+'" width="640" height="480" tabindex="1"></canvas>').appendTo(canvasWrapper);
+      console.warn(`Ludic::Canvas: Unknown property type passed as 'el'.`, canvasConfig);
+    }
 
-      this.set$Element(canvas);
+    if(canvas != null){
+      // make sure canvas has 'tabindex' attr for key binding
+      canvas.setAttribute('tabindex', canvas.getAttribute('tabindex') || '1');
+      this.setElement(canvas);
+    } else {
+      console.warn(`Ludic::Canvas: Ludic does not have a canvas to bind to. Please supply one with the 'el' config property.`);
     }
   }
 
@@ -48,9 +42,8 @@ class Canvas {
     return this.el;
   }
 
-  set$Element(canvas){
-    this.$el = canvas;
-    this.el = this.$el[0];
+  setElement(canvas){
+    this.el = canvas;
   }
 
   addEventListener(){
@@ -61,8 +54,7 @@ class Canvas {
     this.el.removeEventListener.apply(this.el, arguments);
   }
 
-  getContext(dimension){
-    dimension = dimension || '2d';
+  getContext(dimension = this.config.dimension){
     return this.el.getContext(dimension);
   }
 
@@ -72,6 +64,16 @@ class Canvas {
 
   width(){
     return this.el.width;
+  }
+
+  /**
+   * Helper function to clear the current context at full width-height
+   * @param {String} clearColor - color to clear the screen with
+   */
+  clear(clearColor = 'white', context = this.getContext()){
+    context.fillStyle = clearColor
+    context.clearRect(0, 0, this.width(), this.height())
+    context.fillRect(0, 0, this.width(), this.height())
   }
 }
 

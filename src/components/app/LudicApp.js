@@ -5,16 +5,14 @@ import ScreenManager from '../screen/screenManager';
 import Ludic from './ludic';
 import InputController from '../input/inputController';
 
-// master record; all systems report actions to parent manager for master record of all entities:entity/system
-class BaseApp {
+export default class LudicApp {
   constructor(config) {
     Util.setConfig(config);
     Ludic.config = config;
     Ludic.canvas = new Canvas();
     Ludic.context = Ludic.canvas.getContext();
-    Ludic.camera = new Camera(Ludic.canvas);
     Ludic.screenManager = new ScreenManager();
-    Ludic.input = new InputController(Ludic.canvas, Ludic.camera);
+    Ludic.input = new InputController(Ludic.canvas);
     Ludic.util = Util;
 
     //Put Ludic on the window in devmode
@@ -25,14 +23,14 @@ class BaseApp {
     this.running = false;
     this.lastTime = Date.now();
 
-    window._requestAnimFrame = (function(){
+    this._requestAnimFrame = (()=>{
       return  window.requestAnimationFrame       ||
               window.webkitRequestAnimationFrame ||
               window.mozRequestAnimationFrame    ||
               window.oRequestAnimationFrame      ||
               window.msRequestAnimationFrame     ||
               (function(){
-                console.log('falling back to basic requestAnimationFrame');
+                console.warn('LudicApp: falling back to basic requestAnimationFrame');
                 return false;
               })()                               ||
               function( callback ){
@@ -40,22 +38,26 @@ class BaseApp {
               };
     })();
 
+    // do some binding
+    this._requestAnimFrame = this._requestAnimFrame.bind(window);
     this._animate = this._animate.bind(this);
   }
 
-  step(delta) {
-    this.screenManager.step(Ludic.context, delta);
-  }
+  // override
+  update(delta) {}
 
-  _animate() {
+  _animate(time) {
     if(this.running){
-      window._requestAnimFrame(this._animate);
+      this._requestAnimFrame(this._animate);
 
-      var dateNow = Date.now(),
-          delta = (dateNow - this.lastTime) / 1000;
+      var delta = (time - this.lastTime) / 1000;
+      this.lastTime = Ludic._time = time;
 
-      this.lastTime = dateNow;
-      this.step(delta);
+      if(!Number.isNaN(delta)){
+        Ludic.context.save();
+        this.update(delta,time);
+        Ludic.context.restore();
+      }
     }
   }
 
@@ -65,10 +67,12 @@ class BaseApp {
       this._animate();
   }
 
-  run(){
+  run(updateFunction){
     this.running = true;
+    if(updateFunction != null){
+      this.update = updateFunction;
+    }
     this._animate();
   }
-}
 
-export default BaseApp;
+}

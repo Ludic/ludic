@@ -1,16 +1,7 @@
 
 var _config = {
   canvas: {
-    fullscreen: false,
-    fps: false
-  },
-  world: {
-    gravity: {
-      x: 0,
-      y: 0,
-    },
-    drawAxes: false,
-    drawDebug: false
+    dimension: '2d',
   },
   console: {
     log: true
@@ -67,7 +58,7 @@ class Util {
   static extend() {
     for (var i = 1; i < arguments.length; i++){
 
-      if(typeof arguments[i] === 'object'){
+      if(typeof arguments[i] === 'object' && !(arguments[i] instanceof HTMLElement)){
         for (var key in arguments[i]){
           if (arguments[i].hasOwnProperty(key)){
             arguments[0] = arguments[0] || {};
@@ -77,7 +68,6 @@ class Util {
         }
       } else {
         arguments[0] = arguments[i];
-
       }
 
     }
@@ -93,22 +83,13 @@ class Util {
     return _config;
   }
 
-  static readConfig(scope, param, def){
-    var params = param ? param.split('.') : [];
+  static readConfig(scope, param = '', def = undefined){
+    let params = param ? param.split('.') : [];
+    let obj = _config[scope];
 
-    var obj;
-
-    try {
-      obj = _config[scope];
-
-      for(var i=0; i<params.length; i++){
-        obj = obj[params[i]];
-      }
-    } catch (e) {
-      obj = null;
-      console.error(e);
-    } finally {
-      obj = obj || def;
+    obj = Object.resolve(param, obj)
+    if(obj==null){
+      obj = def
     }
     return obj;
   }
@@ -145,46 +126,6 @@ class Util {
     }
   }
 
-  // //to replace original C++ operator =
-  // static copyVec2(vec) {
-  //     return new Box2D.b2Vec2(vec.get_x(), vec.get_y());
-  // }
-  //
-  // //to replace original C++ operator * (float)
-  // static scaleVec2(vec, scale) {
-  //     vec.set_x( scale * vec.get_x() );
-  //     vec.set_y( scale * vec.get_y() );
-  // }
-  //
-  // //to replace original C++ operator *= (float)
-  // static scaledVec2(vec, scale) {
-  //     return new Box2D.b2Vec2(scale * vec.get_x(), scale * vec.get_y());
-  // }
-
-
-  static generateGradient(color1, color2, ratio){
-    var hex = function(x) {
-      x = x.toString(16);
-      return (x.length == 1) ? '0' + x : x;
-    };
-    var r = Math.ceil(parseInt(color1.substring(0,2), 16) * ratio + parseInt(color2.substring(0,2), 16) * (1-ratio));
-    var g = Math.ceil(parseInt(color1.substring(2,4), 16) * ratio + parseInt(color2.substring(2,4), 16) * (1-ratio));
-    var b = Math.ceil(parseInt(color1.substring(4,6), 16) * ratio + parseInt(color2.substring(4,6), 16) * (1-ratio));
-
-    return  hex(r) + hex(g) + hex(b);
-  }
-
-  static sortByKey(items, key){
-    // items.sort(function (a, b) {
-    //   if (a[key] > b[key]) {
-    //     return 1;
-    //   }
-    //   if(a[key] < b[key]) {
-    //     return -1;
-    //   }
-    //   return 0;
-    // });
-  }
 }
 
 export default Util;
