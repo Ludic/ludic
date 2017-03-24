@@ -6,14 +6,14 @@ var fs = require('fs');
 */
 
 module.exports = function(env){
-  return [
-    {
+  return ['umd','this','window','global','amd','commonjs','commonjs2'].map(function(lib){
+    return {
       entry: "./src/main.js",
       output: {
-        libraryTarget: 'umd',
+        libraryTarget: lib,
         library: 'Ludic',
         path: __dirname + '/dist',
-        filename: "ludic.umd.js"
+        filename: "ludic."+lib+".js"
       },
       module: {
         loaders: [
@@ -43,5 +43,5 @@ module.exports = function(env){
       },
       devtool: '#source-map'
     }
-  ]
+  })
 }
