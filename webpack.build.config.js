@@ -1,47 +1,19 @@
-var path = require('path');
-var fs = require('fs');
+var merge = require('webpack-merge')
+var base = require('./webpack.base.config.js')
 
 /*
 * Ludic build config
 */
 
 module.exports = function(env){
-  return ['umd','this','window','global','amd','commonjs','commonjs2'].map(function(lib){
-    return {
-      entry: "./src/main.js",
+  return ['umd','commonjs','commonjs2'].map(function(lib){
+    return merge(base, {
       output: {
         libraryTarget: lib,
         library: 'Ludic',
         path: __dirname + '/dist',
         filename: "ludic."+lib+".js"
       },
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: "babel-loader",
-            options: {
-              presets: [
-                ["es2015",{modules: false}],
-                "stage-1",
-              ]
-            },
-          },
-          {
-            test: /\.css$/,
-            loader: "style!css",
-          },
-        ]
-      },
-      resolve: {
-        alias: {
-          src: path.resolve(__dirname, 'src/'),
-          components: 'src/components',
-        },
-        extensions: ['.js', '.scss', '.json'],
-      },
-      devtool: '#source-map'
-    }
+    })
   })
 }
