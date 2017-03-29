@@ -203,22 +203,6 @@ var Util = function () {
       } catch (e) {
         obj = null;
       }
-
-      this.configure();
-    }
-  }, {
-    key: 'configure',
-    value: function configure() {
-      this.configureConsole();
-    }
-  }, {
-    key: 'configureConsole',
-    value: function configureConsole() {
-
-      if (!_config.console.log) {
-        console._log = console.log;
-        console.log = function () {};
-      }
     }
   }]);
 

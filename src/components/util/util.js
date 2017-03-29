@@ -110,20 +110,6 @@ class Util {
     } catch (e) {
       obj = null;
     }
-
-    this.configure();
-  }
-
-  static configure(){
-    this.configureConsole();
-  }
-
-  static configureConsole(){
-
-    if(!_config.console.log){
-      console._log = console.log;
-      console.log = function(){};
-    }
   }
 
 }

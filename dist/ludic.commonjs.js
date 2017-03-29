@@ -1,5 +1,4 @@
-exports["Ludic"] =
-/******/ (function(modules) { // webpackBootstrap
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -202,22 +201,6 @@ var Util = function () {
         }
       } catch (e) {
         obj = null;
-      }
-
-      this.configure();
-    }
-  }, {
-    key: 'configure',
-    value: function configure() {
-      this.configureConsole();
-    }
-  }, {
-    key: 'configureConsole',
-    value: function configureConsole() {
-
-      if (!_config.console.log) {
-        console._log = console.log;
-        console.log = function () {};
       }
     }
   }]);
@@ -3632,5 +3615,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }
-/******/ ]);
+/******/ ])));
 //# sourceMappingURL=ludic.commonjs.js.map
