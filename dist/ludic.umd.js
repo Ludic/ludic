@@ -3,10 +3,10 @@
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
-	else if(typeof exports === 'object')
-		exports["Ludic"] = factory();
-	else
-		root["Ludic"] = factory();
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -172,7 +172,6 @@ var Util = function () {
     key: 'setConfig',
     value: function setConfig(config) {
       _config = this.extend(_config, config);
-      this.configure();
     }
   }, {
     key: 'getConfig',
@@ -212,6 +211,7 @@ var Util = function () {
       } catch (e) {
         obj = null;
       }
+      console.log('update');
     }
   }]);
 
@@ -2716,7 +2716,7 @@ var LudicApp = function () {
 
   _createClass(LudicApp, [{
     key: 'update',
-    value: function update(delta) {}
+    value: function update(delta, time) {}
   }, {
     key: '_animate',
     value: function _animate(time) {

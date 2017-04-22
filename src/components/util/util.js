@@ -76,7 +76,6 @@ class Util {
 
   static setConfig(config){
     _config = this.extend(_config, config);
-    this.configure();
   }
 
   static getConfig(){
@@ -110,6 +109,7 @@ class Util {
     } catch (e) {
       obj = null;
     }
+    console.log('update');
   }
 
 }

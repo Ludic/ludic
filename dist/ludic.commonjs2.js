@@ -163,7 +163,6 @@ var Util = function () {
     key: 'setConfig',
     value: function setConfig(config) {
       _config = this.extend(_config, config);
-      this.configure();
     }
   }, {
     key: 'getConfig',
@@ -203,6 +202,7 @@ var Util = function () {
       } catch (e) {
         obj = null;
       }
+      console.log('update');
     }
   }]);
 
@@ -2707,7 +2707,7 @@ var LudicApp = function () {
 
   _createClass(LudicApp, [{
     key: 'update',
-    value: function update(delta) {}
+    value: function update(delta, time) {}
   }, {
     key: '_animate',
     value: function _animate(time) {

@@ -1,5 +1,4 @@
-exports["Ludic"] =
-/******/ (function(modules) { // webpackBootstrap
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -163,7 +162,6 @@ var Util = function () {
     key: 'setConfig',
     value: function setConfig(config) {
       _config = this.extend(_config, config);
-      this.configure();
     }
   }, {
     key: 'getConfig',
@@ -203,6 +201,7 @@ var Util = function () {
       } catch (e) {
         obj = null;
       }
+      console.log('update');
     }
   }]);
 
@@ -2707,7 +2706,7 @@ var LudicApp = function () {
 
   _createClass(LudicApp, [{
     key: 'update',
-    value: function update(delta) {}
+    value: function update(delta, time) {}
   }, {
     key: '_animate',
     value: function _animate(time) {
@@ -3616,5 +3615,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }
-/******/ ]);
+/******/ ])));
 //# sourceMappingURL=ludic.commonjs.js.map
