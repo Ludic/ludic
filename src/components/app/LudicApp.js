@@ -44,7 +44,7 @@ export default class LudicApp {
   }
 
   // override
-  update(delta) {}
+  update(delta,time) {}
 
   _animate(time) {
     if(this.running){

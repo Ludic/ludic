@@ -1,14 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -73,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -172,7 +163,6 @@ var Util = function () {
     key: 'setConfig',
     value: function setConfig(config) {
       _config = this.extend(_config, config);
-      this.configure();
     }
   }, {
     key: 'getConfig',
@@ -212,22 +202,7 @@ var Util = function () {
       } catch (e) {
         obj = null;
       }
-
-      this.configure();
-    }
-  }, {
-    key: 'configure',
-    value: function configure() {
-      this.configureConsole();
-    }
-  }, {
-    key: 'configureConsole',
-    value: function configureConsole() {
-
-      if (!_config.console.log) {
-        console._log = console.log;
-        console.log = function () {};
-      }
+      console.log('update');
     }
   }]);
 
@@ -447,7 +422,7 @@ var Asset = function () {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__imageAssetLoader__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__imageAssetLoader__ = __webpack_require__(23);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1434,7 +1409,7 @@ Gamepad.prototype.getValueByAxisId = function (axisId) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_util__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__keyCodeMap__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__keyCodeMap__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gamepadController__ = __webpack_require__(9);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -2066,7 +2041,7 @@ InputController.InputEventListener = InputEventListener;
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_privateProperty__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_privateProperty__ = __webpack_require__(25);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2732,7 +2707,7 @@ var LudicApp = function () {
 
   _createClass(LudicApp, [{
     key: 'update',
-    value: function update(delta) {}
+    value: function update(delta, time) {}
   }, {
     key: '_animate',
     value: function _animate(time) {
@@ -2775,29 +2750,6 @@ var LudicApp = function () {
 /* 15 */
 /***/ function(module, exports) {
 
-
-var timeTotal = 0;
-var averageArray = [];
-var period = 5;
-var average;
-
-onmessage = function onmessage(event) {
-  timeTotal += event.data;
-
-  averageArray.push(event.data);
-
-  if (averageArray.length > period) {
-    timeTotal -= averageArray.shift();
-    average = timeTotal / period;
-    // return 1 / average;
-    postMessage(1 / average);
-  }
-};
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
 // implementation modeled from http://stackoverflow.com/a/6491621
 Object.defineProperty(Object, 'resolve', {
   enumerable: false,
@@ -2820,7 +2772,7 @@ Object.defineProperty(Object, 'resolve', {
 });
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports) {
 
 Path2D.rect = function () {
@@ -2843,7 +2795,7 @@ Path2D.ellipse = function () {
 };
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2901,7 +2853,7 @@ var Screen = function () {
 /* harmony default export */ exports["a"] = Screen;
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3023,7 +2975,7 @@ var MultiSprite = function (_BaseSprite) {
 /* harmony default export */ exports["a"] = MultiSprite;
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3121,7 +3073,7 @@ var HUD = function () {
 /* harmony default export */ exports["a"] = HUD;
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3275,7 +3227,7 @@ MenuDialog.MenuItem = function () {
 }();
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3405,7 +3357,7 @@ var Text = function (_HUDElement) {
 /* harmony default export */ exports["a"] = Text;
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3420,7 +3372,7 @@ function classTypeOf(typeToCheck, type) {
 }
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3449,7 +3401,7 @@ var ImageAssetLoader = function () {
 /* harmony default export */ exports["a"] = new ImageAssetLoader();
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3519,7 +3471,7 @@ var ImageAssetLoader = function () {
 };
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3562,7 +3514,7 @@ var PrivateProperty = function () {
 /* harmony default export */ exports["a"] = PrivateProperty;
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3573,57 +3525,53 @@ var PrivateProperty = function () {
 /* harmony reexport (binding) */ __webpack_require__.d(exports, "Ludic", function() { return __WEBPACK_IMPORTED_MODULE_3__components_app_ludic__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_base_asset__ = __webpack_require__(4);
 /* harmony reexport (binding) */ __webpack_require__.d(exports, "Asset", function() { return __WEBPACK_IMPORTED_MODULE_4__components_base_asset__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_base_assetManager__ = __webpack_require__(5);
 /* harmony reexport (binding) */ __webpack_require__.d(exports, "AssetManager", function() { return __WEBPACK_IMPORTED_MODULE_5__components_base_assetManager__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_base_assetManager__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_base_camera__ = __webpack_require__(6);
 /* harmony reexport (binding) */ __webpack_require__.d(exports, "Camera", function() { return __WEBPACK_IMPORTED_MODULE_6__components_base_camera__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_base_fps__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_base_fps___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_base_fps__);
-/* harmony reexport (default from non-hamory) */ __webpack_require__.d(exports, "fps", function() { return __WEBPACK_IMPORTED_MODULE_7__components_base_fps___default.a; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_base_imageAsset__ = __webpack_require__(7);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "ImageAsset", function() { return __WEBPACK_IMPORTED_MODULE_8__components_base_imageAsset__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_canvas_canvas__ = __webpack_require__(2);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "Canvas", function() { return __WEBPACK_IMPORTED_MODULE_9__components_canvas_canvas__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_input_inputController__ = __webpack_require__(10);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "InputController", function() { return __WEBPACK_IMPORTED_MODULE_10__components_input_inputController__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "GamepadController", function() { return __WEBPACK_IMPORTED_MODULE_11__components_input_gamepadController__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_input_gamepadController__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_base_imageAsset__ = __webpack_require__(7);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "ImageAsset", function() { return __WEBPACK_IMPORTED_MODULE_7__components_base_imageAsset__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_canvas_canvas__ = __webpack_require__(2);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "Canvas", function() { return __WEBPACK_IMPORTED_MODULE_8__components_canvas_canvas__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_input_inputController__ = __webpack_require__(10);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "InputController", function() { return __WEBPACK_IMPORTED_MODULE_9__components_input_inputController__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "GamepadController", function() { return __WEBPACK_IMPORTED_MODULE_10__components_input_gamepadController__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_input_gamepadController__ = __webpack_require__(9);
 Object.defineProperty(exports, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_patches_path2D__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_patches_path2D__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_patches_path2D___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_patches_path2D__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_patches_object__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_patches_object__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_patches_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_patches_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_screen_screen__ = __webpack_require__(18);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "Screen", function() { return __WEBPACK_IMPORTED_MODULE_12__components_screen_screen__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_screen_screenManager__ = __webpack_require__(11);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "ScreenManager", function() { return __WEBPACK_IMPORTED_MODULE_13__components_screen_screenManager__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_sprite_BaseSprite__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "BaseSprite", function() { return __WEBPACK_IMPORTED_MODULE_14__components_sprite_BaseSprite__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_sprite_MultiSprite__ = __webpack_require__(19);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "MultiSprite", function() { return __WEBPACK_IMPORTED_MODULE_15__components_sprite_MultiSprite__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__components_ui_Hud__ = __webpack_require__(20);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "HUD", function() { return __WEBPACK_IMPORTED_MODULE_16__components_ui_Hud__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_ui_HUDElement__ = __webpack_require__(3);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "HUDElement", function() { return __WEBPACK_IMPORTED_MODULE_17__components_ui_HUDElement__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_ui_Text__ = __webpack_require__(22);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "Text", function() { return __WEBPACK_IMPORTED_MODULE_18__components_ui_Text__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_ui_Dialog__ = __webpack_require__(13);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "Dialog", function() { return __WEBPACK_IMPORTED_MODULE_19__components_ui_Dialog__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_ui_MenuDialog__ = __webpack_require__(21);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "MenuDialog", function() { return __WEBPACK_IMPORTED_MODULE_20__components_ui_MenuDialog__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_util_util__ = __webpack_require__(0);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "Util", function() { return __WEBPACK_IMPORTED_MODULE_21__components_util_util__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_util_utilities__ = __webpack_require__(23);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(exports, "classTypeOf", function() { return __WEBPACK_IMPORTED_MODULE_22__components_util_utilities__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_engine_Vector2__ = __webpack_require__(8);
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "Vector2", function() { return __WEBPACK_IMPORTED_MODULE_23__components_engine_Vector2__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_screen_screen__ = __webpack_require__(17);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "Screen", function() { return __WEBPACK_IMPORTED_MODULE_11__components_screen_screen__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_screen_screenManager__ = __webpack_require__(11);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "ScreenManager", function() { return __WEBPACK_IMPORTED_MODULE_12__components_screen_screenManager__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_sprite_BaseSprite__ = __webpack_require__(12);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "BaseSprite", function() { return __WEBPACK_IMPORTED_MODULE_13__components_sprite_BaseSprite__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_sprite_MultiSprite__ = __webpack_require__(18);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "MultiSprite", function() { return __WEBPACK_IMPORTED_MODULE_14__components_sprite_MultiSprite__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_ui_Hud__ = __webpack_require__(19);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "HUD", function() { return __WEBPACK_IMPORTED_MODULE_15__components_ui_Hud__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__components_ui_HUDElement__ = __webpack_require__(3);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "HUDElement", function() { return __WEBPACK_IMPORTED_MODULE_16__components_ui_HUDElement__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_ui_Text__ = __webpack_require__(21);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "Text", function() { return __WEBPACK_IMPORTED_MODULE_17__components_ui_Text__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_ui_Dialog__ = __webpack_require__(13);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "Dialog", function() { return __WEBPACK_IMPORTED_MODULE_18__components_ui_Dialog__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_ui_MenuDialog__ = __webpack_require__(20);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "MenuDialog", function() { return __WEBPACK_IMPORTED_MODULE_19__components_ui_MenuDialog__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_util_util__ = __webpack_require__(0);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "Util", function() { return __WEBPACK_IMPORTED_MODULE_20__components_util_util__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_util_utilities__ = __webpack_require__(22);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(exports, "classTypeOf", function() { return __WEBPACK_IMPORTED_MODULE_21__components_util_utilities__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_engine_Vector2__ = __webpack_require__(8);
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "Vector2", function() { return __WEBPACK_IMPORTED_MODULE_22__components_engine_Vector2__["a"]; });
 
 // app
 
 
 
 // base
-
 
 
 
@@ -3669,5 +3617,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }
 /******/ ]);
-});
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=ludic.commonjs2.js.map

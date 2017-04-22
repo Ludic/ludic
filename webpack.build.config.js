@@ -2,17 +2,17 @@ var merge = require('webpack-merge')
 var base = require('./webpack.base.config.js')
 
 /*
-* Ludic dev config
+* Ludic build config
 */
 
 module.exports = function(env){
   return ['umd','commonjs','commonjs2'].map(function(lib){
     return merge(base, {
-      entry: "./src/main.js",
       output: {
         libraryTarget: lib,
+        library: 'Ludic',
         path: __dirname + '/dist',
-        filename: 'ludic.'+lib+'.js'
+        filename: "ludic."+lib+".js"
       },
     })
   })

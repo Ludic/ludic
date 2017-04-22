@@ -3,6 +3,9 @@ node_modules
 *rube-backups
 heap_analysis
 
+#
+dist
+
 # npm stuff
 npm-debug.log
 
