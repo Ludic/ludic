@@ -4,7 +4,7 @@ node_modules
 heap_analysis
 
 #
-dist
+dist/
 
 # npm stuff
 npm-debug.log
