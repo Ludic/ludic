@@ -1,49 +1,49 @@
 
 // app
-export {default as LudicApp} from './components/app/LudicApp'
-export {default as default, default as Ludic} from './components/app/ludic'
+export {default as LudicApp} from './app/LudicApp'
+export {default as default, default as Ludic} from './app/ludic'
 
 
 // base
-export {default as Asset} from './components/base/asset'
-export {default as AssetManager} from './components/base/assetManager'
-export {default as Camera} from './components/base/camera'
-export {default as ImageAsset} from './components/base/imageAsset'
+export {default as Asset} from './base/asset'
+export {default as AssetManager} from './base/assetManager'
+export {default as Camera} from './base/camera'
+export {default as ImageAsset} from './base/imageAsset'
 
 // canvas
-export {default as Canvas} from './components/canvas/canvas'
+export {default as Canvas} from './canvas/canvas'
 
 // input
-export {default as InputController} from './components/input/inputController'
-export {default as GamepadController} from './components/input/gamepadController'
+export {default as InputController} from './input/inputController'
+export {default as GamepadController} from './input/gamepadController'
 
 // patches
 /*
   patches that are prototype extensions, just import here
   patches that require a parameter (monkey patch) export function name with prefix `Patch`
-    i.e. export {default as PatchFixSomeClass} from './components/patches/fixSomeClass'
+    i.e. export {default as PatchFixSomeClass} from './patches/fixSomeClass'
 */
-import path2D from './components/patches/Path2D';
-import object from './components/patches/Object';
+import path2D from './patches/Path2D';
+import object from './patches/Object';
 
 // screen
-export {default as Screen} from './components/screen/screen'
-export {default as ScreenManager} from './components/screen/screenManager'
+export {default as Screen} from './screen/screen'
+export {default as ScreenManager} from './screen/screenManager'
 
 // sprite
-export {default as BaseSprite} from './components/sprite/BaseSprite'
-export {default as MultiSprite} from './components/sprite/MultiSprite'
+export {default as BaseSprite} from './sprite/BaseSprite'
+export {default as MultiSprite} from './sprite/MultiSprite'
 
 // ui
-export {default as HUD} from './components/ui/Hud'
-export {default as HUDElement} from './components/ui/HUDElement'
-export {default as Text} from './components/ui/Text'
-export {default as Dialog} from './components/ui/Dialog'
-export {default as MenuDialog} from './components/ui/MenuDialog'
+export {default as HUD} from './ui/Hud'
+export {default as HUDElement} from './ui/HUDElement'
+export {default as Text} from './ui/Text'
+export {default as Dialog} from './ui/Dialog'
+export {default as MenuDialog} from './ui/MenuDialog'
 
 // util
-export {default as Util} from './components/util/util'
-export * from './components/util/utilities'
+export {default as Util} from './util/util'
+export * from './util/utilities'
 
 // vectors
-export {default as Vector2} from './components/engine/Vector2'
+export {default as Vector2} from './engine/Vector2'
