@@ -1,4 +1,3 @@
-import Util from '../util/util';
 import KeyCodeMap from './keyCodeMap';
 
 import GamepadController from './gamepadController'
@@ -32,7 +31,6 @@ let prevMousePosPixel = {};
 class InputController {
   constructor(canvas) {
     this.canvas = canvas;
-    // this.config = Util.readConfig('input');
     // TODO: refactor config
     this.config = {};
 

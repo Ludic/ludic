@@ -1,5 +1,5 @@
 import Dialog from './Dialog'
-import Ludic from '../app/ludic'
+import app from '../app/app'
 
 export default class MenuDialog extends Dialog {
   constructor(options) {
@@ -32,7 +32,7 @@ export default class MenuDialog extends Dialog {
   show(){
     super.show();
     // take input control
-    this.input = Ludic.input.newEventListener({
+    this.input = app.input.newEventListener({
       stopPropagation: true,
       keyConfig: {
         'w': 'up',
@@ -52,7 +52,7 @@ export default class MenuDialog extends Dialog {
 
   hide(){
     super.hide();
-    Ludic.input.removeEventListener(this.input);
+    app.input.removeEventListener(this.input);
   }
 
   selectItem(index){

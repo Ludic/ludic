@@ -1,23 +1,21 @@
-import Util from '../util/util';
+
 
 class Canvas {
-  constructor() {
-    this.setupCanvas();
-    this.config = Util.readConfig('canvas');
-    this.focus();
-
+  constructor(element, dimension='2d') {
+    this.dimension = dimension
+    this.setupCanvas(element)
+    this.focus()
   }
 
-  setupCanvas(){
-    let canvasConfig = Util.readConfig('el')
-    let canvas;
+  setupCanvas(element){
+    let canvas
 
-    if(typeof canvasConfig === 'string'){
-      canvas = document.querySelector(canvasConfig)
-    } else if(canvasConfig instanceof HTMLElement){
-      canvas = canvasConfig
+    if(typeof element === 'string'){
+      canvas = document.querySelector(element)
+    } else if(element instanceof HTMLElement){
+      canvas = element
     } else {
-      console.warn(`Ludic::Canvas: Unknown property type passed as 'el'.`, canvasConfig);
+      console.warn(`Ludic::Canvas: Unknown property type passed as 'el'.`, element);
     }
 
     if(canvas != null){
@@ -54,7 +52,7 @@ class Canvas {
     this.el.removeEventListener.apply(this.el, arguments);
   }
 
-  getContext(dimension = this.config.dimension){
+  getContext(dimension = this.dimension){
     return this.el.getContext(dimension);
   }
 

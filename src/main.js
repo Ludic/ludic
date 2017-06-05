@@ -1,8 +1,6 @@
 
 // app
-export {default as LudicApp} from './app/LudicApp'
-export {default as default, default as Ludic} from './app/ludic'
-
+export {default as default, default as app, LudicApp} from './app/app'
 
 // base
 export {default as Asset} from './base/asset'
@@ -42,8 +40,8 @@ export {default as Dialog} from './ui/Dialog'
 export {default as MenuDialog} from './ui/MenuDialog'
 
 // util
-export {default as Util} from './util/util'
-export * from './util/utilities'
+import * as utils from './utils'
+export {utils}
 
 // vectors
 export {default as Vector2} from './engine/Vector2'

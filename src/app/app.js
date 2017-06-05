@@ -1,23 +1,22 @@
 import Canvas from '../canvas/canvas';
 import Camera from '../base/camera';
-import Util from '../util/util';
+import * as Utils from '../utils';
 import ScreenManager from '../screen/screenManager';
-import Ludic from './ludic';
 import InputController from '../input/inputController';
 
-export default class LudicApp {
-  constructor(config) {
-    Util.setConfig(config);
-    Ludic.config = config;
-    Ludic.canvas = new Canvas();
-    Ludic.context = Ludic.canvas.getContext();
-    Ludic.screenManager = new ScreenManager();
-    Ludic.input = new InputController(Ludic.canvas);
-    Ludic.util = Util;
+export class LudicApp {
+  constructor(config, appContext) {
+    this.$appContext = appContext
+    // TODO: Create better config system
+    this.$appContext.config = config;
+    this.$appContext.canvas = new Canvas(config.el);
+    this.$appContext.context = this.$appContext.canvas.getContext();
+    this.$appContext.input = new InputController(this.$appContext.canvas);
+    this.$appContext.utils = Utils;
 
-    //Put Ludic on the window in devmode
-    if(Ludic.devmode){
-      window.Ludic = Ludic;
+    //Put the app context on the window in devmode
+    if(this.$appContext.devmode){
+      window.$ludicAppContext = this.$appContext;
     }
 
     this.running = false;
@@ -51,12 +50,12 @@ export default class LudicApp {
       this._requestAnimFrame(this._animate);
 
       var delta = (time - this.lastTime) / 1000;
-      this.lastTime = Ludic._time = time;
+      this.lastTime = this.$appContext._time = time;
 
       if(!Number.isNaN(delta)){
-        Ludic.context.save();
+        this.$appContext.context.save();
         this.update(delta,time);
-        Ludic.context.restore();
+        this.$appContext.context.restore();
       }
     }
   }
@@ -75,4 +74,8 @@ export default class LudicApp {
     this._animate();
   }
 
+}
+
+export default function app(config){
+  return new LudicApp(config, app)
 }

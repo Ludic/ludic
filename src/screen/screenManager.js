@@ -1,4 +1,4 @@
-import PrivateProperty from '../util/privateProperty'
+import PrivateProperty from '../utils/privateProperty'
 
 let _stack = new PrivateProperty();
 let _listeners = new PrivateProperty();

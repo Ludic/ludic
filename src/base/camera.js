@@ -1,9 +1,10 @@
-import Util from '../util/util';
-import Vector2 from '../engine/Vector2';
-import Canvas from '../canvas/canvas';
-import Ludic from '../app/ludic';
+import {round} from '../utils'
+import Vector2 from '../engine/Vector2'
+import Canvas from '../canvas/canvas'
+import app from '../app/app'
 
-var DEFAULT_PTM = 32;
+// PTM: Pixels to Meters ratio
+var DEFAULT_PTM = 32
 
 const DEFAULTS = {
   inverseY: true,
@@ -22,8 +23,8 @@ class Camera {
    * @param {boolean} [options.inverseX=false] - make 'x' axis point left
    * @param {number} [options.x=0] - 'x' coordinate to start the camera
    * @param {number} [options.y=0] - 'y' coordinate to start the camera
-   * @param {number} [options.width=Ludic.canvas.width()] - width of the camera view
-   * @param {number} [options.height=Ludic.canvas.height()] - height of the camera view
+   * @param {number} [options.width=app.canvas.width()] - width of the camera view
+   * @param {number} [options.height=app.canvas.height()] - height of the camera view
    *
    * `new Camera({Canvas})`
    * @param {Canvas} [canvas] - optional canvas to provide dimensions
@@ -43,8 +44,8 @@ class Camera {
    */
   constructor(){
     let options = Object.assign({},DEFAULTS,{
-      width: Ludic.canvas.width(),
-      height: Ludic.canvas.height(),
+      width: app.canvas.width(),
+      height: app.canvas.height(),
     });
     if(arguments.length === 1){
       if(typeof arguments[0] === 'object'){
@@ -203,8 +204,8 @@ class Camera {
 
   moveCenterBy(toMove,instantaneous, fraction){
     fraction = fraction || instantaneous ? 1 : 0.25;
-    this.offset.x -= Util.myRound(fraction * toMove.x * this.ptm, 0);
-    this.offset.y += Util.myRound(fraction * toMove.y * this.ptm, 0);
+    this.offset.x -= round(fraction * toMove.x * this.ptm, 0);
+    this.offset.y += round(fraction * toMove.y * this.ptm, 0);
   }
 
   updateEnvironmentVariables(){
