@@ -1,4 +1,4 @@
-export function convertHex(hex,opacity){
+export function convertHex(hex, opacity = 1){
   hex = hex.replace('#','')
   var r = parseInt(hex.substring(0,2), 16)
   var g = parseInt(hex.substring(2,4), 16)
@@ -16,31 +16,21 @@ export function round(val, places=0) {
   return Math.round(val*c)/c
 }
 
-export function using(self, ns, pattern, logNames, logValues){
+export function using(self, ns, pattern){
   self = self || this
-  if (pattern == undefined) {
-      // import all
-      for (var name in ns) {
-          if(!logNames){
-            self[name] = ns[name]
-          } else {
-            console.log(name, logValues ? ns[name] : '')
-          }
+  if (pattern == null) {
+    // import all
+    for (let name in ns) {
+      self[name] = ns[name]
+    }
+  } else if (typeof pattern == 'string') {
+    let regex = new RegExp(pattern)
+    // import only stuff matching given pattern
+    for (let name in ns) {
+      if (name.match(regex)) {
+        self[name] = ns[name]
       }
-  } else {
-      if (typeof(pattern) == 'string') {
-          pattern = new RegExp(pattern)
-      }
-      // import only stuff matching given pattern
-      for (var name in ns) {
-          if (name.match(pattern)) {
-            if(!logNames){
-              self[name] = ns[name]
-            } else {
-              console.log(name, logValues ? ns[name] : '')
-            }
-          }
-      }
+    }
   }
 }
 
