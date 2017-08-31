@@ -43,15 +43,12 @@ class Camera {
    * @param {number} [height] - height of the camera view
    */
   constructor(){
-    let options = Object.assign({},DEFAULTS,{
-      width: app.canvas.width(),
-      height: app.canvas.height(),
-    });
+    let options = Object.assign({},DEFAULTS)
     if(arguments.length === 1){
       if(typeof arguments[0] === 'object'){
         if(arguments[0] instanceof Canvas){
-          options.width = canvas.width();
-          option.height = canva.height();
+          options.width = arguments[0].width();
+          options.height = arguments[0].height();
         } else {
           // options argument
           options = Object.assign(options, arguments[0])
@@ -277,4 +274,4 @@ class Camera {
 }
 
 
-export default Camera;
+export default Camera

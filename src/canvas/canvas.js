@@ -15,53 +15,54 @@ class Canvas {
     } else if(element instanceof HTMLElement){
       canvas = element
     } else {
-      console.warn(`Ludic::Canvas: Unknown property type passed as 'el'.`, element);
+      console.warn(`Ludic::Canvas: Unknown property type passed as 'el'.`, element)
     }
 
     if(canvas != null){
       // make sure canvas has 'tabindex' attr for key binding
-      canvas.setAttribute('tabindex', canvas.getAttribute('tabindex') || '1');
-      this.setElement(canvas);
+      canvas.setAttribute('tabindex', canvas.getAttribute('tabindex') || '1')
+      canvas.style.position = 'relative'
+      this.setElement(canvas)
     } else {
-      console.warn(`Ludic::Canvas: Ludic does not have a canvas to bind to. Please supply one with the 'el' config property.`);
+      console.warn(`Ludic::Canvas: Ludic does not have a canvas to bind to. Please supply one with the 'el' config property.`)
     }
   }
 
   resize(){
-    this.el.width = window.innerWidth;
-    this.el.height = window.innerHeight;
+    this.el.width = window.innerWidth
+    this.el.height = window.innerHeight
   }
 
   focus(){
-    this.el.focus();
+    this.el.focus()
   }
 
   getElement() {
-    return this.el;
+    return this.el
   }
 
   setElement(canvas){
-    this.el = canvas;
+    this.el = canvas
   }
 
   addEventListener(){
-    this.el.addEventListener.apply(this.el, arguments);
+    this.el.addEventListener.apply(this.el, arguments)
   }
 
   removeEventListener(){
-    this.el.removeEventListener.apply(this.el, arguments);
+    this.el.removeEventListener.apply(this.el, arguments)
   }
 
   getContext(dimension = this.dimension){
-    return this.el.getContext(dimension);
+    return this.el.getContext(dimension)
   }
 
   height(){
-    return this.el.height;
+    return this.el.height
   }
 
   width(){
-    return this.el.width;
+    return this.el.width
   }
 
   /**
@@ -75,4 +76,4 @@ class Canvas {
   }
 }
 
-export default Canvas;
+export default Canvas

@@ -33,11 +33,11 @@ export {default as BaseSprite} from './sprite/BaseSprite'
 export {default as MultiSprite} from './sprite/MultiSprite'
 
 // ui
-export {default as HUD} from './ui/Hud'
-export {default as HUDElement} from './ui/HUDElement'
-export {default as Text} from './ui/Text'
-export {default as Dialog} from './ui/Dialog'
-export {default as MenuDialog} from './ui/MenuDialog'
+// export {default as HUD} from './ui/hud'
+// export {default as HUDElement} from './ui/HUDElement'
+// export {default as Text} from './ui/Text'
+// export {default as Dialog} from './ui/Dialog'
+// export {default as MenuDialog} from './ui/MenuDialog'
 
 // util
 import * as utils from './utils'
