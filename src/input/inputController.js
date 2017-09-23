@@ -215,6 +215,13 @@ class InputController {
       this.onMouseEvent('mouseOut',this.canvas.el,evt);
     }.bind(this), false);
 
+    this.canvas.addEventListener('mouseenter', function(evt) {
+      this.onMouseEvent('mouseEnter',this.canvas.el,evt);
+    }.bind(this), false);
+    this.canvas.addEventListener('mouseleave', function(evt) {
+      this.onMouseEvent('mouseLeave',this.canvas.el,evt);
+    }.bind(this), false);
+
     // touch events
     this.canvas.addEventListener('touchstart', function(evt) {
       this.onMouseEvent('touchStart',this.canvas.el,evt);
@@ -372,7 +379,7 @@ class InputEventListener {
   _loadListener(listener){
     let avail = ['start', 'select', 'home', 'extra', 'left', 'right', 'up', 'down',
       'l1', 'l2', 'l3', 'r1', 'r2', 'r3', 'triangle', 'square', 'circle', 'cross',
-      'leftStick', 'rightStick', 'mouseMove', 'mouseDown', 'mouseUp', 'mouseOut',
+      'leftStick', 'rightStick', 'mouseMove', 'mouseDown', 'mouseUp', 'mouseOut', 'mouseEnter', 'mouseLeave',
       'touchStart', 'touchEnd', 'touchMove', 'touchCancel',
     ];
 

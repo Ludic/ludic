@@ -71,8 +71,10 @@ class Camera {
       options.y = y;
       options.width = width;
       options.height = height;
+    } else if(arguments.length === 0) {
+      console.warn(`Camera::Initialized without any arguments.`, arguments)
     } else if(arguments.length !== 0) {
-      console.warn(`Camera::Unknown arguments.`, arguments);
+      console.warn(`Camera::Unknown arguments.`, arguments)
     }
 
     // apply the options
