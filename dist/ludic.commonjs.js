@@ -1,5 +1,4 @@
-exports["Ludic"] =
-/******/ (function(modules) { // webpackBootstrap
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -2870,5 +2869,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }
-/******/ ]);
+/******/ ])));
 //# sourceMappingURL=ludic.commonjs.js.map

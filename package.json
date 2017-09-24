@@ -2,8 +2,8 @@
   "name": "ludic",
   "version": "1.0.0",
   "description": "JS Game Engine",
-  "main": "dist/main.js",
-  "module": "src/main.js",
+  "main": "dist/ludic.umd.js",
+  "module": "dist/ludic.umd.js",
   "scripts": {
     "dev": "webpack --watch --config ./webpack.dev.config.js",
     "build": "webpack --config ./webpack.build.config.js",
