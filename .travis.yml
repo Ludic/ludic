@@ -3,18 +3,18 @@ node_js:
   - "node"
 script:
   - npm run build
-deploy:
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    local_dir: dist
-    target_branch: dist
-    on:
-      branch: master
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    local_dir: dist
-    target_branch: latest
-    on:
-      branch: dev
+# deploy:
+#   - provider: pages
+#     skip_cleanup: true
+#     github_token: $GITHUB_TOKEN
+#     local_dir: dist
+#     target_branch: dist
+#     on:
+#       branch: master
+#   - provider: pages
+#     skip_cleanup: true
+#     github_token: $GITHUB_TOKEN
+#     local_dir: dist
+#     target_branch: latest
+#     on:
+#       branch: dev

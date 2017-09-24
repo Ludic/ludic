@@ -1,12 +1,9 @@
-jspm_packages
-node_modules
-*rube-backups
-heap_analysis
-
 #
-dist/
+dist/*.js
+dist/*.map
 
 # npm stuff
+node_modules
 npm-debug.log
 
 # mac stuff
