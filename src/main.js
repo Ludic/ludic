@@ -1,6 +1,6 @@
 
 // app
-export {default as default, default as app, LudicApp} from './app/app'
+export {default as default, LudicApp} from './app/app'
 
 // base
 export {default as Asset} from './base/asset'

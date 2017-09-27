@@ -1,8 +1,8 @@
-import Canvas from '../canvas/canvas';
-import Camera from '../base/camera';
-import * as Utils from '../utils';
-import ScreenManager from '../screen/screenManager';
-import InputController from '../input/inputController';
+import Canvas from '../canvas/canvas'
+import Camera from '../base/camera'
+import * as Utils from '../utils'
+import ScreenManager from '../screen/screenManager'
+import InputController from '../input/inputController'
 
 const pluginArgs = new WeakMap()
 
@@ -15,29 +15,26 @@ let $install = function $install(plugin, ...args){
 }
 
 export class LudicApp {
-  constructor(config, $app = {}) {
-    this.$app = $app
-    // TODO: Create better config system
-    this.$app.config = config;
-    this.$app.canvas = new Canvas(config.el);
-    this.$app.context = this.$app.canvas.getContext();
-    this.$app.input = new InputController(this.$app.canvas);
-    this.$app.utils = Utils;
+  constructor(config) {
+    this.$config = config
+    this.$canvas = new Canvas(config.el)
+    this.$context = this.$canvas.getContext()
+    this.$input = new InputController(this.$canvas)
+    this.$utils = Utils
 
     // install plugins
-    let plugins = this.$app._plugins
+    let plugins = LudicApp._plugins
     if(plugins && Array.isArray(plugins)){
-      plugins.forEach(plugin => $install(plugin, ...(pluginArgs.get(plugin) || [])))
+      plugins.forEach(plugin => $install(plugin, ...[this, ...(pluginArgs.get(plugin) || [])]))
     }
-
 
     //Put the app context on the window in devmode
-    if(this.$app.devmode){
-      window.$ludicAppContext = this.$app;
+    if(this.$config.dev){
+      // TODO: devvy stuff
     }
 
-    this.running = false;
-    this.lastTime = Date.now();
+    this._running = false
+    this._lastTime = Date.now()
 
     this._requestAnimFrame = (()=>{
       return  window.requestAnimationFrame       ||
@@ -46,72 +43,71 @@ export class LudicApp {
               window.oRequestAnimationFrame      ||
               window.msRequestAnimationFrame     ||
               (function(){
-                console.warn('LudicApp: falling back to basic requestAnimationFrame');
-                return false;
+                console.warn('LudicApp: falling back to basic requestAnimationFrame')
+                return false
               })()                               ||
               function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
+                window.setTimeout(callback, 1000 / 60)
+              }
+    })()
 
     // do some binding
-    this._requestAnimFrame = this._requestAnimFrame.bind(window);
-    this._animate = this._animate.bind(this);
+    this._requestAnimFrame = this._requestAnimFrame.bind(window)
+    this._animate = this._animate.bind(this)
   }
 
   // override
   update(delta,time) {}
 
   _animate(time) {
-    if(this.running){
-      this._requestAnimFrame(this._animate);
+    if(this._running){
+      this._requestAnimFrame(this._animate)
 
-      var delta = (time - this.lastTime) / 1000;
-      this.lastTime = this.$app._time = time;
+      var delta = (time - this._lastTime) / 1000
+      this._lastTime = this._time = time
 
       if(!Number.isNaN(delta)){
-        this.$app.context.save();
-        this.update(delta,time);
-        this.$app.context.restore();
+        this.$context.save()
+        this.update(delta,time)
+        this.$context.restore()
       }
     }
   }
 
   pause() {
-    this.running = !this.running;
-    if (this.running)
-      this._animate();
+    this._running = !this._running
+    if (this._running)
+      this._animate()
   }
 
   run(updateFunction){
-    this.running = true;
+    this._running = true
     if(updateFunction != null){
-      this.update = updateFunction;
+      this.update = updateFunction
     }
-    this._animate();
+    this._animate()
   }
 
   use(plugin, ...args){
-    args.splice(0,0,this.$app)
-    $install(plugin, args)
+    $install(plugin, [this, ...args])
   }
 
 }
 
 export default function app(config){
-  return new LudicApp(config, app)
+  return new LudicApp(config)
 }
 
-app.use = function(plugin){
-  const installedPlugins = (this._plugins || (this._plugins = []))
+LudicApp.use = app.use = function(plugin){
+  const installedPlugins = (LudicApp._plugins || (LudicApp._plugins = []))
   if(pluginArgs.has(plugin)){
-    return this
+    return LudicApp
   }
 
   // additional parameters
   const args = Array.from(arguments)
-  args.splice(0,1,this)
+  args.splice(0,1)
   installedPlugins.push(plugin)
   pluginArgs.set(plugin, args)
-  return this
+  return LudicApp
 }

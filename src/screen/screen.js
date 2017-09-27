@@ -1,12 +1,12 @@
 
 export default class Screen {
   constructor(options) {
-    this.options = options || {};
+    this.options = options || {}
   }
 
   _step(delta,...rest){
     if(!this._isFinished){
-      this.update.apply(this,arguments);
+      this.update.apply(this,arguments)
     }
   }
 
@@ -15,9 +15,9 @@ export default class Screen {
 
   finish(data){
     if(!this._isFinished){
-      this.onDestroy();
-      this._finalData = data || {};
-      this._isFinished = true;
+      this.onDestroy()
+      this._finalData = data || {}
+      this._isFinished = true
     }
   }
 
