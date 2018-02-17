@@ -14,6 +14,7 @@ export default class Screen {
   update(delta,...rest){}
 
   finish(data){
+    console.log('finish screen', data)
     if(!this._isFinished){
       this.onDestroy()
       this._finalData = data || {}
@@ -24,4 +25,11 @@ export default class Screen {
   onDestroy(){}
   onAddedToManager(manager){}
   onRemovedFromManager(manager){}
+
+  $mapMethods(component, mapping){
+    for(let key in mapping){
+      component.$on[mapping[key]] = this[key].bind(this)
+    }
+    return component
+  }
 }
