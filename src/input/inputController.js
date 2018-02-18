@@ -1,8 +1,8 @@
-import KeyCodeMap from './keyCodeMap';
+import KeyCodeMap from './keyCodeMap'
 
 import GamepadController from './gamepadController'
 
-let listeners = [];
+let listeners = []
 let defaultKeyConfig = {
   preventDefault: true
 }
@@ -15,42 +15,42 @@ let ps4Mapping = {
     rx:'rightStick',
     ry:'rightStick'
   }
-};
+}
 
 let gamepadMaps = {
   'Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 05c4)':ps4Mapping // ps4 controller
-};
+}
 
-let gamepadsAxisDeadZone = 0.08;
-let gamepadsConfig = {};
+let gamepadsAxisDeadZone = 0.08
+let gamepadsConfig = {}
 
-let mousePosPixel = {};
-let prevMousePosPixel = {};
-// let gamepadTypeMaps = [{id:'054c',type:'ps4'}];
+let mousePosPixel = {}
+let prevMousePosPixel = {}
+// let gamepadTypeMaps = [{id:'054c',type:'ps4'}]
 
 class InputController {
   constructor(canvas) {
-    this.canvas = canvas;
+    this.canvas = canvas
     // TODO: refactor config
-    this.config = {};
+    this.config = {}
 
-    this.inputControllers = [];
+    this.inputControllers = []
 
-    this.initKeys();
-    this.initMouse();
+    this.initKeys()
+    this.initMouse()
     this.addInputController(new GamepadController())
-    // this.initGamepads();
+    // this.initGamepads()
   }
 
   addInputController(inputController){
-    inputController.install(this);
-    this.inputControllers.push(inputController);
+    inputController.install(this)
+    this.inputControllers.push(inputController)
   }
 
   // input methods
 
   addInputListener(listener){
-    listeners.push(listener);
+    listeners.push(listener)
   }
 
   /**
@@ -64,137 +64,136 @@ class InputController {
   newInputListener(options, binder, alsoAdd){
     if(typeof alsoAdd === 'undefined' && typeof binder === 'boolean'){
       // alsoAdd was the second param, without binder
-      alsoAdd = binder;
-      binder = null;
+      alsoAdd = binder
+      binder = null
     }
     // we can also set `alsoAdd` via options
     alsoAdd = alsoAdd != null ? alsoAdd : options.alsoAdd || false
-    var l = new InputEventListener(options, binder);
+    let l = new InputEventListener(options, binder)
     if(alsoAdd){
-      this.addInputListener(l);
+      this.addInputListener(l)
     }
-    return l;
+    return l
   }
 
   removeInputListener(listener){
-    var ix = listeners.indexOf(listener);
+    let ix = listeners.indexOf(listener)
     if(ix>-1){
-      listeners.splice(ix,1);
+      listeners.splice(ix,1)
     }
   }
 
   //  -- keyboard
   initKeys() {
     // object for all key states
-    this.allKeys = {};
+    this.allKeys = {}
 
     let func = (evt)=>{
-      // evt.preventDefault();
-      // this.onKeyDown(this.canvas,evt);
-      // this.onKeyEvent(evt);
-      var l;
-      let down = evt.type === 'keydown';
-      let dir = down?'down':'up';
+      // evt.preventDefault()
+      // this.onKeyDown(this.canvas,evt)
+      // this.onKeyEvent(evt)
+      let down = evt.type === 'keydown'
+      let dir = down?'down':'up'
 
       // give the event a list of all keys states
-      this.allKeys[evt.keyCode] = this.allKeys[evt.key] = down;
-      evt.allKeys = this.allKeys;
+      this.allKeys[evt.keyCode] = this.allKeys[evt.key] = down
+      evt.allKeys = this.allKeys
 
       if(this.config.logAllKeys){
-        console.log(evt.keyCode);
+        console.log(evt.keyCode)
       }
       this.dispatchEvent(this,this.keyHandler,evt,down,dir)
     }
 
-    this.canvas.addEventListener('keydown', func, false);
-    this.canvas.addEventListener('keyup', func, false);
+    this.canvas.addEventListener('keydown', func, false)
+    this.canvas.addEventListener('keyup', func, false)
   }
 
   dispatchEvent(thisArg, handler, event, ...args){
     for(let listener, i=listeners.length-1; i>=0; i--){
-      listener = listeners[i];
-      if(!listener || !listener.enabled){ continue;}
+      listener = listeners[i]
+      if(!listener || !listener.enabled){
+        continue
+      }
       if(handler.call(thisArg,listener,event,...args) === true){
-        break;
+        break
       }
     }
   }
 
   keyHandler(l,evt,down,dir){
-    let cfg = l.keyConfig;
-    let key = cfg[evt.keyCode];
-    let binder = l.binder || l;
+    let cfg = l.keyConfig
+    let key = cfg[evt.keyCode]
+    let binder = l.binder || l
     if(key){
       if(typeof key === 'object' || Array.isArray(key)) {
-        let keys;
+        let keys
         // make array out of single object, treat everything like an array
         if(Array.isArray(key)){
-          keys = key;
+          keys = key
         } else {
-          keys = [key];
+          keys = [key]
         }
 
         // loop through all key configs
         for(let key of keys){
-          let modifiers = false;
-          let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both';
-          let method = key.hasOwnProperty('method') && key.method;
-          key._once = down?key._once:false;
+          let modifiers = false
+          let direction = !key.hasOwnProperty('direction') || key.direction === dir || key.direction === 'both'
+          let method = key.hasOwnProperty('method') && key.method
+          key._once = down?key._once:false
 
           // logic for modifiers
           if(!!key.shiftKey == evt.shiftKey && !!key.altKey == evt.altKey && !!key.ctrlKey == evt.ctrlKey){
-            modifiers = true;
+            modifiers = true
           }
 
           if(method && modifiers && direction && !key._once){
-            binder = key.binder || binder;
-            var b = this._execCommand(l,method,binder,down,evt);
-            key._once = key.once && down;
+            binder = key.binder || binder
+            let b = this._execCommand(l,method,binder,down,evt)
+            key._once = key.once && down
           }
         }
       } else {
-        console.warn(`InputController: Unsupported key config type '${key}'`);
+        console.warn(`InputController: Unsupported key config type '${key}'`)
       }
     }
     // else {
-    //   console.log('no config for keycode', evt.keyCode, key);
+    //   console.log('no config for keycode', evt.keyCode, key)
     // }
 
     // check for if listener wants the only control
     // if(l.stopPropagation){
-    //   break;
+    //   break
     // }
   }
 
   onKeyEvent(evt) {
-    // console.log(evt);
-    var l;
-    let down = evt.type === 'keydown';
-    let dir = down?'down':'up';
+    let down = evt.type === 'keydown'
+    let dir = down?'down':'up'
 
     // give the event a list of all keys states
-    this.allKeys[evt.keyCode] = this.allKeys[evt.key] = down;
-    evt.allKeys = this.allKeys;
+    this.allKeys[evt.keyCode] = this.allKeys[evt.key] = down
+    evt.allKeys = this.allKeys
 
     if(this.config.logAllKeys){
-      console.log(evt.keyCode);
+      console.log(evt.keyCode)
     }
-    for(var i=listeners.length-1; i>=0; i--){
-      l = listeners[i];
-      if(!l || !l.enabled){ continue;}
-
-
+    for(let l, i=listeners.length-1; i>=0; i--){
+      l = listeners[i]
+      if(!l || !l.enabled){
+        continue
+      }
     }
 
   }
 
   _execCommand(listener, method, binder, ...args){
     if(typeof method === 'string'){
-      return listener[method].call(binder,...args);
+      return listener[method].call(binder,...args)
     } else if(typeof method === 'function'){
-      return method.call(binder,...args);
+      return method.call(binder,...args)
     } else {
-      return false;
+      return false
     }
   }
 
@@ -202,58 +201,58 @@ class InputController {
   //  -- mouse
   initMouse(){
     this.canvas.addEventListener('mousemove', function(evt) {
-      this.onMouseEvent('mouseMove',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('mouseMove',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('mousedown', function(evt) {
-      this.onMouseEvent('mouseDown',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('mouseDown',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('mouseup', function(evt) {
-      this.onMouseEvent('mouseUp',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('mouseUp',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('mouseout', function(evt) {
-      this.onMouseEvent('mouseOut',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('mouseOut',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('mouseenter', function(evt) {
-      this.onMouseEvent('mouseEnter',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('mouseEnter',this.canvas.el,evt)
+    }.bind(this), false)
     this.canvas.addEventListener('mouseleave', function(evt) {
-      this.onMouseEvent('mouseLeave',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('mouseLeave',this.canvas.el,evt)
+    }.bind(this), false)
 
     // touch events
     this.canvas.addEventListener('touchstart', function(evt) {
-      this.onMouseEvent('touchStart',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('touchStart',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('touchend', function(evt) {
-      this.onMouseEvent('touchEnd',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('touchEnd',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('touchmove', function(evt) {
-      this.onMouseEvent('touchMove',this.canvas.el,evt);
-    }.bind(this), false);
+      this.onMouseEvent('touchMove',this.canvas.el,evt)
+    }.bind(this), false)
 
     this.canvas.addEventListener('touchcancel', function(evt) {
-      this.onMouseEvent('touchCancel',this.canvas,evt);
-    }.bind(this), false);
+      this.onMouseEvent('touchCancel',this.canvas,evt)
+    }.bind(this), false)
   }
 
   onMouseEvent(key, canvas, evt){
-    prevMousePosPixel = mousePosPixel;
-    this.updateMousePos(canvas, evt);
+    prevMousePosPixel = mousePosPixel
+    this.updateMousePos(canvas, evt)
 
-    for(var i=listeners.length-1; i>=0; i--){
-      let l = listeners[i];
+    for(let l, i=listeners.length-1; i>=0; i--){
+      l = listeners[i]
       if(l && l.enabled){
         if(l.hasOwnProperty(key)){
-          let bndr = l.binder || l;
-          let b = l[key].call(bndr,mousePosPixel,evt);
+          let bndr = l.binder || l
+          let b = l[key].call(bndr,mousePosPixel,evt)
           if(b === true){
-            return;
+            return
           }
         }
       }
@@ -262,11 +261,11 @@ class InputController {
 
   //    -- mouse helper function
   updateMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
+    let rect = canvas.getBoundingClientRect()
     mousePosPixel = {
       x: evt.clientX - rect.left,
       y: canvas.height - (evt.clientY - rect.top)
-    };
+    }
   }
 
   //  -- gamepad
@@ -283,99 +282,99 @@ class InputController {
 }
 
 let stripModifiers = function(key){
-  let mods = key.split('.');
-  key = mods[0];
-  let ret = {key, config:{}};
+  let mods = key.split('.')
+  key = mods[0]
+  let ret = {key, config:{}}
   if(mods.length > 1){
     for(let i=1; i<mods.length; i++){
-      let mod = mods[i];
+      let mod = mods[i]
       switch (mod) {
         case 'alt':
         case 'altKey':
-          ret.config.altKey = true;
-          break;
+          ret.config.altKey = true
+          break
         case 'shift':
         case 'shiftKey':
-          ret.config.shiftKey = true;
-          break;
+          ret.config.shiftKey = true
+          break
         case 'ctrl':
         case 'ctrlKey':
-          ret.config.ctrlKey = true;
-          break;
+          ret.config.ctrlKey = true
+          break
         case 'up':
-          ret.config.direction = 'up';
-          break;
+          ret.config.direction = 'up'
+          break
         case 'down':
-          ret.config.direction = 'down';
-          break;
+          ret.config.direction = 'down'
+          break
         case 'once':
-          ret.config.once = true;
-          break;
+          ret.config.once = true
+          break
         default:
-          break;
+          break
       }
     }
   }
-  return ret;
+  return ret
 }
 
 let importKeyConfig = function(keyConfig){
-  let config = {};
+  let config = {}
   for(let key in keyConfig){
-    let mods = stripModifiers(key);
-    let _key = key;
-    let cfg = keyConfig[key];
-    key = KeyCodeMap[mods.key] || mods.key;
+    let mods = stripModifiers(key)
+    let _key = key
+    let cfg = keyConfig[key]
+    key = KeyCodeMap[mods.key] || mods.key
 
     // everything needs to be an array of objects
     if(typeof cfg === 'string' || typeof cfg === 'function'){
-      config[key] = [Object.assign({},{method:cfg},mods.config)];
+      config[key] = [Object.assign({},{method:cfg},mods.config)]
     } else if(typeof cfg === 'object' && !Array.isArray(cfg)){
-      config[key] = [Object.assign({},mods.config,cfg)];
+      config[key] = [Object.assign({},mods.config,cfg)]
     } else if(Array.isArray(cfg)){
       config[key] = cfg.map((conf)=>{
-        return Object.assign({},mods.config,conf);
-      });
+        return Object.assign({},mods.config,conf)
+      })
     } else {
-      console.warn(`InputController: Unsupported key config type '${typeof cfg}' for '${key}'`, cfg);
+      console.warn(`InputController: Unsupported key config type '${typeof cfg}' for '${key}'`, cfg)
     }
   }
-  return config;
+  return config
 }
 
 class InputEventListener {
   constructor(options, binder) {
-    let keyConfig = options;
+    let keyConfig = options
     if(options.hasOwnProperty('keyConfig')){
-      keyConfig = options.keyConfig;
+      keyConfig = options.keyConfig
     }
     if(options.hasOwnProperty('gamepadIndex')){
-      this.gamepadIndex = options.gamepadIndex;
+      this.gamepadIndex = options.gamepadIndex
     } else {
-      this.gamepadIndex = -1;
+      this.gamepadIndex = -1
     }
     if(options.hasOwnProperty('binder')){
-      binder = options.binder;
+      binder = options.binder
     }
 
-    this.stopPropagation = options.stopPropagation;
+    this.stopPropagation = options.stopPropagation
 
-    this.keyConfig = importKeyConfig.call(this,keyConfig);
-    this.options = options;
-    this.binder = binder;
-    this.enabled = options.hasOwnProperty('enabled') ? options.enabled : true;
+    this.keyConfig = importKeyConfig.call(this,keyConfig)
+    this.options = options
+    this.binder = binder
+    this.enabled = options.hasOwnProperty('enabled') ? options.enabled : true
 
     if(options.hasOwnProperty('methods')){
-      this._loadListener(options.methods);
+      this._loadListener(options.methods)
     }
   }
 
   $enable(){
-    this.enabled = true;
+    this.enabled = true
   }
 
   $disable(){
-    this.enabled = false;
+    this.enabled = false
   }
 
   _loadListener(listener){
@@ -383,35 +382,35 @@ class InputEventListener {
       'l1', 'l2', 'l3', 'r1', 'r2', 'r3', 'triangle', 'square', 'circle', 'cross',
       'leftStick', 'rightStick', 'mouseMove', 'mouseDown', 'mouseUp', 'mouseOut', 'mouseEnter', 'mouseLeave',
       'touchStart', 'touchEnd', 'touchMove', 'touchCancel',
-    ];
+    ]
 
     for(let key of avail){
       if(key in listener){
-        let method = listener[key];
+        let method = listener[key]
 
         if(typeof method === 'function'){
-          this[key] = method;
+          this[key] = method
         } else if(typeof method === 'string'){
-          console.log(this.keyConfig);
-          let code = method;
+          console.log(this.keyConfig)
+          let code = method
 
           if(Number.isNaN(parseInt(code))){
             // need to convert char
-            let _code = KeyCodeMap[code];
+            let _code = KeyCodeMap[code]
             if(_code){
-              code = _code;
+              code = _code
             } else {
-              console.warn('There is no mapping for: ', method);
-              continue;
+              console.warn('There is no mapping for: ', method)
+              continue
             }
           }
 
-          let arr = this.keyConfig[code];
+          let arr = this.keyConfig[code]
 
           if(arr.length === 1){
             this[key] = arr[0].method
           } else {
-            console.warn('multiple entries per keycode is not supported at this yet.', key, arr, method);
+            console.warn('multiple entries per keycode is not supported at this yet.', key, arr, method)
           }
         }
       }
@@ -419,87 +418,87 @@ class InputEventListener {
   }
 
   start(){
-    return null;
+    return null
   }
 
   select(){
-    return null;
+    return null
   }
 
   home(){  // ps/xb button
-    return null;
+    return null
   }
 
   left(){
-    return null;
+    return null
   }
 
   right(){
-    return null;
+    return null
   }
 
   up(){
-    return null;
+    return null
   }
 
   down(){
-    return null;
+    return null
   }
 
   l1(){
-    return null;
+    return null
   }
 
   l2(){
-    return null;
+    return null
   }
 
   l3(){
-    return null;
+    return null
   }
 
   r1(){
-    return null;
+    return null
   }
 
   r2(){
-    return null;
+    return null
   }
 
   r3(){
-    return null;
+    return null
   }
 
   triangle(){
-    return null;
+    return null
   }
 
   square(){
-    return null;
+    return null
   }
 
   circle(){
-    return null;
+    return null
   }
 
   cross(){
-    return null;
+    return null
   }
 
   extra(){
-    return null;
+    return null
   }
 
   leftStick(x,y,event){
-    return null;
+    return null
   }
 
   rightStick(x,y,event){
-    return null;
+    return null
   }
 }
 // assign the InputEventListener class as a static property on InputController
 //  so it can be instantiated properly outside of this module
-InputController.InputEventListener = InputEventListener;
+InputController.InputEventListener = InputEventListener
 
-export default InputController;
+export default InputController

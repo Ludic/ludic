@@ -63,7 +63,7 @@ export class LudicApp {
     if(this._running){
       this._requestAnimFrame(this._animate)
 
-      var delta = (time - this._lastTime) / 1000
+      let delta = (time - this._lastTime) / 1000
       this._lastTime = this._time = time
 
       if(!Number.isNaN(delta)){

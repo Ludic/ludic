@@ -2,7 +2,7 @@
 export function classTypeOf(typeToCheck, type){
   do {
     if(typeToCheck === type){
-      return true;
+      return true
     }
-  } while ((typeToCheck = Object.getPrototypeOf(typeToCheck)) !== Function.prototype);
+  } while ((typeToCheck = Object.getPrototypeOf(typeToCheck)) !== Function.prototype)
 }

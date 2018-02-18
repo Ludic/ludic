@@ -1,4 +1,4 @@
-import ImageAsset from './imageAsset';
+import ImageAsset from './imageAsset'
 
 class ImageAssetLoader {
   constructor() {
@@ -6,8 +6,8 @@ class ImageAssetLoader {
   }
 
   load(name, url, type, options){
-    return new ImageAsset(name, url, type, options);;
+    return new ImageAsset(name, url, type, options)
   }
 }
 
-export default new ImageAssetLoader();
+export default new ImageAssetLoader()

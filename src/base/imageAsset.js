@@ -1,24 +1,24 @@
-import Asset from './asset';
+import Asset from './asset'
 
 class ImageAsset extends Asset {
   constructor(name, url, type, options) {
-    super(name, url, type || 'image', options);
+    super(name, url, type || 'image', options)
 
-    this.data = new Image();
+    this.data = new Image()
     this.promise = new Promise((resolve,reject)=>{
-      this.data.onload = this.onload(resolve,reject);
-    });
+      this.data.onload = this.onload(resolve,reject)
+    })
 
   }
 
   load(){
-    this.data.src = this.url;
+    this.data.src = this.url
   }
 
   onload(resolve,reject){
     return () => {
-      resolve(this);
-    };
+      resolve(this)
+    }
   }
 
   destroy(){
@@ -26,4 +26,4 @@ class ImageAsset extends Asset {
   }
 }
 
-export default ImageAsset;
+export default ImageAsset

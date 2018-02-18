@@ -2,10 +2,10 @@
 
 class Asset {
   constructor(name, url, type, options) {
-    this.name = name;
-    this.url = url;
-    this.type = type;
-    this.options = options || {};
+    this.name = name
+    this.url = url
+    this.type = type
+    this.options = options || {}
 
   }
 
@@ -14,8 +14,8 @@ class Asset {
 
   onload(resolve,reject){
     return () => {
-      resolve(this);
-    };
+      resolve(this)
+    }
   }
 
   onAssetResolve(am){
@@ -26,12 +26,12 @@ class Asset {
   }
 
   destroy(){
-    this.name = null;
-    this.url = null;
-    this.type = null;
-    this.options = null;
-    this.data = null;
+    this.name = null
+    this.url = null
+    this.type = null
+    this.options = null
+    this.data = null
   }
 }
 
-export default Asset;
+export default Asset

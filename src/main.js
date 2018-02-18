@@ -21,8 +21,8 @@ export {default as GamepadController} from './input/gamepadController'
   patches that require a parameter (monkey patch) export function name with prefix `Patch`
     i.e. export {default as PatchFixSomeClass} from './patches/fixSomeClass'
 */
-import path2D from './patches/Path2D';
-import object from './patches/Object';
+import path2D from './patches/Path2D'
+import object from './patches/Object'
 
 // screen
 export {default as Screen} from './screen/screen'

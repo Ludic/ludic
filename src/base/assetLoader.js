@@ -6,6 +6,6 @@ export default class AssetLoader {
   }
 
   load(name, url, type options){
-    console.log('default loader', arguments);
+    console.log('default loader', arguments)
   }
 }
