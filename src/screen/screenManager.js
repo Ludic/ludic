@@ -42,8 +42,9 @@ export default class ScreenManager {
 
   addScreen(screen, replace){
     let stack = _stack(this)
-    // give the screen a ref to the manager
+    // give the screen a ref to the manager and the app
     screen.$manager = this
+    screen.$app = this.$app
     // give the screen an id
     screen.$id = this.getNewId()
     if(replace){
