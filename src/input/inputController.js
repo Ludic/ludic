@@ -67,6 +67,8 @@ class InputController {
       alsoAdd = binder;
       binder = null;
     }
+    // we can also set `alsoAdd` via options
+    alsoAdd = alsoAdd != null ? alsoAdd : options.alsoAdd || false
     var l = new InputEventListener(options, binder);
     if(alsoAdd){
       this.addInputListener(l);
@@ -272,7 +274,7 @@ class InputController {
 
   update(...args){
     this.inputControllers.forEach((controller)=>{
-      if(controller.hasOwnProperty('update')){
+      if(typeof controller.update === 'function'){
         controller.update(...args)
       }
     })
