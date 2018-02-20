@@ -7,8 +7,8 @@ import InputController from '../input/inputController'
 const pluginArgs = new WeakMap()
 
 let $install = function $install(plugin, ...args){
-  if (typeof plugin.install === 'function') {
-    plugin.install.apply(plugin, args)
+  if (typeof plugin.plugin === 'function') {
+    plugin.plugin.apply(plugin, args)
   } else if (typeof plugin === 'function') {
     plugin.apply(null, args)
   }

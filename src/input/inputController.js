@@ -391,7 +391,6 @@ class InputEventListener {
         if(typeof method === 'function'){
           this[key] = method
         } else if(typeof method === 'string'){
-          console.log(this.keyConfig)
           let code = method
 
           if(Number.isNaN(parseInt(code))){
@@ -406,7 +405,6 @@ class InputEventListener {
           }
 
           let arr = this.keyConfig[code]
-
           if(arr.length === 1){
             this[key] = arr[0].method
           } else {
