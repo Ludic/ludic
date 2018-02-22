@@ -135,6 +135,15 @@ class Camera {
     ctx.stroke()
   }
 
+  drawBounds(ctx, color='red'){
+    let br = this.getViewportBounds()
+    ctx.save()
+    ctx.strokeStyle = color
+    ctx.strokeWidth = 2
+    ctx.strokeRect(br.x, br.y, br.w-br.x, br.h-br.y)
+    ctx.restore()
+  }
+
   setChaseEntity(ent,chaseMethod){
     this.chaseEntity = ent
     this.chaseMethod = chaseMethod
@@ -272,6 +281,26 @@ class Camera {
     ctx.scale(this.inverseX ? (-1 / ptm) : (1 / ptm), this.inverseY ? (-1 / ptm) : (1 / ptm))
     ctx.lineWidth *= ptm
     ctx.translate(-this.getOffsetX(), -this.getOffsetY())
+  }
+
+  isPointInBounds(x, y, ctx){
+    let inBounds = false
+    ctx.save()
+    ctx.resetTransform(ctx)
+    this._generateViewportRect(ctx)
+    inBounds = ctx.isPointInPath(x, y)
+    ctx.restore()
+    return inBounds
+  }
+
+  _generateViewportRect(ctx){
+    let br = this.getViewportBounds()
+    ctx.beginPath()
+    ctx.moveTo(br.x,br.y)
+    ctx.lineTo(br.w,br.y)
+    ctx.lineTo(br.w,br.h)
+    ctx.lineTo(br.x,br.h)
+    ctx.closePath()
   }
 }
 
