@@ -1,20 +1,24 @@
-let ps4Mapping = {
-  buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
-  axes: ['lx','ly','rx','ry'],
-  sticks: {
-    lx:'leftStick',
-    ly:'leftStick',
-    rx:'rightStick',
-    ry:'rightStick'
-  }
-}
-
 let gamepadMaps = {
-  'Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 05c4)':ps4Mapping // ps4 controller
+  ps4: {
+    name: 'PS4 Controller',
+    buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
+    axes: ['lx','ly','rx','ry'],
+    sticks: {
+      lx:'leftStick',
+      ly:'leftStick',
+      rx:'rightStick',
+      ry:'rightStick'
+    },
+    check(id){
+      return /54c.*5c4/.test(id)
+    },
+  },
 }
 
 let gamepadsAxisDeadZone = 0.08
 let gamepadsConfig = {}
+
+const gamepadMappings = {}
 
 class GamepadController {
   constructor() {
@@ -39,12 +43,16 @@ class GamepadController {
       []  // gamepad index 3
     ]
     window.addEventListener("gamepadconnected", ({gamepad, ...e})=>{
-      if(!gamepadMaps.hasOwnProperty(gamepad.id)){
+      let [mappingId, mapping] = this.findMappingForGamepad(gamepad)
+      if(!mapping){
         // log out an unknown gamepad
         console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
           gamepad.index, gamepad.id,
           gamepad.buttons.length, gamepad.axes.length)
         console.log(gamepad)
+      } else {
+        console.log(`${mapping.name} connected as controller ${gamepad.index}.`)
+        gamepadMappings[gamepad.index] = mapping
       }
       this.getGamepads()
     })
@@ -60,6 +68,10 @@ class GamepadController {
     // window.addEventListener('gamepadbuttonup', (e)=>{
     //   console.log('gamepad button up: ',e)
     // })
+  }
+
+  findMappingForGamepad(gamepad){
+    return Object.entries(gamepadMaps).find(([id, mapping]) => mapping.check(gamepad.id))
   }
 
   getGamepads(){
@@ -156,7 +168,7 @@ class GamepadController {
   }
 
   gamepadButtonEvent(gamepad,button,down) {
-    button.id = gamepadMaps[gamepad.id].buttons[button.index]
+    button.id = gamepadMappings[gamepad.index].buttons[button.index]
     if(button.id){
       this.inputController.dispatchEvent(this,this.onGamepadButtonEvent,new GamepadButtonEvent(gamepad,button,down))
     } else {
@@ -220,13 +232,13 @@ class GamepadController {
     // }
   }
 
-  getGamepadMap(gamepadId){
-    return gamepadMaps[gamepadId] || {}
+  getGamepadMap(gamepad){
+    return gamepadMappings[gamepad.index] || {}
   }
 
   gamepadAxisEvent(gamepad,axisIndex,value,zeroed){
     this.setLastAxisState(gamepad.index,axisIndex,zeroed)
-    let gpMap = this.getGamepadMap(gamepad.id)
+    let gpMap = this.getGamepadMap(gamepad)
     let axis = {}
     axis.id = gpMap.axes[axisIndex]
     axis.stick = gpMap.sticks[axis.id]
@@ -315,7 +327,7 @@ class GamepadAxisEvent {
 }
 
 Gamepad.prototype.getValueByAxisId = function(axisId){
-  let gp = gamepadMaps[this.id]
+  let gp = gamepadMappings[this.index]
   let ix = gp.axes.indexOf(axisId)
   if(ix>-1){
     return this.axes[ix]
