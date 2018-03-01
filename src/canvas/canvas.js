@@ -53,8 +53,8 @@ class Canvas {
     this.el.removeEventListener.apply(this.el, arguments)
   }
 
-  getContext(dimension = this.dimension){
-    return this.el.getContext(dimension)
+  getContext(dimension = this.dimension, options = {alpha: false}){
+    return this.context || (this.context = this.el.getContext(dimension, options))
   }
 
   height(){
