@@ -14,7 +14,6 @@ export default class Screen {
   update(delta,...rest){}
 
   finish(data){
-    console.log('finish screen', data)
     if(!this._isFinished){
       this.onDestroy()
       this._finalData = data || {}
