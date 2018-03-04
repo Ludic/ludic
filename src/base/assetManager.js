@@ -17,14 +17,6 @@ class AssetManager {
   }
 
   loadResource(name, url, type, options, overwrite){
-    // let promise = Promise.reject({
-    //   reason: "resource load failed",
-    //   name,
-    //   url,
-    //   type,
-    //   options,
-    //   overwrite
-    // })
     let promise = null
     // first check if we have the asset
     if(!this.assets[name] || overwrite){
@@ -98,7 +90,6 @@ class AssetManager {
   }
 
   assetsLoaded(){
-    console.log('all assets loaded: ',arguments)
     if(this.onAssetsLoadedCallback){
       this.onAssetsLoadedCallback(this)
     }
@@ -111,19 +102,6 @@ class AssetManager {
 
   NewAsset(name, url, type, options){
     type = type || 'image'
-    // switch (type) {
-    //   case 'image':
-    //     return new ImageAsset(name, url, type, options)
-    //     break
-    //   case 'rube':
-    //     return new RubeAsset(name, url, type, options)
-    //     break
-    //   case 'rubeImage':
-    //     return new RubeImageAsset(name, url, type, options)
-    //     break
-    //   default:
-    //     return null
-    // }
 
     let loader = this.loaders[type]
 
