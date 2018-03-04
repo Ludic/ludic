@@ -11,6 +11,9 @@ export {default as ImageAsset} from './base/imageAsset'
 // canvas
 export {default as Canvas} from './canvas/canvas'
 
+// audio
+export {default as AudioController} from './audio/audioController'
+
 // input
 export {default as InputController} from './input/inputController'
 export {default as GamepadController} from './input/gamepadController'
