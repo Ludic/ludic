@@ -2,6 +2,7 @@
 // import RubeAsset from './rubeAsset'
 // import RubeImageAsset from './rubeImageAsset'
 import ImageLoader from './imageAssetLoader'
+import AudioLoader from './audioAssetLoader'
 
 class AssetManager {
   constructor() {
@@ -12,6 +13,7 @@ class AssetManager {
     this.loaders = {}
 
     this.addLoader('image', ImageLoader)
+    this.addLoader('audio', AudioLoader)
   }
 
   loadResource(name, url, type, options, overwrite){
@@ -77,7 +79,6 @@ class AssetManager {
   }
 
   step(){
-
     if(this.loadQueue.length==0){
       if(!this.finalPromise){
         this.finalPromise = Promise.all(this.promiseQueue).then(()=>{
@@ -97,7 +98,7 @@ class AssetManager {
   }
 
   assetsLoaded(){
-    // console.log('all assets loaded: ',arguments)
+    console.log('all assets loaded: ',arguments)
     if(this.onAssetsLoadedCallback){
       this.onAssetsLoadedCallback(this)
     }

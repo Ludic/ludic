@@ -1,13 +1,21 @@
+// Play Audio
+
 
 class AudioController {
   constructor() {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext
+    this.ac = new AudioContext()
+    this.playing = {}
   }
 
-  playSound(){
-
+  playSound(arrayBuffer){
+    let source = this.ac.createBufferSource()
+    source.buffer = arrayBuffer
+    source.connect(this.ac.destination)
+    source.start(0)
   }
 
 }
 
 
-export default AudioController
+export default new AudioController()
