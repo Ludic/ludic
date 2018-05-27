@@ -111,15 +111,8 @@ class Camera {
     window.camera = this
   }
 
-  getCanvas(){
-    return this.canvas
-  }
-
-
   draw(ctx){
-
     this.setTransform(ctx)
-
   }
 
   drawAxes(ctx) {
