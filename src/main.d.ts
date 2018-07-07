@@ -143,14 +143,23 @@ declare namespace ludic {
     playSound(arrayBuffer: ArrayBuffer): void;
   }
 
+  export interface InputEventListenerOptions {
+    keyConfig?: object
+    gamepadIndex?: number | null
+    binder?: any
+    stopPropagation?: boolean
+    enabled?: boolean
+    methods?: object
+  }
+
   // input
   export class InputEventListener {
     stopPropagation: boolean;
     keyConfig: object;
-    options: object;
+    options: InputEventListenerOptions;
     binder: any;
     enabled: boolean;
-    constructor(options: object, binder?: any);
+    constructor(options: InputEventListenerOptions, binder?: any);
     $enable(): void;
     $disable(): void;
     // button methods
