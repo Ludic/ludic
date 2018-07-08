@@ -76,7 +76,7 @@ let gamepadMaps = {
     },
     test(gamepad){
       let ua = navigator.userAgent
-      return /54c.*5c4/.test(gamepad.id)
+      return /54c/.test(gamepad.id)
         && gamepad.axes.length == this.axes.length
         && gamepad.buttons.length == this.buttons.length
         && ua.includes('Firefox') && ua.includes('Ubuntu')
