@@ -125,7 +125,7 @@ class GamepadController {
       let [mappingId, mapping] = this.findMappingForGamepad(gamepad)
       if(!mapping){
         // log out an unknown gamepad
-        console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+        console.warn("No mapping found for gamepad at index %d: %s. %d buttons, %d axes.",
           gamepad.index, gamepad.id,
           gamepad.buttons.length, gamepad.axes.length)
         console.log(gamepad)
@@ -150,7 +150,7 @@ class GamepadController {
   }
 
   findMappingForGamepad(gamepad){
-    return Object.entries(gamepadMaps).find(([id, mapping]) => mapping.test(gamepad))
+    return Object.entries(gamepadMaps).find(([id, mapping]) => mapping.test(gamepad)) || []
   }
 
   getGamepads(){
