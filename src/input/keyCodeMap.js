@@ -34,6 +34,18 @@ export default {
   'right' : '39',
   'down' : '40',
 
+  // numbers
+  '0': '48',
+  '1': '49',
+  '2': '50',
+  '3': '51',
+  '4': '52',
+  '5': '53',
+  '6': '54',
+  '7': '55',
+  '8': '56',
+  '9': '57',
+
   // alpha keys, in order of keyboard qwerty layout
   'q': '81',
   'w': '87',
