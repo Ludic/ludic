@@ -377,8 +377,8 @@ class GamepadController {
     return getGamepadMap(gamepad)
   }
 
-  createGamepadAxisEvent(axis,zeroed, delta){
-    let evt = new GamepadAxisEvent(axis, delta)
+  createGamepadAxisEvent(axis, zeroed, delta){
+    let evt = new GamepadAxisEvent(axis, zeroed, delta)
     if(axis.stick==='leftStick'){
       evt.values.x = axis.gamepad.getValueByAxisId('lx')
       evt.values.y = axis.gamepad.getValueByAxisId('ly')
@@ -445,7 +445,7 @@ class GamepadButtonEvent {
 }
 
 class GamepadAxisEvent {
-  constructor(axis, delta) {
+  constructor(axis, zeroed, delta) {
     this.gamepad = axis.gamepad
     this.gamepadIndex = axis.gamepad.index
     this.axis = axis
@@ -455,6 +455,7 @@ class GamepadAxisEvent {
     this.values = axis.values || {}
     this.type = 'gamepadAxisEvent'
     this.delta = delta
+    this.zeroed = zeroed
   }
 }
 
