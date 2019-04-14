@@ -4,9 +4,9 @@ class AudioAsset extends Asset {
   context: AudioContext
   request: XMLHttpRequest
 
-  constructor(name: string, url: string, type: string, context: AudioContext, options: any) {
+  constructor(name: string, url: string, type: string, options: any) {
     super(name, url, type || 'audio', options)
-    this.context = context
+    this.context = new AudioContext()
     this.promise = new Promise((resolve,reject)=>{
       this.request = new XMLHttpRequest()
       this.request.open("GET", this.url, true)
