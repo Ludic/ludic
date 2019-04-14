@@ -6,16 +6,21 @@ export interface LudicAppOptions {
 }
 
 export class LudicApp {
-  $canvas: Canvas
-  $input: InputManager = new InputManager()
-  requestAnimationFrame: Window['requestAnimationFrame']
-  running: boolean = false
-  lastRunTime: number
+  static $instance: LudicApp
+  static canvas: Canvas
+  static input: InputManager = new InputManager()
+  static $running: boolean = false
+  
+  private requestAnimationFrame: Window['requestAnimationFrame']
+  private lastRunTime: number
 
   constructor(opts: LudicAppOptions){
+    if(LudicApp.$instance) return LudicApp.$instance
+
     const {el} = opts
-    
-    this.$canvas = new Canvas(el)
+
+    LudicApp.$instance = this
+    LudicApp.canvas = new Canvas(el)
 
     this.requestAnimationFrame = (()=>{
       return  window.requestAnimationFrame       ||
@@ -28,7 +33,7 @@ export class LudicApp {
   }
 
   start():void {
-    this.running = true
+    LudicApp.$running = true
     this.lastRunTime = performance.now()
     this.requestAnimationFrame(this.animate)
   }
