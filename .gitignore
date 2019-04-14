@@ -8,3 +8,5 @@ npm-debug.log
 
 # mac stuff
 .DS*
+
+.nyc_output/
