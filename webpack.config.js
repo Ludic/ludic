@@ -9,6 +9,8 @@ const base = {
   resolve: {
     alias: {
       "src": path.resolve(__dirname, 'src'),
+      "dist": path.resolve(__dirname, 'dist'),
+      "test": path.resolve(__dirname, 'test'),
     },
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [".ts", ".tsx", ".js", ".json"]
