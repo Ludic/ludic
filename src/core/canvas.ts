@@ -1,4 +1,4 @@
-import { LudicAppOptions } from './app'
+import { LudicOptions } from './app'
 
 export interface CanvasDimensions {
   width: number
@@ -10,7 +10,7 @@ export class Canvas {
   element: HTMLCanvasElement
   context: CanvasRenderingContext2D
 
-  constructor(el: LudicAppOptions['el'], dimension='2d') {
+  constructor(el: LudicOptions['el'], dimension='2d') {
     this.dimension = dimension
 
     if(typeof el === 'string'){
