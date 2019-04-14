@@ -30,7 +30,7 @@ declare global {
   }
 }
 
-import LudicApp from './core/app'
+import Ludic from './core/app'
 
 export * from './core/app'
 export * from './core/camera'
@@ -53,4 +53,4 @@ export * from './reactivity/dep'
 export * from './reactivity/lambda'
 export * from './reactivity/state'
 
-export default LudicApp
+export default Ludic

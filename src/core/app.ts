@@ -1,12 +1,12 @@
 import Canvas from './canvas'
 import InputManager from 'src/input/manager'
 
-export interface LudicAppOptions {
+export interface LudicOptions {
   el: string | HTMLCanvasElement
 }
 
-export class LudicApp {
-  static $instance: LudicApp
+export class Ludic {
+  static $instance: Ludic
   static canvas: Canvas
   static input: InputManager = new InputManager()
   static $running: boolean = false
@@ -14,13 +14,13 @@ export class LudicApp {
   private requestAnimationFrame: Window['requestAnimationFrame']
   private lastRunTime: number
 
-  constructor(opts: LudicAppOptions){
-    if(LudicApp.$instance) return LudicApp.$instance
+  constructor(opts: LudicOptions){
+    if(Ludic.$instance) return Ludic.$instance
 
     const {el} = opts
 
-    LudicApp.$instance = this
-    LudicApp.canvas = new Canvas(el)
+    Ludic.$instance = this
+    Ludic.canvas = new Canvas(el)
 
     this.requestAnimationFrame = (()=>{
       return  window.requestAnimationFrame       ||
@@ -33,7 +33,7 @@ export class LudicApp {
   }
 
   start():void {
-    LudicApp.$running = true
+    Ludic.$running = true
     this.lastRunTime = performance.now()
     this.requestAnimationFrame(this.animate)
   }
@@ -53,4 +53,4 @@ export class LudicApp {
   
 }
 
-export default LudicApp
+export default Ludic
