@@ -6,7 +6,12 @@
     "declaration": true,
     "noImplicitAny": true,
     "module": "es6",
-    "target": "esnext"
+    "target": "esnext",
+    "paths": {
+      "@src/*" : ["src/*"],
+      "@dist/*" : ["dist/*"],
+      "@tests/*": ["tests/*"]
+    }
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
 }
