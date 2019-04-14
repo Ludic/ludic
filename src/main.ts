@@ -53,4 +53,12 @@ export * from './reactivity/dep'
 export * from './reactivity/lambda'
 export * from './reactivity/state'
 
+export * from './asset/asset'
+export * from './asset/assetLoader'
+export * from './asset/assetManager'
+export * from './asset/audioAsset'
+export * from './asset/audioAssetLoader'
+export * from './asset/imageAsset'
+export * from './asset/imageAssetLoader'
+
 export default Ludic
