@@ -1,23 +1,22 @@
 import * as L from '@dist/ludic'
-import Screen from './screen'
 
-class BasicGame extends L.Game {
+class BasicGame extends L.Ludic {
   public screenManager: L.ScreenManager
 
-  constructor(config: LudicAppConfig = {}) {
+  constructor(config: L.LudicOptions = {}) {
     super(config)
-    this.screenManager = new L.ScreenManager(this)
-    this.screenManager.addScreen(new Screen())
+    // this.screenManager = new L.ScreenManager(this)
+    // this.screenManager.addScreen(new Screen())
   }
 
   public update(delta: number, time: number): void {
-    this.screenManager.update(delta)
+    // this.screenManager.update(delta)
   }
 }
 
 
-// Create a new BasicGame
+// Create the Game
 let game = new BasicGame()
 
-// Run the Game
-game.update()
+// Start the Game
+game.start()
