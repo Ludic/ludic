@@ -1,0 +1,23 @@
+* Lifecycle
+  Ludic has a well defined life-cycle, governing the states of an application, like creating, pausing, resuming, rendering and disposing the game.
+
+** Diagram
+   #+BEGIN_SRC ditaa :file ./life-cycle.png
+                               +-------------+
+                               |             |
+                               |   Ludic()   |
+                               |             |
+                               +-------------+
+                                      |
+                                      |  constructor()
+                                      v
+                               +-------------+
+                               |             |
+                               |    update() |---------->
+                               |             |
+                               +-------------+
+
+   #+END_SRC
+
+   #+RESULTS:
+   [[file:./life-cycle.png]]

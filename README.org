@@ -21,15 +21,5 @@
 
 ** [Example Games](/Ludic/wiki/ExampleGames)
 ** [API Reference](/Ludic/wiki/API)
-
-  ## Documentation
-  [docs](https://github.com/ludic/ludic/blob/master/docs)
-
-  ## Developing
-  see [developing](https://github.com/ludic/ludic/blob/master/docs/DEVELOPING.md)
-
-  ***
-
-  ## Browser / Platform Support
-
-  Chrome, probably just Chrome.
+   ## Documentation
+   [docs](https://github.com/ludic/ludic/blob/master/docs)
