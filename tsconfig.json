@@ -4,8 +4,8 @@
     "baseUrl": ".",
     "sourceMap": true,
     "declaration": true,
-    "noImplicitAny": true,
-    "module": "es6",
+    "noImplicitAny": false,
+    "module": "commonjs",
     "target": "esnext",
     "paths": {
       "@src/*" : ["src/*"],

@@ -1,7 +1,9 @@
 import { assert } from 'chai'
+import * as L from '../dist/ludic.commonjs.js'
+
 
 describe('basic', ()=>{
-  it('should be equal', async()=>{
-    assert.equal(0, 0)
+  it('should exist', async()=>{
+    assert.equal(!!L, true)
   })
 })
