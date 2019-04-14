@@ -7,7 +7,7 @@ declare global {
   interface HTMLCanvasElement {
     transferControlToOffscreen(): OffscreenCanvas;
   }
-  
+
   interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasUserInterface, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
     readonly canvas: OffscreenCanvas;
   }
@@ -24,7 +24,7 @@ declare global {
     prototype: OffscreenCanvas;
     new(width: number, height: number): OffscreenCanvas;
   }
-  
+
   interface Worker {
     postMessage(message: any, transfer?: Array<Transferable|OffscreenCanvas>): void;
   }
@@ -54,5 +54,3 @@ export * from './reactivity/lambda'
 export * from './reactivity/state'
 
 export default LudicApp
-
-
