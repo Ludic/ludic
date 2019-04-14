@@ -23,10 +23,12 @@ export default {
   'windows': '91', // windows key
   'left-command': '91', // left command key on mac layout
   'left-cmd': '91',
+  'left-meta': '91',
   'search': '91', // on chromebook
   'menu': '93', // windows menu
   'right-command': '93', // right command key on mac layout
   'right-cmd': '93',
+  'right-meta': '93',
 
   // arrow keys
   'left' : '37',

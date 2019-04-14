@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "dist/",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "declaration": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "esnext"
+  },
+  "include": ["./src/**/*"]
+}
