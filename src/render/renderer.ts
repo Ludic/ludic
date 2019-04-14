@@ -112,11 +112,13 @@ export class RenderingContext implements OffscreenCanvasRenderingContext2D {
   fill(path?: any, fillRule?: any) {
     throw new Error('Method not implemented.');
   }
+  // @ts-ignore
   isPointInPath(x: number, y: number, fillRule?: CanvasFillRule): boolean;
   isPointInPath(path: Path2D, x: number, y: number, fillRule?: CanvasFillRule): boolean;
   isPointInPath(path: any, x: any, y?: any, fillRule?: any) {
-    throw new Error('Method not implemented.');
+    this.$components.push(new RenderingContextFunctionComponent('restore'))
   }
+  // @ts-ignore
   isPointInStroke(x: number, y: number): boolean;
   isPointInStroke(path: Path2D, x: number, y: number): boolean;
   isPointInStroke(path: any, x: any, y?: any) {
@@ -152,6 +154,7 @@ export class RenderingContext implements OffscreenCanvasRenderingContext2D {
   drawImage(image: any, sx: any, sy: any, sw?: any, sh?: any, dx?: any, dy?: any, dw?: any, dh?: any) {
     throw new Error('Method not implemented.');
   }
+  // @ts-ignore
   createImageData(sw: number, sh: number): ImageData;
   createImageData(imagedata: ImageData): ImageData;
   createImageData(sw: any, sh?: any) {
