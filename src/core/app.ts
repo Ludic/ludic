@@ -10,7 +10,7 @@ export class Ludic {
   static canvas: Canvas
   static input: InputManager = new InputManager()
   static $running: boolean = false
-  
+
   private requestAnimationFrame: Window['requestAnimationFrame']
   private lastRunTime: number
 
@@ -32,13 +32,13 @@ export class Ludic {
     this.animate = this.animate.bind(this)
   }
 
-  start():void {
+  public start(): void {
     Ludic.$running = true
     this.lastRunTime = performance.now()
     this.requestAnimationFrame(this.animate)
   }
 
-  private animate(time: number):void {
+  private animate(time: number): void {
     this.requestAnimationFrame(this.animate)
     let now = performance.now()
     let delta = now - this.lastRunTime
@@ -50,7 +50,7 @@ export class Ludic {
     // console.log(time, delta)
   }
 
-  
+
 }
 
 export default Ludic
