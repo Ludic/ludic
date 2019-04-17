@@ -33,13 +33,13 @@ const base = {
 }
 
 module.exports = function(env){
-  return ['umd','commonjs','commonjs2'].map(function(lib){
+  return ['commonjs'].map(function(lib){
     return merge(base, {
       output: {
         libraryTarget: lib,
         library: 'Ludic',
         path: __dirname + '/dist',
-        filename: "ludic."+lib+".js"
+        filename: "ludic.js"
       },
     })
   })
