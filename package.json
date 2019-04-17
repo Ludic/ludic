@@ -28,6 +28,7 @@
   "homepage": "https://github.com/Ludic/ludic#readme",
   "dependencies": {},
   "devDependencies": {
+    "@ludic/ein": "github:Ludic/ein",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "awesome-typescript-loader": "^5.2.1",
