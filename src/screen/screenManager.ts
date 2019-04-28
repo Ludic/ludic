@@ -8,10 +8,10 @@ export interface ScreenManagerListener {
   onScreensRemoved(screens: Screen[], manager: ScreenManager): void
   onWarnPopScreen(stack: Screen[], manager: ScreenManager): void
 }
-const LISTENER_METHODS: Array<keyof ScreenManagerListener> = ['onScreenAdded', 'onScreenFinished', 'onScreensRemoved', 'onWarnPopScreen']
+const LISTENER_METHODS: Array<string> = ['onScreenAdded', 'onScreenFinished', 'onScreensRemoved', 'onWarnPopScreen']
 
 function isListenerMethod(prop: string): prop is keyof ScreenManagerListener {
-  return prop in LISTENER_METHODS
+  return LISTENER_METHODS.includes(prop)
 }
 
 export class ScreenManager {
@@ -58,7 +58,7 @@ export class ScreenManager {
     }
   }
 
-  addScreen(screen: Screen, replace: boolean){
+  addScreen(screen: Screen, replace: boolean = false){
     let stack = this._stack
     // give the screen a ref to the manager and the app
     screen.$manager = this
