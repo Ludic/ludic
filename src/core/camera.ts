@@ -93,7 +93,6 @@ export class Camera {
         if(arg0 instanceof Canvas){
           options.width = arg0.element.width
           options.height = arg0.element.height
-          console.log('set w h', arg0.element.width, arg0.element.height)
         } else {
           // options argument
           options = Object.assign(options, arg0)
@@ -134,7 +133,7 @@ export class Camera {
     this.updateEnvironmentVariables()
   }
 
-  draw(ctx: RenderingContext2D){
+  update(ctx: RenderingContext2D){
     this.setTransform(ctx)
   }
 

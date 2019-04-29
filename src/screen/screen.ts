@@ -9,8 +9,8 @@ export class Screen {
   _isFinished: boolean
   _finalData: any
 
-  constructor(options: any) {
-    this.options = options || {}
+  constructor(options: any = {}) {
+    this.options = options
   }
 
   // _step(delta,...rest){

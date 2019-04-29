@@ -1,4 +1,4 @@
-export default class Vector2 {
+export class Vector2 {
   x: number
   y: number
   
@@ -21,3 +21,4 @@ export default class Vector2 {
     this.y = y
   }
 }
+export default Vector2

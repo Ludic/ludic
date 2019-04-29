@@ -61,4 +61,6 @@ export * from './asset/audioAssetLoader'
 export * from './asset/imageAsset'
 export * from './asset/imageAssetLoader'
 
+export * from './utils/vector2'
+
 export default Ludic

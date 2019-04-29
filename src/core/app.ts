@@ -1,5 +1,5 @@
 import Canvas from './canvas'
-import InputManager from 'src/input/manager'
+import InputManager from '../input/manager'
 
 export interface LudicOptions {
   el: string | HTMLCanvasElement

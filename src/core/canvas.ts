@@ -8,7 +8,7 @@ export interface CanvasDimensions {
 export class Canvas {
   dimension: string
   element: HTMLCanvasElement
-  context: CanvasRenderingContext2D
+  private _context: CanvasRenderingContext2D
 
   constructor(el: LudicOptions['el'], dimension='2d') {
     this.dimension = dimension
@@ -18,15 +18,19 @@ export class Canvas {
     } else if(el instanceof HTMLCanvasElement) {
       this.element = el
     }
-
     // window.addEventListener('resize', ()=>{
     //   this.element.width = window.innerWidth
     //   this.element.height = window.innerHeight
     // }, false)
+    this.setDimensions()
+  }
+
+  get context(): CanvasRenderingContext2D {
+    return this.getContext()
   }
 
   getContext(dimension = this.dimension, options = {alpha: false}){
-    return this.context || (this.context = <CanvasRenderingContext2D>this.element.getContext(dimension, options))
+    return this._context || (this._context = <CanvasRenderingContext2D>this.element.getContext(dimension, options))
   }
 
   setDimensions(width: number = window.innerWidth, height: number = window.innerHeight): CanvasDimensions {
@@ -39,7 +43,7 @@ export class Canvas {
    * Helper function to clear the current context at full width-height
    * @param {String} clearColor - color to clear the screen with
    */
-  clear(clearColor = 'white', context = this.getContext()){
+  clear(clearColor = 'white', context = this.context){
     context.fillStyle = clearColor
     context.clearRect(0, 0, this.element.width, this.element.height)
     context.fillRect(0, 0, this.element.width, this.element.height)
