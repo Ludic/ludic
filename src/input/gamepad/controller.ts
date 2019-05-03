@@ -135,73 +135,36 @@ export default class GamepadController implements InputController {
           const buttonName = gamepadMap.buttons[buttonIndex]
           gamepadState[buttonName] = button
         })
+        // do the same thing for each of the axis (analog sticks)
+        // loop through each and poll state
+        gamepad.axes.forEach( (axisValue,axisIndex)=>{
+          // first determine if this axis is for a stick or a button or a dpad
+          // let axis = new GamepadAxis(gamepad, axisIndex, axisValue)
+          const axisName = gamepadMap.axes[axisIndex]
+          const stick = gamepadMap.sticks[axisName]
+          const buttonIndex = gamepadMap.buttonAxes ? gamepadMap.buttonAxes[axisName] : null
+          const buttonName = buttonIndex != null ? gamepadMap.buttons[buttonIndex] : null
+          const dpad = gamepadMap.dpadAxes ? gamepadMap.dpadAxes[axisName] : null
+
+          if(stick != null){
+            // this is an axis for an analog stick
+            gamepadState[axisName] = axisValue
+          } else if(buttonIndex != null) {
+            // this is an axis for a button
+            const button = gamepad.buttons[buttonIndex]
+            gamepadState[buttonName] = button
+          } else if(dpad != null) {
+            Object.entries(dpad).forEach(([direction, dpadValue]: [string, number]) => {
+              const button = {pressed: false, value: axisValue, id: direction}
+              if(dpadValue == axisValue){
+                button.pressed = true
+              }
+              gamepadState[direction] = button
+            })
+          }
+        })
       }
-
     }
-
-    // do the same thing for each of the axis (analog sticks)
-    // loop through each and poll state
-    // gamepad.axes.forEach( (axisValue,axisIndex)=>{
-    //   // first determine if this axis is for a stick or a button or a dpad
-    //   let axis = new GamepadAxis(gamepad, axisIndex, axisValue)
-    //   if(axis.stick != null){
-    //     // this is an axis for a stick
-    //     // get the deadZone associated with each axis
-    //     let dz = this.getDeadZone(axisIndex)
-    //     // get the last known state for the axis
-    //     let lastState = this.getLastAxisState(gamepadIndex,axisIndex)
-
-    //     // if the axisValue of the axis is withing the bounds of the deadzone
-    //     //  create an axis event
-    //     if( axisValue < -dz || axisValue > dz ){
-    //       let axisEvent = this.createGamepadAxisEvent(axis,false, delta)
-    //       this.inputController.dispatchEvent(this,this.onGamepadAxis, axisEvent)
-    //       this.setLastAxisState(gamepadIndex,axisIndex,false)
-    //     } else if(!lastState.zeroed){
-    //       axis.zero()
-    //       let axisEvent = this.createGamepadAxisEvent(axis,true, delta)
-    //       this.inputController.dispatchEvent(this,this.onGamepadAxis, axisEvent)
-    //       this.setLastAxisState(gamepadIndex,axisIndex,true)
-    //     }
-    //   } else if(axis.buttonIndex != null) {
-    //     // this is an axis for a button
-    //     let button = gamepad.buttons[axis.buttonIndex]
-    //     let lastState = this.getLastState(gamepadIndex,axis.buttonIndex)
-    //     button.index = axis.buttonIndex // tell the button what it's index is
-    //     button.lastState = lastState
-    //     if(button.pressed){
-    //       // if pressed, create a button event and set the buttons last known state
-    //       let buttonEvent = this.createGamepadButtonEvent(gamepad,button,true,axisValue, delta)
-    //       buttonEvent && this.inputController.dispatchEvent(this,this.onGamepadButtonEvent,buttonEvent)
-    //       this.setLastState(gamepadIndex,axis.buttonIndex,true)
-    //     } else {
-    //       if(lastState) {
-    //         // if the button is not pressed but its last state was pressed, create a 'button up' event
-    //         if(lastState.pressed) {
-    //           let buttonEvent = this.createGamepadButtonEvent(gamepad,button,false,axisValue, delta)
-    //           buttonEvent && this.inputController.dispatchEvent(this,this.onGamepadButtonEvent,buttonEvent)
-    //         }
-    //       }
-    //       // set the buttons last known state for not pressed
-    //       this.setLastState(gamepadIndex,axis.buttonIndex,false)
-    //     }
-    //   } else if(axis.dpad != null) {
-    //     for(let direction in axis.dpad){
-    //       let lastState = this.getLastDPadAxisState(gamepadIndex,axisIndex)
-    //       if(axis.dpad[direction] == axisValue){
-    //         let button = {pressed: true, value: axisValue, id: direction}
-    //         let buttonEvent = new GamepadButtonEvent(gamepad,button,true,button.value, delta)
-    //         this.inputController.dispatchEvent(this,this.onGamepadButtonEvent,buttonEvent)
-    //         this.setLastDPadAxisState(gamepadIndex,axisIndex,direction,false)
-    //       } else if(lastState.direction == direction && !lastState.zeroed) {
-    //         let button = {pressed: false, value: axisValue, id: direction}
-    //         let buttonEvent = new GamepadButtonEvent(gamepad,button,false,button.value, delta)
-    //         this.inputController.dispatchEvent(this,this.onGamepadButtonEvent,buttonEvent)
-    //         this.setLastDPadAxisState(gamepadIndex,axisIndex,direction,true)
-    //       }
-    //     }
-    //   }
-    // })
     return gamepadState
   }
 
