@@ -101,7 +101,7 @@ const MAPS: GamepadMap = {
     },
   },
   'ps4-4': {
-    name: 'PS4 Controller (Chrome;Linux)',
+    name: 'PS4 Controller (Chrome;Linux;Wired)',
     buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home'],
     axes: ['lx','ly','rx','ry'],
     sticks: {
@@ -118,5 +118,24 @@ const MAPS: GamepadMap = {
         && ua.includes('Chrome') && ua.includes('Linux')
     },
   },
+  'ps4-5': {
+    name: 'PS4 Controller (Chrome;Linux;Wireless)',
+    buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
+    axes: ['lx','ly','rx','ry'],
+    sticks: {
+      lx:'leftStick',
+      ly:'leftStick',
+      rx:'rightStick',
+      ry:'rightStick'
+    },
+    test(gamepad){
+      let ua = navigator.userAgent
+      return /054c/.test(gamepad.id)
+        && gamepad.axes.length == this.axes.length
+        && gamepad.buttons.length == this.buttons.length
+        && ua.includes('Chrome') && ua.includes('Linux')
+    },
+  },
+
 }
 export default MAPS
