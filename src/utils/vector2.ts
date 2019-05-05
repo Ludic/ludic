@@ -20,5 +20,21 @@ export class Vector2 {
   set_y(y: number){
     this.y = y
   }
+
+  magnitude(){
+    return Math.sqrt(this.x*this.x + this.y*this.y)
+  }
+  normalize(): this {
+    const m = this.magnitude()
+    if(m > 0){
+      this.scale(1/m)
+    }
+    return this
+  }
+  scale(val: number): this {
+    this.x = this.x * val
+    this.y = this.y * val
+    return this
+  }
 }
 export default Vector2

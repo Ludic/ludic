@@ -125,14 +125,14 @@ export default class GamepadController implements InputController {
       
       if(gamepadMap){
         gamepad.buttons.forEach( (button, buttonIndex)=>{
+          // get the name for this button at this index from the mapping
+          const buttonName = gamepadMap.buttons[buttonIndex]
           // check if this button is actually a button or axis
-          if(gamepadMap.buttonAxes && gamepadMap.buttons[buttonIndex] in gamepadMap.buttonAxes){
+          if(gamepadMap.buttonAxes && buttonName in gamepadMap.buttonAxes){
             // skip this button because the axis will handle it
             return
           }
-          // get the name for this button at this index from the mapping
-          // and set it on the state
-          const buttonName = gamepadMap.buttons[buttonIndex]
+          // set it on the state
           gamepadState[buttonName] = button
         })
         // do the same thing for each of the axis (analog sticks)
