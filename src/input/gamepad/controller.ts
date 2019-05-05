@@ -8,6 +8,23 @@ declare module '../manager' {
   }
 }
 
+declare global {
+  interface Gamepad {
+    readonly vibrationActuator?: ChromeGamepadHapticActuator
+  }
+  interface ChromeGamepadHapticActuator {
+    readonly type: GamepadHapticActuatorType | 'dual-rumble'
+    playEffect(type: ChromeGamepadHapticActuator['type'], params: GamepadEffectParameters): Promise<string>
+    reset(): Promise<any>
+  }
+  interface GamepadEffectParameters {
+    duration: number
+    startDelay?: number
+    strongMagnitude?: number
+    weakMagnitude?: number
+  }
+
+}
 
 let gamepadsAxisDeadZone = 0.08
 let gamepadsConfig = {}
@@ -16,6 +33,15 @@ const gamepadMappings: {[key: string]: GamepadMapConfig} = {}
 
 const getGamepadMap = function getGamepadMap(gamepad: Gamepad): GamepadMapConfig {
   return gamepadMappings[gamepad.index] || ({} as GamepadMapConfig)
+}
+
+export interface GamepadVibrationParams {
+  duration: number
+  type?: ChromeGamepadHapticActuator['type']
+  value?: number
+  weakMagnitude?: number
+  strongMagnitude?: number
+  startDelay?: number
 }
 
 export class GamepadState {
@@ -66,6 +92,33 @@ export class GamepadState {
     this.ly = 0
     this.rx = 0
     this.ry = 0
+  }
+  /**
+   * an abstraction for chrome/spec haptic actuators
+   */
+  vibrate(params: GamepadVibrationParams){
+    // make sure we have a gamepad
+    if(this.gamepad != null){
+      // check for chrome property
+      if(this.gamepad.vibrationActuator != null){
+        const weakMagnitude = params.weakMagnitude != null ? params.weakMagnitude : (params.value != null ? params.value : undefined)
+        const strongMagnitude = params.strongMagnitude != null ? params.strongMagnitude : (params.value != null ? params.value : undefined)
+        const type = params.type != null ? params.type : this.gamepad.vibrationActuator.type
+        return this.gamepad.vibrationActuator.playEffect(type, {
+          duration: params.duration,
+          startDelay: params.startDelay,
+          weakMagnitude: weakMagnitude,
+          strongMagnitude: strongMagnitude
+        })
+      } else if(this.gamepad.hapticActuators != null && this.gamepad.hapticActuators.length){
+        const value = params.value != null ? params.value : (params.weakMagnitude != null ? params.weakMagnitude : params.strongMagnitude)
+        let actuators = this.gamepad.hapticActuators
+        if(params.type != null){
+          actuators = actuators.filter(actuator => actuator.type === params.type)
+        }
+        return Promise.all(actuators.map(actuator => actuator.pulse(value, params.duration)))
+      }
+    }
   }
 }
 
