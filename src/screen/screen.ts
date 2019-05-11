@@ -31,7 +31,12 @@ export class Screen {
   }
 
   onDestroy(){}
-  onAddedToManager(manager: ScreenManager){}
+  /**
+   * 
+   * @param manager ScreenManager that called this.
+   * @param finalData the final data from the previous screen
+   */
+  onAddedToManager(manager: ScreenManager, finalData?: any){}
   onRemovedFromManager(manager: ScreenManager){}
 
   // $mapMethods(component, mapping){

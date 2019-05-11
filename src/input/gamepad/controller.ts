@@ -44,50 +44,73 @@ export interface GamepadVibrationParams {
   startDelay?: number
 }
 
+class GamepadStateButton implements GamepadButton {
+  pressed: boolean;
+  touched: boolean;
+  value: number;
+  last?: GamepadStateButton
+  id?: string
+  constructor({pressed=false, touched=false, value=0}: GamepadButton = {} as any, last?: GamepadStateButton){
+    this.pressed = pressed
+    this.touched = touched
+    this.value = value
+    this.last = last != null ? new GamepadStateButton(last, null) : null
+  }
+  get toggled(){
+    return this.last && this.last.pressed !== this.pressed
+  }
+  get buttonUp(){
+    return this.toggled && !this.pressed
+  }
+  get buttonDown(){
+    return this.toggled && this.pressed
+  }
+}
+
 export class GamepadState {
   gamepad: Gamepad
   // normalized buttons and axes
-  start: GamepadButton
-  select: GamepadButton
-  home: GamepadButton // ps/xb button
-  left: GamepadButton
-  right: GamepadButton
-  up: GamepadButton
-  down: GamepadButton
-  l1: GamepadButton
-  l2: GamepadButton
-  l3: GamepadButton
-  r1: GamepadButton
-  r2: GamepadButton
-  r3: GamepadButton
-  triangle: GamepadButton
-  square: GamepadButton
-  circle: GamepadButton
-  cross: GamepadButton
-  extra: GamepadButton
+  start: GamepadStateButton
+  select: GamepadStateButton
+  home: GamepadStateButton // ps/xb button
+  left: GamepadStateButton
+  right: GamepadStateButton
+  up: GamepadStateButton
+  down: GamepadStateButton
+  l1: GamepadStateButton
+  l2: GamepadStateButton
+  l3: GamepadStateButton
+  r1: GamepadStateButton
+  r2: GamepadStateButton
+  r3: GamepadStateButton
+  triangle: GamepadStateButton
+  square: GamepadStateButton
+  circle: GamepadStateButton
+  cross: GamepadStateButton
+  extra: GamepadStateButton
   lx: number
   ly: number
   rx: number
   ry: number
   constructor(){
-    this.start = {pressed: false, touched: false, value: 0}
-    this.select = {pressed: false, touched: false, value: 0}
-    this.home = {pressed: false, touched: false, value: 0} // ps/xb button
-    this.left = {pressed: false, touched: false, value: 0}
-    this.right = {pressed: false, touched: false, value: 0}
-    this.up = {pressed: false, touched: false, value: 0}
-    this.down = {pressed: false, touched: false, value: 0}
-    this.l1 = {pressed: false, touched: false, value: 0}
-    this.l2 = {pressed: false, touched: false, value: 0}
-    this.l3 = {pressed: false, touched: false, value: 0}
-    this.r1 = {pressed: false, touched: false, value: 0}
-    this.r2 = {pressed: false, touched: false, value: 0}
-    this.r3 = {pressed: false, touched: false, value: 0}
-    this.triangle = {pressed: false, touched: false, value: 0}
-    this.square = {pressed: false, touched: false, value: 0}
-    this.circle = {pressed: false, touched: false, value: 0}
-    this.cross = {pressed: false, touched: false, value: 0}
-    this.extra = {pressed: false, touched: false, value: 0}
+    this.start = new GamepadStateButton()
+    this.select = new GamepadStateButton()
+    this.home = new GamepadStateButton() // ps/xb button
+    this.left = new GamepadStateButton()
+    this.right = new GamepadStateButton()
+    this.up = new GamepadStateButton()
+    this.down = new GamepadStateButton()
+    this.l1 = new GamepadStateButton()
+    this.l2 = new GamepadStateButton()
+    this.l3 = new GamepadStateButton()
+    this.r1 = new GamepadStateButton()
+    this.r2 = new GamepadStateButton()
+    this.r3 = new GamepadStateButton()
+    this.triangle = new GamepadStateButton()
+    this.square = new GamepadStateButton()
+    this.circle = new GamepadStateButton()
+    this.cross = new GamepadStateButton()
+    this.extra = new GamepadStateButton()
     this.lx = 0
     this.ly = 0
     this.rx = 0
@@ -167,7 +190,7 @@ export default class GamepadController implements InputController {
     return Array.from(navigator.getGamepads() || [])
   }
 
-  _parseGamepadState(gamepad: Gamepad): GamepadState {
+  _parseGamepadState(gamepad: Gamepad, lastState: GamepadState): GamepadState {
     const gamepadState = new GamepadState()
 
     if(gamepad != null) {
@@ -186,7 +209,7 @@ export default class GamepadController implements InputController {
             return
           }
           // set it on the state
-          gamepadState[buttonName] = button
+          gamepadState[buttonName] = new GamepadStateButton(button, lastState[buttonName])
         })
         // do the same thing for each of the axis (analog sticks)
         // loop through each and poll state
@@ -205,10 +228,11 @@ export default class GamepadController implements InputController {
           } else if(buttonIndex != null) {
             // this is an axis for a button
             const button = gamepad.buttons[buttonIndex]
-            gamepadState[buttonName] = button
+            gamepadState[buttonName] = new GamepadStateButton(button, lastState[buttonName])
           } else if(dpad != null) {
             Object.entries(dpad).forEach(([direction, dpadValue]: [string, number]) => {
-              const button = {pressed: false, value: axisValue, id: direction}
+              const button = new GamepadStateButton({pressed: false, value: axisValue, touched: false}, lastState[direction])
+              button.id = direction
               if(dpadValue == axisValue){
                 button.pressed = true
               }
@@ -223,7 +247,7 @@ export default class GamepadController implements InputController {
 
   update(time: number, delta: number){
     this.gamepads.forEach((gamepad, index) => {
-      this.state.set(index, this._parseGamepadState(gamepad))
+      this.state.set(index, this._parseGamepadState(gamepad, this.state.get(index)))
     })
   }
 

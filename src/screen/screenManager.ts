@@ -60,25 +60,28 @@ export class ScreenManager {
 
   addScreen(screen: Screen, replace: boolean = false){
     let stack = this._stack
+    let finalData = null
     // give the screen a ref to the manager and the app
     screen.$manager = this
     // screen.$app = this.$app
     // give the screen an id
     screen.$id = this.getNewId()
     if(replace){
-      stack.splice(stack.length-1,1,screen)
-    } else {
-      stack.push(screen)
+      const [rm] = this.popScreen()
+      if(rm != null){
+        finalData = rm._finalData
+      }
     }
+    stack.push(screen)
     // call screen's callback
-    screen.onAddedToManager(this)
+    screen.onAddedToManager(this, finalData)
     // call listener methods
     this._listeners.onScreenAdded(screen, this, replace)
   }
 
   popScreen(){
     let stack = this._stack
-    if(stack.length > 1){
+    if(stack.length > 0){
       let screen = stack.pop()
       // call screen's callback
       screen.onRemovedFromManager(this)
