@@ -47,7 +47,7 @@ export class Ludic {
   }
 
   update(time: number, delta: number): void {
-    // console.log(time, delta)
+    Ludic.input.update(time, delta)
   }
 
 
