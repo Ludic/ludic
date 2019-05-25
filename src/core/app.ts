@@ -6,6 +6,7 @@ export interface LudicOptions {
 }
 
 export class Ludic {
+  static debug: boolean
   static $instance: Ludic
   static canvas: Canvas
   static input: InputManager = new InputManager()
