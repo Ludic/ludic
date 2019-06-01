@@ -58,9 +58,8 @@ export class ScreenManager {
     }
   }
 
-  addScreen(screen: Screen, replace: boolean = false){
+  addScreen(screen: Screen, replace: boolean = false, finalData?: any){
     let stack = this._stack
-    let finalData = null
     // give the screen a ref to the manager and the app
     screen.$manager = this
     // screen.$app = this.$app

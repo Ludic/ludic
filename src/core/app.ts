@@ -1,8 +1,13 @@
 import Canvas from './canvas'
 import InputManager from '../input/manager'
 
+export interface LudicPlugin {
+  (app: typeof Ludic): void
+}
+
 export interface LudicOptions {
   el: string | HTMLCanvasElement
+  plugins?: Array<LudicPlugin>
 }
 
 export class Ludic {
@@ -18,11 +23,12 @@ export class Ludic {
   constructor(opts: LudicOptions){
     if(Ludic.$instance) return Ludic.$instance
 
-    const {el} = opts
+    const {el, plugins = []} = opts
 
     Ludic.$instance = this
     Ludic.canvas = new Canvas(el)
 
+    plugins.forEach(p => this.install(p))
     this.requestAnimationFrame = (()=>{
       return  window.requestAnimationFrame       ||
               window.webkitRequestAnimationFrame ||
@@ -51,6 +57,9 @@ export class Ludic {
     Ludic.input.update(time, delta)
   }
 
+  install(plugin: LudicPlugin){
+    plugin(Ludic)
+  }
 
 }
 

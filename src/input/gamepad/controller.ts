@@ -88,10 +88,10 @@ export class GamepadState {
   circle: GamepadStateButton
   cross: GamepadStateButton
   extra: GamepadStateButton
-  lx: number
-  ly: number
-  rx: number
-  ry: number
+  lx: GamepadStateButton
+  ly: GamepadStateButton
+  rx: GamepadStateButton
+  ry: GamepadStateButton
   constructor(){
     this.start = new GamepadStateButton()
     this.select = new GamepadStateButton()
@@ -111,10 +111,10 @@ export class GamepadState {
     this.circle = new GamepadStateButton()
     this.cross = new GamepadStateButton()
     this.extra = new GamepadStateButton()
-    this.lx = 0
-    this.ly = 0
-    this.rx = 0
-    this.ry = 0
+    this.lx = new GamepadStateButton({value: 0, pressed: false, touched: false})
+    this.ly = new GamepadStateButton({value: 0, pressed: false, touched: false})
+    this.rx = new GamepadStateButton({value: 0, pressed: false, touched: false})
+    this.ry = new GamepadStateButton({value: 0, pressed: false, touched: false})
   }
   /**
    * an abstraction for chrome/spec haptic actuators
@@ -224,7 +224,7 @@ export default class GamepadController implements InputController {
 
           if(stick != null){
             // this is an axis for an analog stick
-            gamepadState[axisName] = axisValue
+            gamepadState[axisName] = new GamepadStateButton({pressed: false, touched: false, value: axisValue}, gamepadState[axisName])
           } else if(buttonIndex != null) {
             // this is an axis for a button
             const button = gamepad.buttons[buttonIndex]
