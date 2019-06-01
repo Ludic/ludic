@@ -212,14 +212,14 @@ export default class GamepadController implements InputController {
             // skip this button because the axis will handle it
             return
           }
-          let buttonValue = button.value
+          let {value, touched, pressed} = button
           if(gamepadMap.axisButtons && gamepadMap.axisButtons.includes(buttonName)) {
             // map this button value to an axis value of -1,1
             // ex: (0,1) -> (-1,1)
-            buttonValue = mapRange(buttonValue, 0, 1, -1, 1)
+            value = mapRange(value, 0, 1, -1, 1)
           }
           // set it on the state
-          gamepadState[buttonName] = new GamepadStateButton({...button, value: buttonValue}, lastState[buttonName])
+          gamepadState[buttonName] = new GamepadStateButton({pressed, value, touched}, lastState[buttonName])
         })
         // do the same thing for each of the axis (analog sticks)
         // loop through each and poll state
