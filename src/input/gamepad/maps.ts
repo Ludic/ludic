@@ -1,4 +1,4 @@
-export type GamepadButtonName = 'cross'|'circle'|'square'|'triangle'|'l1'|'r1'|'l2'|'r2'|'extra'|'start'|'l3'|'r3'|'up'|'down'|'left'|'right'|'home'|'select'
+export type GamepadButtonName = 'cross'|'circle'|'square'|'triangle'|'l1'|'r1'|'l2'|'r2'|'extra'|'start'|'l3'|'r3'|'up'|'down'|'left'|'right'|'home'|'select'|'rx'|'ry'
 export type GamepadAxisName = 'lx'|'ly'|'rx'|'ry'|'l2'|'r2'|'dpadX'|'dpadY'
 export interface GamepadMapConfig {
   name: string
@@ -120,8 +120,12 @@ const MAPS: GamepadMap = {
   },
   'ps4-5': {
     name: 'PS4 Controller (Chrome;Linux;Wireless)',
-    buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
-    axes: ['lx','ly','rx','ry'],
+    buttons: ['circle', 'triangle', 'cross', 'square', 'l1','r1','rx','ry','select','start','home','l3', 'up','down','left','right','r3', 'extra'],
+    axes: ['lx','ly','l2','r2'],
+    buttonAxes: {
+      rx:6,
+      ry:7,
+    },
     sticks: {
       lx:'leftStick',
       ly:'leftStick',
