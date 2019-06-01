@@ -35,6 +35,10 @@ const getGamepadMap = function getGamepadMap(gamepad: Gamepad): GamepadMapConfig
   return gamepadMappings[gamepad.index] || ({} as GamepadMapConfig)
 }
 
+const mapRange = function mapRange(value, oldBottom, oldTop, newBottom, newTop) {
+  return (value - oldBottom) / (oldTop - oldBottom) * (newTop - newBottom) + newBottom
+}
+
 export interface GamepadVibrationParams {
   duration: number
   type?: ChromeGamepadHapticActuator['type']
@@ -208,8 +212,14 @@ export default class GamepadController implements InputController {
             // skip this button because the axis will handle it
             return
           }
+          let buttonValue = button.value
+          if(gamepadMap.axisButtons && gamepadMap.axisButtons.includes(buttonName)) {
+            // map this button value to an axis value of -1,1
+            // ex: (0,1) -> (-1,1)
+            buttonValue = mapRange(buttonValue, 0, 1, -1, 1)
+          }
           // set it on the state
-          gamepadState[buttonName] = new GamepadStateButton(button, lastState[buttonName])
+          gamepadState[buttonName] = new GamepadStateButton({...button, value: buttonValue}, lastState[buttonName])
         })
         // do the same thing for each of the axis (analog sticks)
         // loop through each and poll state

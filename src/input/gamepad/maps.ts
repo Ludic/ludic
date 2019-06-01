@@ -9,6 +9,7 @@ export interface GamepadMapConfig {
     dpadX: {left: number, right: number},
     dpadY: {up: number, down: number},
   }
+  axisButtons?: string[],
   sticks: {[key: string]: string}
   test: (gamepad: Gamepad) => boolean
 }
@@ -122,6 +123,7 @@ const MAPS: GamepadMap = {
     name: 'PS4 Controller (Chrome;Linux;Wireless)',
     buttons: ['circle', 'triangle', 'cross', 'square', 'l1','r1','rx','ry','select','start','home','l3', 'up','down','left','right','r3', 'extra'],
     axes: ['lx','ly','l2','r2'],
+    axisButtons: ['rx', 'ry'],
     sticks: {
       lx:'leftStick',
       ly:'leftStick',
