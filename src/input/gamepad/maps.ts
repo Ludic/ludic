@@ -122,15 +122,9 @@ const MAPS: GamepadMap = {
     name: 'PS4 Controller (Chrome;Linux;Wireless)',
     buttons: ['circle', 'triangle', 'cross', 'square', 'l1','r1','rx','ry','select','start','home','l3', 'up','down','left','right','r3', 'extra'],
     axes: ['lx','ly','l2','r2'],
-    buttonAxes: {
-      rx:6,
-      ry:7,
-    },
     sticks: {
       lx:'leftStick',
       ly:'leftStick',
-      rx:'rightStick',
-      ry:'rightStick'
     },
     test(gamepad){
       let ua = navigator.userAgent
