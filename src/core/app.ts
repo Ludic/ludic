@@ -2,7 +2,10 @@ import Canvas from './canvas'
 import InputManager from '../input/manager'
 
 export interface LudicPlugin {
-  (app: typeof Ludic): void
+  (app: any, opts?: any): void
+}
+export interface UpdateFunction {
+  (time?: number, delta?: number): void
 }
 
 export interface LudicOptions {
@@ -10,15 +13,30 @@ export interface LudicOptions {
   plugins?: Array<LudicPlugin>
 }
 
-export class Ludic {
+export interface LudicConstructor {
+  $instance: LudicInstance
+  debug: boolean
+  canvas: Canvas
+  input: InputManager
+  $running: boolean
+  new (opts: LudicOptions): LudicInstance
+  registerUpdateFunction(fn: UpdateFunction): void
+}
+
+class LudicInstance {
   static debug: boolean
-  static $instance: Ludic
+  static $instance: LudicInstance
   static canvas: Canvas
   static input: InputManager = new InputManager()
   static $running: boolean = false
 
   private requestAnimationFrame: Window['requestAnimationFrame']
   private lastRunTime: number
+  private updateFunctions: UpdateFunction[] = []
+
+  static registerUpdateFunction(fn: UpdateFunction){
+    this.$instance.updateFunctions.push(fn)
+  }
 
   constructor(opts: LudicOptions){
     if(Ludic.$instance) return Ludic.$instance
@@ -27,6 +45,8 @@ export class Ludic {
 
     Ludic.$instance = this
     Ludic.canvas = new Canvas(el)
+
+    Ludic.registerUpdateFunction((time, delta) => Ludic.input.update(time, delta))
 
     plugins.forEach(p => this.install(p))
     this.requestAnimationFrame = (()=>{
@@ -49,18 +69,19 @@ export class Ludic {
     this.requestAnimationFrame(this.animate)
     let now = performance.now()
     let delta = now - this.lastRunTime
+    this.updateFunctions.forEach(fn => fn(time, delta))
     this.update(time, delta)
     this.lastRunTime = now
   }
 
-  update(time: number, delta: number): void {
-    Ludic.input.update(time, delta)
-  }
+  update(time: number, delta: number): void { }
 
   install(plugin: LudicPlugin){
     plugin(Ludic)
   }
 
 }
+
+export const Ludic: LudicConstructor = LudicInstance
 
 export default Ludic

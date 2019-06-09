@@ -196,7 +196,9 @@ export class Camera {
   }
 
   private _getPixelPointFromWorldPoint_y(y: number){
-    return this.inverseY ? ((y*this.pixelsToMeters) + (this.height - this.offset.y)) : ((this.height - this.offset.y) - (y*this.pixelsToMeters))
+    return this.inverseY
+      ? this.height - ((y*this.pixelsToMeters) + (this.height - this.offset.y))
+      : this.height - ((this.height - this.offset.y) - (y*this.pixelsToMeters))
   }
 
   setViewCenterWorld(vector2: Vector2, instantaneous: boolean, fraction: number = 0) {

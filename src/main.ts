@@ -30,7 +30,7 @@ declare global {
   }
 }
 
-import Ludic from './core/app'
+import { Ludic } from './core/app'
 
 export * from './core/app'
 export * from './core/camera'
