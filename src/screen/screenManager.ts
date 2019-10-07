@@ -45,7 +45,7 @@ export class ScreenManager {
     return idIncrementer++
   }
 
-  update(delta: number){
+  update(delta: number, time: number, ...args: any[]){
     let stack = this._stack
     if(stack.length > 0){
       let screen = stack[stack.length-1]
