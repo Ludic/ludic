@@ -1,5 +1,6 @@
 import InputManager, { InputController, InputState } from '../manager'
 import GamepadMaps, { GamepadMapConfig } from './maps'
+import Pool from '../../pooling/pool'
 
 // augment our InputManager to include gamepad
 declare module '../manager' {
@@ -54,11 +55,20 @@ class GamepadStateButton implements GamepadButton {
   value: number;
   last?: GamepadStateButton
   id?: string
-  constructor({pressed=false, touched=false, value=0}: GamepadButton = {} as any, last?: GamepadStateButton){
+  constructor(btn: GamepadButton = {} as any, last?: GamepadStateButton){
+    this.init(btn, last)
+  }
+  init({pressed=false, touched=false, value=0}: GamepadButton = {} as any, last?: GamepadStateButton): this {
     this.pressed = pressed
     this.touched = touched
     this.value = value
-    this.last = last != null ? new GamepadStateButton(last, null) : null
+    this.last = null
+    if(last != null){
+      this.last = GAMEPAD_STATE_BUTTON_POOL.get()
+      this.last.init(last, null)
+      GAMEPAD_STATE_BUTTON_POOL.free(last)
+    }
+    return this
   }
   get toggled(){
     return this.last && this.last.pressed !== this.pressed
@@ -97,28 +107,29 @@ export class GamepadState {
   rx: GamepadStateButton
   ry: GamepadStateButton
   constructor(){
-    this.start = new GamepadStateButton()
-    this.select = new GamepadStateButton()
-    this.home = new GamepadStateButton() // ps/xb button
-    this.left = new GamepadStateButton()
-    this.right = new GamepadStateButton()
-    this.up = new GamepadStateButton()
-    this.down = new GamepadStateButton()
-    this.l1 = new GamepadStateButton()
-    this.l2 = new GamepadStateButton()
-    this.l3 = new GamepadStateButton()
-    this.r1 = new GamepadStateButton()
-    this.r2 = new GamepadStateButton()
-    this.r3 = new GamepadStateButton()
-    this.triangle = new GamepadStateButton()
-    this.square = new GamepadStateButton()
-    this.circle = new GamepadStateButton()
-    this.cross = new GamepadStateButton()
-    this.extra = new GamepadStateButton()
-    this.lx = new GamepadStateButton({value: 0, pressed: false, touched: false})
-    this.ly = new GamepadStateButton({value: 0, pressed: false, touched: false})
-    this.rx = new GamepadStateButton({value: 0, pressed: false, touched: false})
-    this.ry = new GamepadStateButton({value: 0, pressed: false, touched: false})
+    // console.log('new gp state')
+    this.start = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.select = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.home = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.left = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.right = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.up = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.down = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.l1 = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.l2 = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.l3 = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.r1 = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.r2 = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.r3 = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.triangle = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.square = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.circle = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.cross = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.extra = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.lx = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.ly = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.rx = GAMEPAD_STATE_BUTTON_POOL.get()
+    this.ry = GAMEPAD_STATE_BUTTON_POOL.get()
   }
   /**
    * an abstraction for chrome/spec haptic actuators
@@ -149,11 +160,24 @@ export class GamepadState {
   }
 }
 
+const GAMEPAD_STATE_BUTTON_POOL = new Pool(()=>{
+  console.log('create btn state')
+  return new GamepadStateButton({value: 0, pressed: false, touched: false})
+}, 200)
+
+const GAMEPAD_STATE_POOL = new Pool(()=>{
+  // console.log('create gp state')
+  return new GamepadState()
+}, 8)
+
 export default class GamepadController implements InputController {
+  
   state: InputState<GamepadState>
+
   constructor() {
-    this.state = new InputState(GamepadState)
-    window.addEventListener("gamepadconnected", ({gamepad, ...e}: GamepadEvent)=>{
+    this.state = new InputState(GamepadState, GAMEPAD_STATE_POOL)
+
+    self.addEventListener("gamepadconnected", ({gamepad, ...e}: GamepadEvent)=>{
       let gp = navigator.getGamepads()[gamepad.index]
       console.log(gp)
       let mapping = this.findMappingForGamepad(gamepad)
@@ -168,7 +192,7 @@ export default class GamepadController implements InputController {
         gamepadMappings[gamepad.index] = mapping
       }
     })
-    window.addEventListener("gamepaddisconnected", ({gamepad, ...e}: GamepadEvent)=>{
+    self.addEventListener("gamepaddisconnected", ({gamepad, ...e}: GamepadEvent)=>{
       console.log('Gamepad disconnected: ', gamepad)
     })
 
@@ -189,13 +213,17 @@ export default class GamepadController implements InputController {
     return Object.values(GamepadMaps).find((mapping) => mapping.test(gamepad))
   }
 
+  addMapping(name: string, mapping: GamepadMapConfig){
+    GamepadMaps[name] = mapping
+  }
+
   get gamepads(){
     // convert this array-like into an array
     return Array.from(navigator.getGamepads() || [])
   }
 
   _parseGamepadState(gamepad: Gamepad, lastState: GamepadState): GamepadState {
-    const gamepadState = new GamepadState()
+    const gamepadState = GAMEPAD_STATE_POOL.get()
 
     if(gamepad != null) {
       const gamepadMap = this.findMappingForGamepad(gamepad)
@@ -219,7 +247,8 @@ export default class GamepadController implements InputController {
             value = mapRange(value, 0, 1, -1, 1)
           }
           // set it on the state
-          gamepadState[buttonName] = new GamepadStateButton({pressed, value, touched}, lastState[buttonName])
+          // GAMEPAD_STATE_BUTTON_POOL.free(gamepadState[buttonName])
+          gamepadState[buttonName].init({pressed, value, touched}, lastState[buttonName])
         })
         // do the same thing for each of the axis (analog sticks)
         // loop through each and poll state
@@ -234,24 +263,30 @@ export default class GamepadController implements InputController {
 
           if(stick != null){
             // this is an axis for an analog stick
-            gamepadState[axisName] = new GamepadStateButton({pressed: false, touched: false, value: axisValue}, gamepadState[axisName])
+            // GAMEPAD_STATE_BUTTON_POOL.free(gamepadState[axisName])
+            gamepadState[axisName].init({pressed: false, touched: false, value: axisValue}, gamepadState[axisName])
           } else if(buttonIndex != null) {
             // this is an axis for a button
             const button = gamepad.buttons[buttonIndex]
-            gamepadState[buttonName] = new GamepadStateButton(button, lastState[buttonName])
+            // GAMEPAD_STATE_BUTTON_POOL.free(gamepadState[buttonName])
+            gamepadState[buttonName].init(button, lastState[buttonName])
           } else if(dpad != null) {
             Object.entries(dpad).forEach(([direction, dpadValue]: [string, number]) => {
-              const button = new GamepadStateButton({pressed: false, value: axisValue, touched: false}, lastState[direction])
+
+              const button = gamepadState[direction].init({pressed: false, value: axisValue, touched: false}, lastState[direction])
               button.id = direction
               if(dpadValue == axisValue){
                 button.pressed = true
               }
-              gamepadState[direction] = button
             })
           }
         })
       }
     }
+    GAMEPAD_STATE_POOL.free(lastState)
+    // Object.values(lastState).forEach((btn)=>{
+    //   GAMEPAD_STATE_BUTTON_POOL.free(btn)
+    // })
     return gamepadState
   }
 

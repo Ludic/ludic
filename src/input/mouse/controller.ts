@@ -23,17 +23,17 @@ export default class MouseController implements InputController {
   constructor(){
     this.state = new InputState(MouseState)
 
-    window.addEventListener('mousemove', (evt: MouseEvent) => {
+    self.addEventListener('mousemove', (evt: MouseEvent) => {
       const {which, x, y} = evt
       this.state.set(which, { x, y, down: false})
     }, false)
 
-    window.addEventListener('mousedown', (evt: MouseEvent) => {
+    self.addEventListener('mousedown', (evt: MouseEvent) => {
       const {which, x, y} = evt
       this.state.set(which, { x, y, down: true, })
     }, false)
     
-    window.addEventListener('mouseup', (evt: MouseEvent) => {
+    self.addEventListener('mouseup', (evt: MouseEvent) => {
       const {which, x, y} = evt
       this.state.set(which, { x, y, down: false, })
     }, false)

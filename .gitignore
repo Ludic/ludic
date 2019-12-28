@@ -6,6 +6,9 @@ dist/*.map
 node_modules
 npm-debug.log
 
+# editor stuff
+.vscode
+
 # mac stuff
 .DS*
 

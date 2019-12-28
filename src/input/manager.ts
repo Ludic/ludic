@@ -1,53 +1,18 @@
+import { Pool } from '../pooling/pool'
 
-// let listeners = []
-let defaultKeyConfig = {
-  preventDefault: true
-}
-let ps4Mapping = {
-  buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
-  axes: ['lx','ly','rx','ry'],
-  sticks: {
-    lx:'leftStick',
-    ly:'leftStick',
-    rx:'rightStick',
-    ry:'rightStick'
-  }
-}
 
-let gamepadMaps = {
-  'Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 05c4)':ps4Mapping // ps4 controller
-}
-
-let gamepadsAxisDeadZone = 0.08
-let gamepadsConfig = {}
-
-let mousePosPixel = {}
-let prevMousePosPixel = {}
-// let gamepadTypeMaps = [{id:'054c',type:'ps4'}]
-
-// export class EventState<T> {
-//   event: T
-//   lastEvent: T
-//   set(event: T){
-//     // move current state to last state and set current
-//     this.lastEvent = this.event
-//     this.event = event
-//   }
-// }
-
-interface IInputState<T> {
-  get(key: string): T
-}
-export class InputState<T> {
+export class InputState<T extends object> {
   state: {[key: string]: T} = {}
   private _ctor: new ()=>T
-  constructor(ctor: new ()=>T){
+  private pool: Pool<T>
+  constructor(ctor: new ()=>T, pool?: Pool<T>){
     this._ctor = ctor
+    this.pool = pool
   }
   get(key: string|number){
     let val = this.state[key]
     if(val == null) {
-      val = this.set(key, Reflect.construct(this._ctor, []))
+      val = this.set(key, this.pool ? this.pool.get() : Reflect.construct(this._ctor, []))
     }
     return val
   }

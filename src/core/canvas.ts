@@ -6,37 +6,47 @@ export interface CanvasDimensions {
 }
 
 export class Canvas {
-  dimension: string
-  element: HTMLCanvasElement
-  private _context: CanvasRenderingContext2D
+  element: HTMLCanvasElement|OffscreenCanvas
+  _context: CanvasRenderingContext2D|OffscreenCanvasRenderingContext2D
 
-  constructor(el: LudicOptions['el'], dimension='2d') {
-    this.dimension = dimension
+  constructor(el: string|HTMLCanvasElement|OffscreenCanvas) {
 
     if(typeof el === 'string'){
-      this.element = document.querySelector(el)
-    } else if(el instanceof HTMLCanvasElement) {
+      let node = document.querySelector(el as 'canvas')
+      if(node != null){
+        node.setAttribute('tabindex', "1")
+        this.element = node
+        this.setDimensions()
+      }
+    } else if(typeof HTMLCanvasElement !== 'undefined' && el instanceof HTMLCanvasElement) {
+      el.setAttribute('tabindex', "1")
+      this.element = el
+      this.setDimensions()
+    } else if(el instanceof OffscreenCanvas){
       this.element = el
     }
     // window.addEventListener('resize', ()=>{
     //   this.element.width = window.innerWidth
     //   this.element.height = window.innerHeight
     // }, false)
-    this.setDimensions()
+    
   }
 
-  get context(): CanvasRenderingContext2D {
-    return this.getContext()
+  get context(){
+    return this._context || (this._context = this.element.getContext('2d', {alpha: false, desynchronized: true})!)
   }
 
-  getContext(dimension = this.dimension, options = {alpha: false}){
-    return this._context || (this._context = <CanvasRenderingContext2D>this.element.getContext(dimension, options))
-  }
-
-  setDimensions(width: number = window.innerWidth, height: number = window.innerHeight): CanvasDimensions {
+  setDimensions(width: number = self.innerWidth, height: number = self.innerHeight): CanvasDimensions {
     this.element.width = width
     this.element.height = height
     return {width, height}
+  }
+
+  transferControlToOffscreen(){
+    if(this.element instanceof HTMLCanvasElement){
+      return this.element.transferControlToOffscreen()
+    }
+    return this.element
   }
 
   /**
@@ -44,6 +54,7 @@ export class Canvas {
    * @param {String} clearColor - color to clear the screen with
    */
   clear(clearColor = 'white', context = this.context){
+    // this.element.width = this.element.width
     context.fillStyle = clearColor
     context.clearRect(0, 0, this.element.width, this.element.height)
     context.fillRect(0, 0, this.element.width, this.element.height)

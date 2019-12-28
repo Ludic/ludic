@@ -39,7 +39,8 @@ module.exports = function(env){
         libraryTarget: lib,
         library: 'Ludic',
         path: __dirname + '/dist',
-        filename: "ludic."+lib+".js"
+        filename: "ludic."+lib+".js",
+        globalObject: 'this',
       },
     })
   })

@@ -15,6 +15,9 @@ declare global {
     prototype: OffscreenCanvasRenderingContext2D;
     new(): OffscreenCanvasRenderingContext2D;
   }
+  interface CanvasRenderingContext2DSettings {
+    desynchronized?: boolean
+  }
   interface OffscreenCanvas extends EventTarget {
     width: number;
     height: number;
@@ -36,7 +39,7 @@ export * from './core/app'
 export * from './core/camera'
 export * from './core/canvas'
 
-export * from './render/renderer'
+// export * from './render/context'
 
 export * from './screen/screen'
 export * from './screen/screenManager'

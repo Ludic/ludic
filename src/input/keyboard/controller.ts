@@ -32,8 +32,8 @@ export default class KeyboardController implements InputController {
       this.state.set(code, { down })
     }
 
-    window.addEventListener('keydown', func, false)
-    window.addEventListener('keyup', func, false)
+    self.addEventListener('keydown', func, false)
+    self.addEventListener('keyup', func, false)
   }
   
   install(manager: InputManager){

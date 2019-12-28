@@ -18,7 +18,7 @@ export interface GamepadMap {
 }
 
 const MAPS: GamepadMap = {
-  'ps4-1': {
+  'standard': {
     name: 'PS4 Controller (Chrome;macOS)',
     buttons: ['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select'],
     axes: ['lx','ly','rx','ry'],
@@ -30,10 +30,14 @@ const MAPS: GamepadMap = {
     },
     test(gamepad){
       let ua = navigator.userAgent
-      return /54c.*5c4/.test(gamepad.id)
+      const isPS4 = /54c.*5c4/.test(gamepad.id)
         && gamepad.axes.length == this.axes.length
         && gamepad.buttons.length == this.buttons.length
         && ua.includes('Chrome') && ua.includes('Mac OS X')
+
+      const isProController = gamepad.id.includes('Pro Controller')
+      
+      return (isPS4 || isProController)
     },
   },
   'ps4-2': {
