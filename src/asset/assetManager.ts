@@ -15,7 +15,7 @@ class AssetManager {
   loaders: {[key: string]: AssetLoader}
   loading: boolean
   
-  private finalPromise: Promise<any>
+  private finalPromise: Promise<any>|null
   private onAssetsLoadedCallback: AssetsLoadedCallback
 
   constructor() {
@@ -31,7 +31,7 @@ class AssetManager {
   }
 
   loadResource(name: string, url: string, type: string, options: any, overwrite: boolean){
-    let promise = null
+    let promise: Promise<any> = Promise.resolve()
     // first check if we have the asset
     if(!this.assets[name] || overwrite){
       let asset = this.NewAsset(name, url, type, options)
@@ -96,8 +96,10 @@ class AssetManager {
     } else {
       this.finalPromise = null
       let asset = this.loadQueue.shift()
-      this.promiseQueue.push(asset.promise)
-      asset.load()
+      if(asset){
+        this.promiseQueue.push(asset.promise)
+        asset.load()
+      }
     }
 
   }

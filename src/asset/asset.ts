@@ -12,11 +12,11 @@ abstract class Asset {
   data: any
   promise: Promise<any>
   
-  constructor(name: string, url: string, type: string, options: object) {
+  constructor(name: string, url: string, type: string, options: object = {}) {
     this.name = name
     this.url = url
     this.type = type
-    this.options = options || {}
+    this.options = options
   }
 
   /**
@@ -46,10 +46,6 @@ abstract class Asset {
   }
 
   destroy(){
-    this.name = null
-    this.url = null
-    this.type = null
-    this.options = null
     this.data = null
   }
 }

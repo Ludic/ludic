@@ -81,7 +81,7 @@ export class ScreenManager {
   popScreen(){
     let stack = this._stack
     if(stack.length > 0){
-      let screen = stack.pop()
+      let screen = stack.pop()!
       // call screen's callback
       screen.onRemovedFromManager(this)
       // call listener methods

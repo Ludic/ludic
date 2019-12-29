@@ -62,10 +62,10 @@ class GamepadStateButton implements GamepadButton {
     this.pressed = pressed
     this.touched = touched
     this.value = value
-    this.last = null
+    this.last = undefined
     if(last != null){
       this.last = GAMEPAD_STATE_BUTTON_POOL.get()
-      this.last.init(last, null)
+      this.last.init(last)
       GAMEPAD_STATE_BUTTON_POOL.free(last)
     }
     return this
@@ -154,7 +154,11 @@ export class GamepadState {
         if(params.type != null){
           actuators = actuators.filter(actuator => actuator.type === params.type)
         }
-        return Promise.all(actuators.map(actuator => actuator.pulse(value, params.duration)))
+        if(value != null){
+          return Promise.all(actuators.map(actuator => actuator.pulse(value, params.duration)))
+        } else {
+          return Promise.resolve()
+        }
       }
     }
   }
@@ -222,7 +226,7 @@ export default class GamepadController implements InputController {
     return Array.from(navigator.getGamepads() || [])
   }
 
-  _parseGamepadState(gamepad: Gamepad, lastState: GamepadState): GamepadState {
+  _parseGamepadState(gamepad: Gamepad|null, lastState: GamepadState): GamepadState {
     const gamepadState = GAMEPAD_STATE_POOL.get()
 
     if(gamepad != null) {
@@ -265,7 +269,7 @@ export default class GamepadController implements InputController {
             // this is an axis for an analog stick
             // GAMEPAD_STATE_BUTTON_POOL.free(gamepadState[axisName])
             gamepadState[axisName].init({pressed: false, touched: false, value: axisValue}, gamepadState[axisName])
-          } else if(buttonIndex != null) {
+          } else if(buttonIndex != null && buttonName != null) {
             // this is an axis for a button
             const button = gamepad.buttons[buttonIndex]
             // GAMEPAD_STATE_BUTTON_POOL.free(gamepadState[buttonName])

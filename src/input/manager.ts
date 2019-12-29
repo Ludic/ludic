@@ -4,7 +4,7 @@ import { Pool } from '../pooling/pool'
 export class InputState<T extends object> {
   state: {[key: string]: T} = {}
   private _ctor: new ()=>T
-  private pool: Pool<T>
+  private pool?: Pool<T>
   constructor(ctor: new ()=>T, pool?: Pool<T>){
     this._ctor = ctor
     this.pool = pool
