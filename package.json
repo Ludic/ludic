@@ -1,6 +1,6 @@
 {
   "name": "@ludic/ludic",
-  "version": "1.0.1",
+  "version": "0.0.1",
   "description": "Typescript Game Engine",
   "main": "dist/ludic.umd.js",
   "module": "dist/ludic.umd.js",
@@ -10,7 +10,8 @@
     "dev": "webpack --watch --config ./webpack.config.js",
     "build": "webpack --config ./webpack.config.js",
     "test": "nyc mocha --require ts-node/register -r tsconfig-paths/register -r source-map-support/register --recursive \"./test/**/*.spec.ts\" --timeout 30000",
-    "build:test": "npm run build && npm run test"
+    "build:test": "npm run build && npm run test",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist",
@@ -19,6 +20,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ludic/ludic.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "author": "",
   "license": "ISC",
