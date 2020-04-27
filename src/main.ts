@@ -40,9 +40,6 @@ export * from './core/app'
 export * from './core/camera'
 export * from './core/canvas'
 
-// Ein
-export * from './ein'
-
 // export * from './render/context'
 
 // Screen
