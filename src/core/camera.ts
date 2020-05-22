@@ -137,6 +137,23 @@ export class Camera {
     this.setTransform(ctx)
   }
 
+  /**
+   * Helper function to clear the current context at full width-height
+   * @param {String} clearColor - color to clear the screen with
+   */
+  clear(context: RenderingContext2D, clearColor = 'white'){
+    const bounds = this.getViewportBounds()
+    context.fillStyle = clearColor
+    context.clearRect(bounds.x, bounds.y, bounds.w - bounds.x, bounds.h - bounds.y)
+    context.fillRect(bounds.x, bounds.y, bounds.w - bounds.x, bounds.h - bounds.y)
+  }
+
+  clearAndUpdate(ctx: RenderingContext2D){
+    this.resetTransform(ctx)
+    this.update(ctx)
+    this.clear(ctx)
+  }
+
   drawAxes(ctx: RenderingContext2D) {
     ctx.save()
     ctx.lineWidth = 1/this.pixelsToMeters
@@ -298,10 +315,7 @@ export class Camera {
   }
 
   resetTransform(ctx: RenderingContext2D){
-    // ctx.scale(1 / this.getPTM(),1 / this.getPTM())
-    ctx.scale(this.inverseX ? (-1 / this.pixelsToMeters) : (1 / this.pixelsToMeters), this.inverseY ? (-1 / this.pixelsToMeters) : (1 / this.pixelsToMeters))
-    // ctx.lineWidth *= this.pixelsToMeters
-    ctx.translate(-this.getOffsetX(), -this.getOffsetY())
+    ctx.resetTransform()
   }
 
   isPointInBounds(x: number, y: number, ctx: RenderingContext2D){
