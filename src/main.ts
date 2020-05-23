@@ -1,3 +1,42 @@
+import { Ludic } from './core/app'
+
+// Core
+export * from './core/app'
+export * from './core/camera'
+export * from './core/canvas'
+
+// export * from './render/context'
+
+// Screen
+export * from './screen/screen'
+export * from './screen/screenManager'
+
+// Input
+export * from './input/manager'
+export * from './input/keyboard/controller'
+export { default as KeyboardController } from './input/keyboard/controller'
+export * from './input/mouse/controller'
+export { default as MouseController } from './input/mouse/controller'
+export * from './input/gamepad/controller'
+export { default as GamepadController } from './input/gamepad/controller'
+
+// Reactivity
+export * from '@ludic/ein'
+
+// Assets
+export * from './asset/asset'
+export * from './asset/assetLoader'
+export * from './asset/assetManager'
+export * from './asset/audioAsset'
+export * from './asset/audioAssetLoader'
+export * from './asset/imageAsset'
+export * from './asset/imageAssetLoader'
+
+// Utils
+export * from './utils/vector2'
+
+export default Ludic
+
 declare global {
   interface Window {
     mozRequestAnimationFrame: Window['requestAnimationFrame']
@@ -32,44 +71,3 @@ declare global {
     postMessage(message: any, transfer?: Array<Transferable|OffscreenCanvas>): void;
   }
 }
-
-import { Ludic } from './core/app'
-
-// Core
-export * from './core/app'
-export * from './core/camera'
-export * from './core/canvas'
-
-// export * from './render/context'
-
-// Screen
-export * from './screen/screen'
-export * from './screen/screenManager'
-
-// Input
-export * from './input/manager'
-export * from './input/keyboard/controller'
-export { default as KeyboardController } from './input/keyboard/controller'
-export * from './input/mouse/controller'
-export { default as MouseController } from './input/mouse/controller'
-export * from './input/gamepad/controller'
-export { default as GamepadController } from './input/gamepad/controller'
-
-// Reactivity
-export * from './reactivity/dep'
-export * from './reactivity/lambda'
-export * from './reactivity/state'
-
-// Assets
-export * from './asset/asset'
-export * from './asset/assetLoader'
-export * from './asset/assetManager'
-export * from './asset/audioAsset'
-export * from './asset/audioAssetLoader'
-export * from './asset/imageAsset'
-export * from './asset/imageAssetLoader'
-
-// Utils
-export * from './utils/vector2'
-
-export default Ludic
