@@ -20,9 +20,6 @@ export { default as MouseController } from './input/mouse/controller'
 export * from './input/gamepad/controller'
 export { default as GamepadController } from './input/gamepad/controller'
 
-// Reactivity
-export * from '@ludic/ein'
-
 // Assets
 export * from './asset/asset'
 export * from './asset/assetLoader'
