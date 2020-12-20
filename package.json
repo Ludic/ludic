@@ -10,7 +10,7 @@
     "dev": "rollup -c rollup.config.js --watch",
     "build": "rollup -c rollup.config.js",
     "test_old": "nyc mocha --require ts-node/register -r tsconfig-paths/register -r source-map-support/register --recursive \"./test/**/*.spec.ts\" --timeout 30000",
-    "test": "ts-mocha -r tsconfig-paths/register tests/basic.spec.ts",
+    "test": "ts-mocha -p tests/tsconfig.json -r tsconfig-paths/register tests/basic.spec.ts",
     "test_o": "ts-mocha tests/**/*.spec.ts",
     "test:e2e": "ts-mocha tests/e2e/**/*.spec.ts",
     "test:performance": "ts-mocha tests/performance/**/*.spec.ts",
