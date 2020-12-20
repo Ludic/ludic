@@ -165,7 +165,6 @@ export class GamepadState {
 }
 
 const GAMEPAD_STATE_BUTTON_POOL = new Pool(()=>{
-  console.log('create btn state')
   return new GamepadStateButton({value: 0, pressed: false, touched: false})
 }, 200)
 

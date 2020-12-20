@@ -6,6 +6,7 @@
     "declaration": true,
     "noImplicitAny": false,
     "target": "ES2019",
+    "module": "ESNext",
     "moduleResolution": "node",
     "strictNullChecks": true,
     "paths": {

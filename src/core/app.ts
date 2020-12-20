@@ -144,17 +144,23 @@ class LudicInstance {
      });
     this.observer.observe({entryTypes: ['measure']});
 
+    // initialize everything
+    this.init()
+
     if(opts.start){
       this.start()
     }
   }
 
-  public start(): void {
+  protected init(){ }
+
+  public start(): this {
     this.readyPromise.then(()=>{
       Ludic.running = true
       this.lastRunTime = performance.now()
       this.animate(this.lastRunTime)
     })
+    return this
   }
 
   animate(time: number): void {
@@ -197,5 +203,5 @@ class LudicInstance {
 }
 
 export const Ludic: LudicConstructor = LudicInstance
-
+export {LudicInstance as LudicApp}
 export default Ludic

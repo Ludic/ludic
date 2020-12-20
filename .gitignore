@@ -2,6 +2,8 @@ dist
 dist/*.js
 dist/*.map
 
+_src
+
 # npm stuff
 node_modules
 npm-debug.log

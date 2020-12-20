@@ -14,14 +14,10 @@ export class Canvas {
     if(typeof el === 'string'){
       let node = document.querySelector(el as 'canvas')
       if(node != null){
-        node.setAttribute('tabindex', "1")
-        this.element = node
-        this.setDimensions()
+        this.setElement(node)
       }
     } else if(typeof HTMLCanvasElement !== 'undefined' && el instanceof HTMLCanvasElement) {
-      el.setAttribute('tabindex', "1")
-      this.element = el
-      this.setDimensions()
+      this.setElement(el)
     } else if(el instanceof OffscreenCanvas){
       this.element = el
     }
@@ -29,16 +25,31 @@ export class Canvas {
     //   this.element.width = window.innerWidth
     //   this.element.height = window.innerHeight
     // }, false)
-    
+    if(this.element == null){
+      console.warn('missing ludic canvas')
+    }
   }
 
   get context(){
     return this._context || (this._context = this.element.getContext('2d', {alpha: false, desynchronized: true})!)
   }
 
+  get width(){
+    return this.element.width
+  }
+  set width(val){
+    this.element.width = val
+  }
+  get height(){
+    return this.element.height
+  }
+  set height(val){
+    this.element.height = val
+  }
+
   setDimensions(width: number = self.innerWidth, height: number = self.innerHeight): CanvasDimensions {
-    this.element.width = width
-    this.element.height = height
+    this.width = width
+    this.height = height
     return {width, height}
   }
 
@@ -58,6 +69,16 @@ export class Canvas {
     context.fillStyle = clearColor
     context.clearRect(0, 0, this.element.width, this.element.height)
     context.fillRect(0, 0, this.element.width, this.element.height)
+  }
+
+  private setElement(el: HTMLCanvasElement){
+    el.setAttribute('tabindex', "1")
+    this.element = el
+    let w = el.getAttribute('width')
+    let h = el.getAttribute('height')
+    const width = w == null ? self.innerWidth : parseFloat(w)
+    const height = h == null ? self.innerHeight : parseFloat(h)
+    this.setDimensions(width, height)
   }
 }
 
