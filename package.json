@@ -14,8 +14,8 @@
     "test_o": "ts-mocha tests/**/*.spec.ts",
     "test:e2e": "ts-mocha tests/e2e/**/*.spec.ts",
     "test:performance": "ts-mocha tests/performance/**/*.spec.ts",
-    "build:test": "npm run build && npm run test",
-    "prepublishOnly": "npm run build"
+    "build:test": "yarn run build && yarn run test",
+    "prepublishOnly": "yarn run build"
   },
   "files": [
     "dist",
