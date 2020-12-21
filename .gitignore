@@ -11,6 +11,12 @@ npm-debug.log
 # editor stuff
 .vscode
 
+# yarn stuff
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*
+
 # mac stuff
 .DS*
 

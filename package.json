@@ -1,6 +1,6 @@
 {
   "name": "@ludic/ludic",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Typescript Game Engine",
   "main": "dist/ludic.umd.js",
   "module": "dist/ludic.es.js",
@@ -15,7 +15,7 @@
     "test:e2e": "ts-mocha tests/e2e/**/*.spec.ts",
     "test:performance": "ts-mocha tests/performance/**/*.spec.ts",
     "build:test": "yarn run build && yarn run test",
-    "prepublishOnly": "yarn run build"
+    "prepublish": "yarn run build"
   },
   "files": [
     "dist",
