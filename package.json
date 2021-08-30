@@ -1,11 +1,10 @@
 {
   "name": "@ludic/ludic",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Typescript Game Engine",
   "main": "dist/ludic.umd.js",
   "module": "dist/ludic.es.js",
   "types": "dist/main.d.ts",
-  "private": false,
   "scripts": {
     "dev": "rollup -c rollup.config.js --watch",
     "build": "rollup -c rollup.config.js",
@@ -14,8 +13,8 @@
     "test_o": "ts-mocha tests/**/*.spec.ts",
     "test:e2e": "ts-mocha tests/e2e/**/*.spec.ts",
     "test:performance": "ts-mocha tests/performance/**/*.spec.ts",
-    "build:test": "yarn run build && yarn run test",
-    "prepublish": "yarn run build"
+    "build:test": "npm run build && npm run test",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist",
@@ -35,12 +34,9 @@
   },
   "homepage": "https://github.com/Ludic/ludic#readme",
   "dependencies": {
-    "@ludic/ein": "github:Ludic/ein"
+    "@ludic/ein": "^0.0.4"
   },
   "devDependencies": {
-    "@ludic/box2d": "github:Ludic/box2d",
-    "@ludic/ludic-box2d": "github:Ludic/ludic-box2d",
-    "@ludic/ludic-vue": "github:Ludic/ludic-vue",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
@@ -51,6 +47,8 @@
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-mocha": "^7.0.0",
     "ts-node": "^8.0.3",
+    "tsconfig-paths": "^3.9.0",
+    "tslib": "^2.0.3",
     "typescript": "^3.9.3"
   }
 }
