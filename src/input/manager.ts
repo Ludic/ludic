@@ -1,4 +1,4 @@
-import { Pool } from '@ludic/ein'
+import { Pool } from 'ein'
 
 
 export class InputState<T extends object> {
@@ -37,24 +37,24 @@ export class InputManager {
     controller.install(this)
     this.inputControllers.push(controller)
   }
-  
+
   // initTouch(){
   //   // touch events
   //   this.canvas.addEventListener('touchstart', function(evt) {
   //     this.onMouseEvent('touchStart',this.canvas.el,evt)
   //   }.bind(this), false)
-  
+
   //   this.canvas.addEventListener('touchend', function(evt) {
   //     this.onMouseEvent('touchEnd',this.canvas.el,evt)
   //   }.bind(this), false)
-  
+
   //   this.canvas.addEventListener('touchmove', function(evt) {
   //     this.onMouseEvent('touchMove',this.canvas.el,evt)
   //   }.bind(this), false)
-  
+
   //   this.canvas.addEventListener('touchcancel', function(evt) {
   //     this.onMouseEvent('touchCancel',this.canvas,evt)
-  //   }.bind(this), false)    
+  //   }.bind(this), false)
   // }
 
   update(time: number, delta: number){

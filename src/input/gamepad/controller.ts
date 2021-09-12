@@ -1,6 +1,6 @@
 import InputManager, { InputController, InputState } from '../manager'
 import GamepadMaps, { GamepadMapConfig } from './maps'
-import { Pool } from '@ludic/ein'
+import { Pool } from 'ein'
 
 // augment our InputManager to include gamepad
 declare module '../manager' {
@@ -174,7 +174,7 @@ const GAMEPAD_STATE_POOL = new Pool(()=>{
 }, 8)
 
 export default class GamepadController implements InputController {
-  
+
   state: InputState<GamepadState>
 
   constructor() {
@@ -230,10 +230,10 @@ export default class GamepadController implements InputController {
 
     if(gamepad != null) {
       const gamepadMap = this.findMappingForGamepad(gamepad)
-  
+
       // set the raw gamepad onto the gamepad state
       gamepadState.gamepad = gamepad
-      
+
       if(gamepadMap){
         gamepad.buttons.forEach( (button, buttonIndex)=>{
           // get the name for this button at this index from the mapping
