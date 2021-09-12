@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/Ludic/ludic#readme",
   "dependencies": {
-    "@ludic/ein": "^0.0.4"
+    "ein": "github:Ludic/ein"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^8.0.0",
