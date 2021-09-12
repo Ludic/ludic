@@ -1,6 +1,6 @@
 import InputManager, { InputController, InputState } from '../manager'
 import GamepadMaps, { GamepadMapConfig } from './maps'
-import { Pool } from 'ein'
+import { Pool } from '@ludic/ein'
 
 // augment our InputManager to include gamepad
 declare module '../manager' {

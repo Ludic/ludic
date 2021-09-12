@@ -1,4 +1,4 @@
-import { Pool } from 'ein'
+import { Pool } from '@ludic/ein'
 
 
 export class InputState<T extends object> {
