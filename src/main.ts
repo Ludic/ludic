@@ -31,6 +31,7 @@ export * from './asset/imageAssetLoader'
 
 // Utils
 export * from './utils/vector2'
+export * from './utils/index'
 
 export default Ludic
 

@@ -5,14 +5,24 @@ export class InputState<T extends object> {
   state: {[key: string]: T} = {}
   private _ctor: new ()=>T
   private pool?: Pool<T>
-  constructor(ctor: new ()=>T, pool?: Pool<T>){
-    this._ctor = ctor
-    this.pool = pool
+  
+  constructor(state: {[key: string]: T})
+  constructor(ctor: new ()=>T, pool?: Pool<T>)
+  constructor(...args: any[]){
+    if(args.length == 2){
+      const [ctor, pool] = args
+      this._ctor = ctor
+      this.pool = pool
+    } else {
+      this.state = args[0]
+    }
   }
   get(key: string|number){
     let val = this.state[key]
-    if(val == null) {
-      val = this.set(key, this.pool ? this.pool.get() : Reflect.construct(this._ctor, []))
+    if(this._ctor != null){
+      if(val == null) {
+        val = this.set(key, this.pool ? this.pool.get() : Reflect.construct(this._ctor, []))
+      }
     }
     return val
   }
@@ -24,6 +34,7 @@ export class InputState<T extends object> {
 export interface InputController {
   install(inputManager: InputManager): void
   update?(time: number, delta: number): void
+  transferToWorker?(worker: Worker): void
 }
 
 export class InputManager {

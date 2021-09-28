@@ -1,8 +1,9 @@
 import Canvas from './canvas'
 import InputManager from '../input/manager'
+import { InputController } from '../input/manager'
 
 export interface LudicPlugin {
-  (app: any, opts?: any): void
+  (app: LudicConstructor, opts?: any): void
 }
 export interface UpdateFunction {
   (time: number, delta: number): void
@@ -10,8 +11,10 @@ export interface UpdateFunction {
 
 export interface LudicWorker {
   worker: Worker
-  passCanvas?: boolean
+  transferCanvas?: boolean
+  transferInput?: boolean
   value?: any
+  start?: boolean
 }
 
 export interface LudicOptions {
@@ -19,6 +22,7 @@ export interface LudicOptions {
   plugins?: Array<LudicPlugin> | undefined
   worker?: boolean
   workers?: {[name: string]: LudicWorker},
+  inputControllers?: InputController[]
   update?: UpdateFunction
   start?: boolean
 }
@@ -41,7 +45,7 @@ class LudicInstance {
   static running: boolean = false
   static debug: boolean
   static canvas: Canvas
-  static input: InputManager = new InputManager()
+  static input: InputManager
   static workers: {[name: string]: any}
   
   private lastRunTime: number
@@ -58,22 +62,17 @@ class LudicInstance {
     if(Ludic.$instance) return Ludic.$instance
     Ludic.$instance = this
 
-    let {el, plugins=[]} = opts
+    let {el, plugins=[], inputControllers=[]} = opts
 
     if(el != null){
       Ludic.canvas = new Canvas(el)
     }
 
+    LudicInstance.input = new InputManager(inputControllers)
+
     Ludic.registerUpdateFunction((time, delta) => Ludic.input.update(time, delta))
 
     plugins.forEach(p => this.install(p))
-    // this.requestAnimationFrame = (()=>{
-    //   return  window.requestAnimationFrame       ||
-    //           window.webkitRequestAnimationFrame ||
-    //           window.mozRequestAnimationFrame    ||
-    //           window.oRequestAnimationFrame      ||
-    //           window.msRequestAnimationFrame
-    // })().bind(window)
 
     const workers = opts.workers || {}
 
@@ -95,7 +94,7 @@ class LudicInstance {
 
     if(opts.workers){
       Object.values(opts.workers).forEach(w => {
-        if(w.passCanvas){
+        if(w.transferCanvas){
           const canvas = Ludic.canvas.transferControlToOffscreen()
           w.worker.postMessage({
             name: 'ludic:canvas',
@@ -103,6 +102,11 @@ class LudicInstance {
               canvas,
             }
           }, [canvas])
+        }
+        if(w.transferInput){
+          Ludic.input.inputControllers.forEach(controller => {
+            controller.transferToWorker?.(w.worker)
+          })
         }
       })
     }
@@ -116,6 +120,7 @@ class LudicInstance {
         if(data){
           if(data.name === 'ludic:canvas'){
             Ludic.canvas = new Canvas(data.data.canvas)
+            console.log('load canvas')
             resolve(true)
           }
         }
@@ -145,7 +150,9 @@ class LudicInstance {
     this.observer.observe({entryTypes: ['measure']});
 
     // initialize everything
-    this.init()
+    this.readyPromise.then(()=>{
+      this.init()
+    })
 
     if(opts.start){
       this.start()
