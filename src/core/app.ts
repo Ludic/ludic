@@ -1,9 +1,17 @@
 import Canvas from './canvas'
 import InputManager from '../input/manager'
 import { InputController } from '../input/manager'
+import EventBus from '../events/EventBus'
 
-export interface LudicPlugin {
+export type LudicPlugin = LudicPluginFunction|LudicPluginClass
+export interface LudicPluginFunction {
   (app: LudicConstructor, opts?: any): void
+}
+export interface LudicPluginClass {
+  install(app: LudicConstructor)
+}
+export interface TestInt {
+  property: string
 }
 export interface UpdateFunction {
   (time: number, delta: number): void
@@ -15,19 +23,35 @@ export interface LudicWorker {
   transferInput?: boolean
   value?: any
   start?: boolean
+  channel: MessageChannel
 }
+
+type LudicWorkerOpts = Omit<LudicWorker, 'channel'>
 
 export interface LudicOptions {
   el?: string | HTMLCanvasElement
   plugins?: Array<LudicPlugin> | undefined
   worker?: boolean
-  workers?: {[name: string]: LudicWorker},
+  workers?: {[name: string]: LudicWorkerOpts},
   inputControllers?: InputController[]
+  globals?: LudicGlobals
   update?: UpdateFunction
   start?: boolean
 }
 
 // export type LudicOptions = ConstructorArgs
+
+export interface LudicGlobals {
+  [key: string]: any
+}
+
+export interface LudicWorkers {
+  [key: string]: Worker
+}
+
+export interface LudicWorkersProp {
+  [key: `$${keyof LudicWorkers}`]: LudicWorker
+}
 
 export interface LudicConstructor {
   $instance: LudicInstance
@@ -35,7 +59,10 @@ export interface LudicConstructor {
   debug: boolean
   canvas: Canvas
   input: InputManager
-  workers: {[name: string]: any}
+  events: EventBus
+  globals: LudicGlobals
+  workers: LudicWorkers
+  isWorker: boolean
   new (opts: LudicOptions): LudicInstance
   registerUpdateFunction(fn: UpdateFunction): void
 }
@@ -46,13 +73,17 @@ class LudicInstance {
   static debug: boolean
   static canvas: Canvas
   static input: InputManager
-  static workers: {[name: string]: any}
+  static events: EventBus
+  static globals: LudicGlobals
+  static workers: LudicWorkers
+  static isWorker: boolean
   
   private lastRunTime: number
   private delta: number
   private updateFunctions: UpdateFunction[] = []
   private readyPromise: Promise<boolean>
   observer: PerformanceObserver
+  protected workerPort: MessagePort
 
   static registerUpdateFunction(fn: UpdateFunction){
     this.$instance.updateFunctions.push(fn)
@@ -62,21 +93,58 @@ class LudicInstance {
     if(Ludic.$instance) return Ludic.$instance
     Ludic.$instance = this
 
-    let {el, plugins=[], inputControllers=[]} = opts
+    let {el, plugins=[], inputControllers=[], globals={}, worker=false} = opts
 
     if(el != null){
       Ludic.canvas = new Canvas(el)
     }
 
+    LudicInstance.isWorker = worker
     LudicInstance.input = new InputManager(inputControllers)
+    LudicInstance.events = new EventBus()
+    LudicInstance.globals = globals
 
     Ludic.registerUpdateFunction((time, delta) => Ludic.input.update(time, delta))
 
-    plugins.forEach(p => this.install(p))
-
     const workers = opts.workers || {}
 
-    Ludic.workers = new Proxy(workers, {
+    const _workers: {[key: string]: LudicWorker} = Object.fromEntries(Object.entries(opts.workers ?? {}).map(([key, w]) => {
+      const worker: LudicWorker = {
+        ...w,
+        channel: new MessageChannel(),
+      }
+      if(w.transferCanvas){
+        const canvas = Ludic.canvas.transferControlToOffscreen()
+        w.worker.postMessage({
+          name: 'ludic:canvas',
+          data: {
+            canvas,
+          }
+        }, [canvas])
+        w.worker.postMessage({
+          name: 'ludic:worker:init',
+          data: {
+            port: worker.channel.port2,
+          }
+        }, [worker.channel.port2])
+      }
+      if(w.transferInput){
+        Ludic.input.inputControllers.forEach(controller => {
+          controller.transferToWorker?.(w.worker)
+        })
+      }
+      return [key, worker]
+    }))
+
+    // setup a proxy that wraps the workers object
+    // so that when we access a worker by keyname
+    // from Ludic.workers we get the actual worker
+    // and not the worker options passed into this
+    // constructor. If we do want the options we can
+    // prepend the key with $.
+    // ie. key => WorkerOptions.worker; $key => WorkerOptions
+    // @ts-ignore
+    Ludic.workers = new Proxy(_workers, {
       get(target, prop){
         if(typeof prop === 'string'){
           if(prop[0] === '$'){
@@ -92,25 +160,8 @@ class LudicInstance {
       }
     })
 
-    if(opts.workers){
-      Object.values(opts.workers).forEach(w => {
-        if(w.transferCanvas){
-          const canvas = Ludic.canvas.transferControlToOffscreen()
-          w.worker.postMessage({
-            name: 'ludic:canvas',
-            data: {
-              canvas,
-            }
-          }, [canvas])
-        }
-        if(w.transferInput){
-          Ludic.input.inputControllers.forEach(controller => {
-            controller.transferToWorker?.(w.worker)
-          })
-        }
-      })
-    }
-
+    // If this instance is a worker then setup some message
+    // listeners for initialization and data transfer.
     if(opts.worker && typeof self === 'object'){
       let resolve;
       this.readyPromise = new Promise((res)=>{
@@ -122,6 +173,8 @@ class LudicInstance {
             Ludic.canvas = new Canvas(data.data.canvas)
             console.log('load canvas')
             resolve(true)
+          } else if (data.name === 'ludic:worker:init'){
+            this.workerPort = data.data.port
           }
         }
       })
@@ -129,9 +182,12 @@ class LudicInstance {
       this.readyPromise = Promise.resolve(true)
     }
 
+    plugins.forEach(p => this.install(p))
+
     if(opts.update){
       this.update = opts.update
     }
+
     this.update = this.update.bind(this)
 
     this.animate = this.animate.bind(this)
@@ -204,7 +260,11 @@ class LudicInstance {
   update(time: number, delta: number): void { }
 
   install(plugin: LudicPlugin){
-    plugin(Ludic)
+    if(plugin instanceof Function){
+      plugin(Ludic)
+    } else {
+      plugin.install(Ludic)
+    }
   }
 
 }

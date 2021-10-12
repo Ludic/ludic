@@ -1,6 +1,6 @@
+import Ludic from '../../core/app'
 import InputManager, { InputController, InputState } from '../manager'
 import GamepadMaps, { GamepadMapConfig, GAMEPAD_BUTTONS, GAMEPAD_AXES, GamepadButtonName, GamepadAxisName } from './maps'
-import { Pool } from '@ludic/ein'
 
 // augment our InputManager to include gamepad
 declare module '../manager' {
@@ -45,129 +45,6 @@ export interface GamepadVibrationParams {
   startDelay?: number
 }
 
-// class GamepadStateButton implements GamepadButton {
-//   pressed: boolean;
-//   touched: boolean;
-//   value: number;
-//   last?: GamepadStateButton
-//   id?: string
-//   constructor(btn: GamepadButton = {} as any, last?: GamepadStateButton){
-//     this.init(btn, last)
-//   }
-//   init({pressed=false, touched=false, value=0}: GamepadButton = {} as any, last?: GamepadStateButton): this {
-//     this.pressed = pressed
-//     this.touched = touched
-//     this.value = value
-//     this.last = undefined
-//     if(last != null){
-//       this.last = GAMEPAD_STATE_BUTTON_POOL.get()
-//       this.last.init(last)
-//       GAMEPAD_STATE_BUTTON_POOL.free(last)
-//     }
-//     return this
-//   }
-//   get toggled(){
-//     return this.last && this.last.pressed !== this.pressed
-//   }
-//   get buttonUp(){
-//     return this.toggled && !this.pressed
-//   }
-//   get buttonDown(){
-//     return this.toggled && this.pressed
-//   }
-// }
-
-// export class GamepadState {
-//   gamepad: Gamepad
-//   // normalized buttons and axes
-//   start: GamepadStateButton
-//   select: GamepadStateButton
-//   home: GamepadStateButton // ps/xb button
-//   left: GamepadStateButton
-//   right: GamepadStateButton
-//   up: GamepadStateButton
-//   down: GamepadStateButton
-//   l1: GamepadStateButton
-//   l2: GamepadStateButton
-//   l3: GamepadStateButton
-//   r1: GamepadStateButton
-//   r2: GamepadStateButton
-//   r3: GamepadStateButton
-//   triangle: GamepadStateButton
-//   square: GamepadStateButton
-//   circle: GamepadStateButton
-//   cross: GamepadStateButton
-//   extra: GamepadStateButton
-//   lx: GamepadStateButton
-//   ly: GamepadStateButton
-//   rx: GamepadStateButton
-//   ry: GamepadStateButton
-//   constructor(){
-//     // console.log('new gp state')
-//     this.start = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.select = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.home = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.left = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.right = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.up = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.down = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.l1 = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.l2 = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.l3 = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.r1 = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.r2 = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.r3 = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.triangle = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.square = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.circle = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.cross = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.extra = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.lx = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.ly = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.rx = GAMEPAD_STATE_BUTTON_POOL.get()
-//     this.ry = GAMEPAD_STATE_BUTTON_POOL.get()
-//   }
-//   /**
-//    * an abstraction for chrome/spec haptic actuators
-//    */
-//   vibrate(params: GamepadVibrationParams){
-//     // make sure we have a gamepad
-//     if(this.gamepad != null){
-//       // check for chrome property
-//       if(this.gamepad.vibrationActuator != null){
-//         const weakMagnitude = params.weakMagnitude != null ? params.weakMagnitude : (params.value != null ? params.value : undefined)
-//         const strongMagnitude = params.strongMagnitude != null ? params.strongMagnitude : (params.value != null ? params.value : undefined)
-//         const type = params.type != null ? params.type : this.gamepad.vibrationActuator.type
-//         return this.gamepad.vibrationActuator.playEffect(type, {
-//           duration: params.duration,
-//           startDelay: params.startDelay,
-//           weakMagnitude: weakMagnitude,
-//           strongMagnitude: strongMagnitude
-//         })
-//       } else if(this.gamepad.hapticActuators != null && this.gamepad.hapticActuators.length){
-//         const value = params.value != null ? params.value : (params.weakMagnitude != null ? params.weakMagnitude : params.strongMagnitude)
-//         let actuators = this.gamepad.hapticActuators
-//         if(params.type != null){
-//           actuators = actuators.filter(actuator => actuator.type === params.type)
-//         }
-//         if(value != null){
-//           return Promise.all(actuators.map(actuator => actuator.pulse(value, params.duration)))
-//         } else {
-//           return Promise.resolve()
-//         }
-//       }
-//     }
-//   }
-// }
-
-// const GAMEPAD_STATE_BUTTON_POOL = new Pool(()=>{
-//   return new GamepadStateButton({value: 0, pressed: false, touched: false})
-// }, 200)
-
-// const GAMEPAD_STATE_POOL = new Pool(()=>{
-//   // console.log('create gp state')
-//   return new GamepadState()
-// }, 8)
 
 export interface GamepadStateOptions {
   buttons: ArrayBuffer
@@ -181,7 +58,7 @@ export class GamepadState {
   index: number
   gamepad: Gamepad
   map: GamepadMapConfig|undefined
-  syncToWorker: Worker|null
+  syncToWorker: Worker|undefined
 
   // current state
   private buttonsBuffer: ArrayBuffer
@@ -209,6 +86,10 @@ export class GamepadState {
         if(data){
           if(data.name === `ludic:input:gamepad:${this.index}:init`){
             this.map = data.data.map
+            Ludic.events.notify('ludic:input:gamepad:init', {
+              index: this.index,
+              map: this.map,
+            })
           }
           if(data.name === `ludic:input:gamepad:${this.index}:sync`){
             // console.log('sync gamepad')
@@ -311,28 +192,22 @@ export class GamepadState {
   init(gamepad: Gamepad, {test, ...map}: GamepadMapConfig){
     this.gamepad = gamepad
     this.map = {test, ...map}
-    if(this.syncToWorker){
-      this.syncToWorker.postMessage({
-        name: `ludic:input:gamepad:${this.index}:init`,
-        data: {
-          map,
-        }
-      })
-    }
+    Ludic.events.notify('ludic:input:gamepad:init', {
+      index: this.index,
+      map: this.map,
+    })
+    Ludic.events.notify(`ludic:input:gamepad:${this.index}:init`, {
+      map,
+    }, this.syncToWorker)
   }
 
   sync(){
-    if(this.syncToWorker){
-      this.syncToWorker.postMessage({
-        name: `ludic:input:gamepad:${this.index}:sync`,
-        data: {
-          buttons: this.buttons,
-          lastButtons: this.lastButtons,
-          axes: this.axes,
-          lastAxes: this.lastAxes,
-        }
-      })
-    }
+    Ludic.events.notify(`ludic:input:gamepad:${this.index}:sync`, {
+      buttons: this.buttons,
+      lastButtons: this.lastButtons,
+      axes: this.axes,
+      lastAxes: this.lastAxes,
+    }, this.syncToWorker)
   }
 }
 

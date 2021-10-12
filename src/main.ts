@@ -33,6 +33,9 @@ export * from './asset/imageAssetLoader'
 export * from './utils/vector2'
 export * from './utils/index'
 
+// Events
+export * from './events/EventBus'
+
 export default Ludic
 
 declare global {
@@ -58,7 +61,11 @@ declare global {
   interface OffscreenCanvas extends EventTarget {
     width: number;
     height: number;
-    getContext(contextId: "2d", contextAttributes ? : CanvasRenderingContext2DSettings): OffscreenCanvasRenderingContext2D | null;
+    getContext(contextId: "2d", options?: CanvasRenderingContext2DSettings): CanvasRenderingContext2D | null;
+    getContext(contextId: "bitmaprenderer", options?: ImageBitmapRenderingContextSettings): ImageBitmapRenderingContext | null;
+    getContext(contextId: "webgl", options?: WebGLContextAttributes): WebGLRenderingContext | null;
+    getContext(contextId: "webgl2", options?: WebGLContextAttributes): WebGL2RenderingContext | null;
+    getContext(contextId: string, options?: any): RenderingContext | null;
   }
   var OffscreenCanvas: {
     prototype: OffscreenCanvas;
