@@ -4,7 +4,7 @@ import { Pool } from '@ludic/ein'
 export class InputState<T extends object> {
   state: {[key: string]: T} = {}
   private _ctor: new ()=>T
-  private pool?: Pool<T>
+  protected pool?: Pool<T>
   
   constructor(state: {[key: string]: T})
   constructor(ctor: new ()=>T, pool?: Pool<T>)
@@ -26,8 +26,8 @@ export class InputState<T extends object> {
     }
     return val
   }
-  set(key: string|number, val: T): T {
-    return this.state[key] = val
+  set(key: string|number, val: T|boolean): T {
+    return this.state[key] = (val as T)
   }
 }
 

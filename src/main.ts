@@ -32,6 +32,8 @@ export * from './asset/imageAssetLoader'
 // Utils
 export * from './utils/vector2'
 export * from './utils/index'
+export * from './utils/fps'
+export { default as FPSPlugin } from './utils/fps'
 
 // Events
 export * from './events/EventBus'
