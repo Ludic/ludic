@@ -16,6 +16,11 @@ export default class FPSPlugin implements LudicPluginClass {
       }
       app.globals.fps._times.push(now)
       app.globals.fps.count = app.globals.fps._times.length
+      if(app.isWorker && app.$instance.workerPort){
+        app.events.notify('ludic:plugin:fps', {
+          count: app.globals.fps.count,
+        }, app.$instance.workerPort)
+      }
     })
   }
 }

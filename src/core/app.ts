@@ -83,7 +83,7 @@ class LudicInstance {
   private updateFunctions: UpdateFunction[] = []
   private readyPromise: Promise<boolean>
   observer: PerformanceObserver
-  protected workerPort: MessagePort
+  workerPort: MessagePort
 
   static registerUpdateFunction(fn: UpdateFunction){
     this.$instance.updateFunctions.push(fn)
@@ -123,10 +123,10 @@ class LudicInstance {
         }, [canvas])
         w.worker.postMessage({
           name: 'ludic:worker:init',
-          data: {
-            port: worker.channel.port2,
-          }
         }, [worker.channel.port2])
+        worker.channel.port1.onmessage = (event)=>{
+          Ludic.events.notify(event.data.name, event.data.data)
+        }
       }
       if(w.transferInput){
         Ludic.input.inputControllers.forEach(controller => {
@@ -167,14 +167,18 @@ class LudicInstance {
       this.readyPromise = new Promise((res)=>{
         resolve = res
       })
-      self.addEventListener('message', ({data})=>{
+      self.addEventListener('message', ({data, ports})=>{
         if(data){
           if(data.name === 'ludic:canvas'){
             Ludic.canvas = new Canvas(data.data.canvas)
             console.log('load canvas')
             resolve(true)
           } else if (data.name === 'ludic:worker:init'){
-            this.workerPort = data.data.port
+            this.workerPort = ports[0]
+            this.workerPort.onmessage = (e)=>{
+              console.log('worker port', e)
+            }
+            // this.workerPort.postMessage('from worker port')
           }
         }
       })

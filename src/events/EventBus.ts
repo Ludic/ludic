@@ -19,7 +19,7 @@ export default class EventBus {
   }
 
 
-  notify(name: string, data?: any, worker?: Worker){
+  notify(name: string, data?: any, worker?: Worker|MessagePort){
     this.listeners.get(name)?.forEach((fn)=>{
       fn(data)
     })
