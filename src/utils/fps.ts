@@ -1,4 +1,4 @@
-import { LudicPluginClass, LudicConstructor } from '../core/app'
+import Ludic, { LudicPluginClass, LudicConstructor } from '../core/app'
 
 export interface FPS {
   readonly count: number
@@ -23,4 +23,10 @@ export default class FPSPlugin implements LudicPluginClass {
       }
     })
   }
+}
+
+export function useFps(cb: (fps: number)=>void){
+  Ludic.events.listen('ludic:plugin:fps', (data)=>{
+    cb(data.count)
+  })
 }
