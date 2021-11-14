@@ -1,5 +1,97 @@
 import { Pool } from '@ludic/ein'
+import { FullGamepadState, GamepadState, Vector2 } from '@src/main'
 
+export class InputManager {
+  inputControllers: InputController[] = []
+  private inputActions: {
+    [key: string]: {
+      value: any
+      getter: InputActionGetter<any>
+    }
+  } = {}
+  // private inputActions: {[key: string]: InputActionConfig} = {}
+  actions: {[key: string]: any} = {}
+
+  constructor(controllers: InputController[] = []) {
+    controllers.forEach(c => this.addController(c))
+  }
+
+  addController(controller: InputController){
+    controller.install(this)
+    this.inputControllers.push(controller)
+  }
+
+  registerAction<V>(key: string, getter: InputActionGetter<any>): void
+  registerAction<V>(key: string, getter: InputActionGetter<V>, value: V): void
+  registerAction<V>(key: string, getter: InputActionGetter<V>, value?: V){
+    this.inputActions[key] = {
+      getter,
+      value,
+    }
+  }
+  // registerAction(key: string, config: InputActionConfig){
+  //   this.inputActions[key] = config
+  // }
+
+  readAction<T>(key: string): T {
+    return this.actions[key] as T
+  }
+
+  // initTouch(){
+  //   // touch events
+  //   this.canvas.addEventListener('touchstart', function(evt) {
+  //     this.onMouseEvent('touchStart',this.canvas.el,evt)
+  //   }.bind(this), false)
+
+  //   this.canvas.addEventListener('touchend', function(evt) {
+  //     this.onMouseEvent('touchEnd',this.canvas.el,evt)
+  //   }.bind(this), false)
+
+  //   this.canvas.addEventListener('touchmove', function(evt) {
+  //     this.onMouseEvent('touchMove',this.canvas.el,evt)
+  //   }.bind(this), false)
+
+  //   this.canvas.addEventListener('touchcancel', function(evt) {
+  //     this.onMouseEvent('touchCancel',this.canvas,evt)
+  //   }.bind(this), false)
+  // }
+
+  update(time: number, delta: number){
+    this.inputControllers.forEach((controller)=>{
+      controller.update && controller.update(time, delta)
+    })
+    Object.entries(this.inputActions).forEach(([key, {getter, value}])=>{
+      this.actions[key] = getter(this, value)
+    })
+    // Object.entries(this.inputActions).forEach(([key, config])=>{
+    //   const state: InputState<any>|undefined = this[config.binding]
+    //   const value = getActionValue(config.type)
+    //   if(state != null && value != null){
+    //     Object.entries(config.values).forEach(([valueKey, btn])=>{
+    //       const button = state.get(btn.button)
+    //       // const valueKey = btn.value ?? 'value'
+    //       const val = button[btn.action]
+    //       // console.log(btn.button, button, btn.action, val)
+    //       if(btn.button == 'KeyW'){
+    //         console.log(val)
+    //         if(typeof val === 'boolean'){
+    //           value[valueKey] = val === true ? 1 : 0
+    //         }
+    //         console.log(value)
+    //       }
+
+    //       // if(btn.negative){
+    //       //   value[valueKey] = -value[valueKey]
+    //       // }
+    //     })
+    //   }
+    //   this.actions[key] = value
+    // })
+  }
+
+}
+
+export default InputManager
 
 export class InputState<T extends object> {
   state: {[key: string]: T} = {}
@@ -37,43 +129,29 @@ export interface InputController {
   transferToWorker?(worker: Worker): void
 }
 
-export class InputManager {
-  inputControllers: InputController[] = []
-
-  constructor(controllers: InputController[] = []) {
-    controllers.forEach(c => this.addController(c))
-  }
-
-  addController(controller: InputController){
-    controller.install(this)
-    this.inputControllers.push(controller)
-  }
-
-  // initTouch(){
-  //   // touch events
-  //   this.canvas.addEventListener('touchstart', function(evt) {
-  //     this.onMouseEvent('touchStart',this.canvas.el,evt)
-  //   }.bind(this), false)
-
-  //   this.canvas.addEventListener('touchend', function(evt) {
-  //     this.onMouseEvent('touchEnd',this.canvas.el,evt)
-  //   }.bind(this), false)
-
-  //   this.canvas.addEventListener('touchmove', function(evt) {
-  //     this.onMouseEvent('touchMove',this.canvas.el,evt)
-  //   }.bind(this), false)
-
-  //   this.canvas.addEventListener('touchcancel', function(evt) {
-  //     this.onMouseEvent('touchCancel',this.canvas,evt)
-  //   }.bind(this), false)
-  // }
-
-  update(time: number, delta: number){
-    this.inputControllers.forEach((controller)=>{
-      controller.update && controller.update(time, delta)
-    })
-  }
-
+export interface InputActionGetter<V> {
+  (input: InputManager, value: V): V
 }
 
-export default InputManager
+export interface InputActionConfig {
+  type: 'Vector3'|'Vector2'|'value',
+  binding: string,
+  values: {
+    [key: string]: InputActionButton
+  }
+  // buttons: InputActionButton[]
+}
+export interface InputActionButton {
+  button: string
+  action: string
+  negative?: boolean
+}
+
+const getActionValue = function(type: string){
+  if(type == 'Vector2'){
+    return {x: 0, y: 0}
+  } else if(type == 'Vector3'){
+    return {x: 0, y: 0, z: 0}
+  }
+  return {value: 0}
+}

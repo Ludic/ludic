@@ -146,17 +146,13 @@ export class GamepadState {
   }
 
   setButton(index: number, value: number){
-    // this.buttons.setFloat64(this.size*index, value)
-    // save the current value at 2* this index
-    // and write the new value
     this.lastButtons[index] = this.buttons[index]
     this.buttons[index] = value
   }
   setAxis(index: number, value: number){
-    // save the current value at 2* this index
-    // and write the new value
+    const dz = this.map?.deadzone ?? 0
     this.lastAxes[index] = this.axes[index]
-    this.axes[index] = value
+    this.axes[index] = value < -dz || dz < value ? value : 0
   }
 
   vibrate(params: GamepadVibrationParams){
@@ -222,7 +218,7 @@ interface GamepadAxesState {
   value: number
   lastValue: number
 }
-type FullGamepadState = GamepadState&Record<GamepadButtonName, GamepadButtonState>&Record<GamepadAxisName, GamepadAxesState>
+export type FullGamepadState = GamepadState&Record<GamepadButtonName, GamepadButtonState>&Record<GamepadAxisName, GamepadAxesState>
 
 export default class GamepadController implements InputController {
 

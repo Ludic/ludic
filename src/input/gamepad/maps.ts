@@ -5,6 +5,7 @@ export interface GamepadMapConfig {
   buttons: {[K in GamepadButtonName]: number}
   axes: {[K in GamepadAxisName]: number}
   test: (gamepad: Gamepad) => boolean
+  deadzone: number
 }
 export interface GamepadMap {
   [key: string]: GamepadMapConfig
@@ -18,6 +19,7 @@ const MAPS: GamepadMap = {
     name: 'PS4 Controller (Chrome;macOS)',
     buttons: makeMap(['cross','circle','square','triangle','l1','r1','l2','r2','extra','start','l3','r3','up','down','left','right','home','select']),
     axes: makeMap(['lx','ly','rx','ry']),
+    deadzone: 0,
     test(gamepad){
       let ua = navigator.userAgent
       const isPS4 = /54c.*5c4/.test(gamepad.id)
@@ -30,14 +32,24 @@ const MAPS: GamepadMap = {
       return (isPS4 || isProController)
     },
   },
-  'xbox-sx': {
+  'xbox-sx-wired': {
     name: 'Xbox Series X Controller (Chrome;macOS;Wired)',
     buttons: makeMap(['cross', 'circle', 'square', 'triangle', 'l1', 'r1', 'l2', 'r2', 'select', 'start', 'l3', 'r3', 'up', 'down', 'left', 'right', 'home', 'extra']),
     axes: makeMap(['lx', 'ly', 'rx', 'ry']),
+    deadzone: 0,
     test(gamepad){
       return gamepad.id.includes('Xbox Series X Controller')
     }
-  }
+  },
+  'xbox-sx-wireless': {
+    name: 'Xbox Series X Controller (Chrome;macOS;Wireless)',
+    buttons: makeMap(['cross', 'circle', 'square', 'triangle', 'l1', 'r1', 'l2', 'r2', 'select', 'start', 'l3', 'r3', 'up', 'down', 'left', 'right', 'home', 'extra']),
+    axes: makeMap(['lx', 'ly', 'rx', 'ry']),
+    deadzone: 0.08,
+    test(gamepad){
+      return gamepad.id.includes('Xbox Wireless Controller')
+    }
+  },
 }
 export default MAPS
 
