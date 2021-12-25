@@ -20,6 +20,8 @@ export class MouseState {
 export default class MouseController implements InputController {
   state: InputState<MouseState>
 
+  active = true
+
   constructor(){
     this.state = new InputState(MouseState)
 

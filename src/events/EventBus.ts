@@ -1,10 +1,13 @@
+import { LudicInstance, LudicWorker } from '../core/app'
 
 export default class EventBus {
 
   private listeners: Map<string, Set<Function>>
+  private instance: typeof LudicInstance
 
-  constructor(){
+  constructor(instance: typeof LudicInstance){
     this.listeners = new Map()
+    this.instance = instance
   }
 
   listen(name: string, fn: (data: any)=>any){
@@ -19,12 +22,20 @@ export default class EventBus {
   }
 
 
-  notify(name: string, data?: any, worker?: Worker|MessagePort){
+  notify(name: string, data?: any, worker?: Worker|MessagePort|string){
     this.listeners.get(name)?.forEach((fn)=>{
       fn(data)
     })
     if(worker != null){
-      worker.postMessage({ name, data, })
+      if(typeof worker === 'string'){
+        if(this.instance.isWorker){
+          (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port2.postMessage({ name, data, })
+        } else {
+          (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port1.postMessage({ name, data, })
+        }
+      } else {
+        worker.postMessage({ name, data, })
+      }
     }
   }
 }

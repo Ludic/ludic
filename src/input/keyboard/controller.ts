@@ -113,6 +113,7 @@ export default class KeyboardController implements InputController {
   state: KeyboardState
 
   syncToWorker: Worker|null
+  active = true
 
   constructor(){
     // const keyboardState = new KeyboardState()
@@ -145,6 +146,8 @@ export default class KeyboardController implements InputController {
   }
 
   update(){
-    this.state.update()
+    if(this.active){
+      this.state.update()
+    }
   }
 }

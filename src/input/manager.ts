@@ -11,6 +11,7 @@ export class InputManager {
   } = {}
   // private inputActions: {[key: string]: InputActionConfig} = {}
   actions: {[key: string]: any} = {}
+  active: boolean = true
 
   constructor(controllers: InputController[] = []) {
     controllers.forEach(c => this.addController(c))
@@ -57,12 +58,14 @@ export class InputManager {
   // }
 
   update(time: number, delta: number){
-    this.inputControllers.forEach((controller)=>{
-      controller.update && controller.update(time, delta)
-    })
-    Object.entries(this.inputActions).forEach(([key, {getter, value}])=>{
-      this.actions[key] = getter(this, value)
-    })
+    if(this.active){
+      this.inputControllers.forEach((controller)=>{
+        controller.update && controller.update(time, delta)
+      })
+      Object.entries(this.inputActions).forEach(([key, {getter, value}])=>{
+        this.actions[key] = getter(this, value)
+      })
+    }
     // Object.entries(this.inputActions).forEach(([key, config])=>{
     //   const state: InputState<any>|undefined = this[config.binding]
     //   const value = getActionValue(config.type)
@@ -124,6 +127,7 @@ export class InputState<T extends object> {
 }
 
 export interface InputController {
+  active: boolean
   install(inputManager: InputManager): void
   update?(time: number, delta: number): void
   transferToWorker?(worker: Worker): void

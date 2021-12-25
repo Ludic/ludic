@@ -2,6 +2,7 @@ import Canvas from './canvas'
 import InputManager from '../input/manager'
 import { InputController } from '../input/manager'
 import EventBus from '../events/EventBus'
+import LudicConfig from '../config/config'
 
 export type LudicPlugin = LudicPluginFunction|LudicPluginClass
 export interface LudicPluginFunction {
@@ -61,13 +62,14 @@ export interface LudicConstructor {
   input: InputManager
   events: EventBus
   globals: LudicGlobals
+  config: LudicConfig
   workers: LudicWorkers
   isWorker: boolean
   new (opts: LudicOptions): LudicInstance
   registerUpdateFunction(fn: UpdateFunction): void
 }
 
-class LudicInstance {
+export class LudicInstance {
   static $instance: LudicInstance
   static running: boolean = false
   static debug: boolean
@@ -75,6 +77,7 @@ class LudicInstance {
   static input: InputManager
   static events: EventBus
   static globals: LudicGlobals
+  static config: LudicConfig
   static workers: LudicWorkers
   static isWorker: boolean
   
@@ -101,8 +104,9 @@ class LudicInstance {
 
     LudicInstance.isWorker = worker
     LudicInstance.input = new InputManager(inputControllers)
-    LudicInstance.events = new EventBus()
+    LudicInstance.events = new EventBus(LudicInstance)
     LudicInstance.globals = globals
+    LudicInstance.config = new LudicConfig()
 
     Ludic.registerUpdateFunction((time, delta) => Ludic.input.update(time, delta))
 
@@ -121,12 +125,12 @@ class LudicInstance {
             canvas,
           }
         }, [canvas])
-        w.worker.postMessage({
-          name: 'ludic:worker:init',
-        }, [worker.channel.port2])
-        worker.channel.port1.onmessage = (event)=>{
-          Ludic.events.notify(event.data.name, event.data.data)
-        }
+      }
+      w.worker.postMessage({
+        name: 'ludic:worker:init',
+      }, [worker.channel.port2])
+      worker.channel.port1.onmessage = (event)=>{
+        Ludic.events.notify(event.data.name, event.data.data)
       }
       if(w.transferInput){
         Ludic.input.inputControllers.forEach(controller => {
@@ -176,7 +180,7 @@ class LudicInstance {
           } else if (data.name === 'ludic:worker:init'){
             this.workerPort = ports[0]
             this.workerPort.onmessage = (e)=>{
-              console.log('worker port', e)
+              Ludic.events.notify(e.data.name, e.data.data)
             }
             // this.workerPort.postMessage('from worker port')
           }

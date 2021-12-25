@@ -226,6 +226,7 @@ export default class GamepadController implements InputController {
   private gamepadIndexes = [0, 1, 2, 3]
   private gamepadStates: [GamepadState, GamepadState, GamepadState, GamepadState]
 
+  active = true
 
   constructor() {
     this.gamepadStates = [
@@ -327,11 +328,13 @@ export default class GamepadController implements InputController {
   }
 
   update(time: number, delta: number){
-    this.gamepads.forEach((gamepad, index) => {
-      // this.state.set(index, this._parseGamepadState(gamepad, this.state.get(index)))
-      // this.state.set(index, this._parseGamepadState(gamepad, this.gamepadStates[index]))
-      this._parseGamepadState(gamepad, this.gamepadStates[index])
-    })
+    if(this.active){
+      this.gamepads.forEach((gamepad, index) => {
+        // this.state.set(index, this._parseGamepadState(gamepad, this.state.get(index)))
+        // this.state.set(index, this._parseGamepadState(gamepad, this.gamepadStates[index]))
+        this._parseGamepadState(gamepad, this.gamepadStates[index])
+      })
+    }
   }
 
   // getDeadZone(gamepadIndex){
