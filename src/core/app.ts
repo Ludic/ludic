@@ -38,6 +38,7 @@ export interface LudicOptions {
   globals?: LudicGlobals
   update?: UpdateFunction
   start?: boolean
+  config?: string|{[key: string]: any}
 }
 
 // export type LudicOptions = ConstructorArgs
@@ -106,7 +107,15 @@ export class LudicInstance {
     LudicInstance.input = new InputManager(inputControllers)
     LudicInstance.events = new EventBus(LudicInstance)
     LudicInstance.globals = globals
-    LudicInstance.config = new LudicConfig()
+
+    // load the config
+    let config: {[key: string]: any} = {}
+    if(typeof opts.config === 'string'){
+      console.log("TODO: fetch config by file and load")
+    } else if(opts.config != null) {
+      config = opts.config
+    }
+    LudicInstance.config = new LudicConfig(LudicInstance, config)
 
     Ludic.registerUpdateFunction((time, delta) => Ludic.input.update(time, delta))
 
