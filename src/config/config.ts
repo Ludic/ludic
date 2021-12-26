@@ -1,23 +1,21 @@
 import { LudicConstructor, LudicInstance } from '@src/main'
 
-export default class LudicConfig {
-  private store: {
-    [key: string]: any
-  } = {}
+export default class LudicConfig<Store extends object=object> {
+  private store: Store
 
   private instance: LudicConstructor
   private typeMapper: {
     [key: string]: (val: any)=>any
   } = {}
 
-  constructor(instance: LudicConstructor, config: {[key: string]: any} = {}){
+  constructor(instance: LudicConstructor, config?: Store){
     this.instance = instance
-    Object.assign(this.store, config)
-    Object.entries(config).forEach(([key, val])=>this.createTypeMapper(key, val))
+    Object.assign({}, this.store, config ?? {})
+    this.parseTypes()
   }
 
-  get<T=any>(key: string): T {
-    return this.store[key] as T
+  get<K extends keyof Store>(key: K): Store[K] {
+    return this.store[key]
   }
 
   set(key: string, value: any){
@@ -30,13 +28,25 @@ export default class LudicConfig {
     fn(this.store[key])
   }
 
-  private createTypeMapper(key, val){
-    if(typeof val === 'number'){
-      this.typeMapper[key] = (val: any)=>parseFloat(val)
-    } else if(typeof val === 'boolean') {
-      this.typeMapper[key] = (val: any)=>(val === '1' || val === 1 || val === true || val === 'true')
-    } else if(typeof val === 'string'){
-      this.typeMapper[key] = (val: any)=>val
-    }
+  private parseTypes(){
+    Object.entries(this.store).forEach(([key, val])=>{
+      if(typeof val === 'number'){
+        this.typeMapper[key] = this.castNumber
+      } else if(typeof val === 'boolean') {
+        this.typeMapper[key] = this.castBoolean
+      } else if(typeof val === 'string'){
+        this.typeMapper[key] = this.castString
+      }
+    })
+  }
+
+  private castNumber(val: any): number {
+    return parseFloat(val)
+  }
+  private castBoolean(val: any): boolean {
+    return (val === '1' || val === 1 || val === true || val === 'true')
+  }
+  private castString(val: any): string {
+    return String(val)
   }
 }

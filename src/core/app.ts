@@ -2,7 +2,7 @@ import Canvas from './canvas'
 import InputManager from '../input/manager'
 import { InputController } from '../input/manager'
 import EventBus from '../events/EventBus'
-import LudicConfig from '../config/config'
+import Config from '../config/config'
 
 export type LudicPlugin = LudicPluginFunction|LudicPluginClass
 export interface LudicPluginFunction {
@@ -38,12 +38,16 @@ export interface LudicOptions {
   globals?: LudicGlobals
   update?: UpdateFunction
   start?: boolean
-  config?: string|{[key: string]: any}
+  config?: string|LudicConfig
 }
 
 // export type LudicOptions = ConstructorArgs
 
 export interface LudicGlobals {
+  [key: string]: any
+}
+
+export interface LudicConfig {
   [key: string]: any
 }
 
@@ -63,7 +67,7 @@ export interface LudicConstructor {
   input: InputManager
   events: EventBus
   globals: LudicGlobals
-  config: LudicConfig
+  config: Config<LudicConfig>
   workers: LudicWorkers
   isWorker: boolean
   new (opts: LudicOptions): LudicInstance
@@ -78,7 +82,7 @@ export class LudicInstance {
   static input: InputManager
   static events: EventBus
   static globals: LudicGlobals
-  static config: LudicConfig
+  static config: Config<LudicConfig>
   static workers: LudicWorkers
   static isWorker: boolean
   
@@ -115,7 +119,7 @@ export class LudicInstance {
     } else if(opts.config != null) {
       config = opts.config
     }
-    LudicInstance.config = new LudicConfig(LudicInstance, config)
+    LudicInstance.config = new Config(LudicInstance, config)
 
     Ludic.registerUpdateFunction((time, delta) => Ludic.input.update(time, delta))
 
