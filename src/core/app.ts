@@ -38,7 +38,7 @@ export interface LudicOptions {
   globals?: LudicGlobals
   update?: UpdateFunction
   start?: boolean
-  config?: string|LudicConfig
+  config?: string|LudicConfig|{[key: string]: any}
 }
 
 // export type LudicOptions = ConstructorArgs
