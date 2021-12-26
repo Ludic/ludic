@@ -23,7 +23,7 @@ export default class LudicConfig<Store extends object=object> {
     this.instance.events.notify(`ludic:config:set:${key}`, this.store[key])
   }
 
-  on(key: string, fn: (val: any)=>void){
+  on<K extends keyof Store>(key: K, fn: (val: Store[K])=>void){
     this.instance.events.listen(`ludic:config:set:${key}`, fn)
     fn(this.store[key])
   }
