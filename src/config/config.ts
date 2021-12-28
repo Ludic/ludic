@@ -10,7 +10,7 @@ export default class LudicConfig<Store extends object=object> {
 
   constructor(instance: LudicConstructor, config?: Store){
     this.instance = instance
-    Object.assign({}, this.store, config ?? {})
+    this.store = Object.assign({}, this.store, config ?? {})
     this.parseTypes()
   }
 
