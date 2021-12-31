@@ -21,20 +21,23 @@ export default class EventBus {
     this.listeners.get(name)?.delete(fn)
   }
 
-
   notify(name: string, data?: any, worker?: Worker|MessagePort|string){
     this.listeners.get(name)?.forEach((fn)=>{
       fn(data)
     })
     if(worker != null){
-      if(typeof worker === 'string'){
-        if(this.instance.isWorker){
-          (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port2.postMessage({ name, data, })
+      try {
+        if(typeof worker === 'string'){
+          if(this.instance.isWorker){
+            (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port2.postMessage({ name, data, })
+          } else {
+            (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port1.postMessage({ name, data, })
+          }
         } else {
-          (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port1.postMessage({ name, data, })
+          worker.postMessage({ name, data, })
         }
-      } else {
-        worker.postMessage({ name, data, })
+      } catch (error) {
+        console.error(name, error)
       }
     }
   }

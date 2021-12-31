@@ -188,7 +188,6 @@ export class LudicInstance {
         if(data){
           if(data.name === 'ludic:canvas'){
             Ludic.canvas = new Canvas(data.data.canvas)
-            console.log('load canvas')
             resolve(true)
           } else if (data.name === 'ludic:worker:init'){
             this.workerPort = ports[0]
@@ -197,6 +196,9 @@ export class LudicInstance {
             }
             // this.workerPort.postMessage('from worker port')
           }
+          //  else {
+          //   console.log('worker message', data)
+          // }
         }
       })
     } else {

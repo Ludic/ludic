@@ -38,6 +38,9 @@ export { default as FPSPlugin } from './utils/fps'
 // Events
 export * from './events/EventBus'
 
+// Worker
+export * from './worker/DataBus'
+
 export default Ludic
 
 declare global {
