@@ -184,16 +184,18 @@ export class LudicInstance {
       this.readyPromise = new Promise((res)=>{
         resolve = res
       })
+      let canvasInitialized = false
+      let workerInitialized = false
       self.addEventListener('message', ({data, ports})=>{
         if(data){
           if(data.name === 'ludic:canvas'){
             Ludic.canvas = new Canvas(data.data.canvas)
-            resolve(true)
           } else if (data.name === 'ludic:worker:init'){
             this.workerPort = ports[0]
             this.workerPort.onmessage = (e)=>{
               Ludic.events.notify(e.data.name, e.data.data)
             }
+            resolve(true)
             // this.workerPort.postMessage('from worker port')
           }
           //  else {

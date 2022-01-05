@@ -51,7 +51,7 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
     if(!app.isWorker && this.workerName == null){
       console.warn('ludic: data bus needs a worker name')
     }
-    const worker = this.workerName ?? app.$instance.workerPort
+    const worker = app.isWorker ? app.$instance.workerPort : this.workerName
 
     this.store = new Proxy({}, {
       set(target, prop, value, receiver){
@@ -79,6 +79,7 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
 
         // initial value
         if(!syncing){
+          console.log('send initial value', prop, val.value, 'worker:', app.isWorker)
           app.events.notify('ludic:data:sync', {
             key: prop,
             value: val.value,
@@ -97,9 +98,15 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
     app.events.listen('ludic:data:sync', (event: DataBusSyncEvent)=>{
       syncing = true
       if(!(event.key in this.store)){
+        console.log('create ref', event.key, event.value, 'worker:', app.isWorker)
         this.store[event.key] = event.value
       }
-      this.store[event.key].value = event.value
+      if(!app.isWorker){
+        console.log('write value', event.key, event.value, this.store[event.key]?.value, 'worker:', app.isWorker, event.key in this.store)
+      }
+      if(event.value !== undefined){
+        this.store[event.key].value = event.value
+      }
       syncing = false
     })
 
