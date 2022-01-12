@@ -41,6 +41,9 @@ export * from './events/EventBus'
 // Worker
 export * from './worker/DataBus'
 
+// reactivity
+export * from './reactivity/reactivity'
+
 export default Ludic
 
 declare global {

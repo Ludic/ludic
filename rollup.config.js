@@ -32,5 +32,8 @@ export default {
   plugins: [
     typescript(),
     resolve(),
-  ]
+  ],
+  external: [
+    'vue',
+  ],
 };
