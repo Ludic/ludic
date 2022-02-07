@@ -1,6 +1,6 @@
 {
   "name": "@ludic/ludic",
-  "version": "0.0.4",
+  "version": "1.0.1",
   "description": "Typescript Game Engine",
   "main": "dist/ludic.umd.js",
   "module": "dist/ludic.es.js",
@@ -18,7 +18,7 @@
   },
   "files": [
     "dist",
-    "src"
+    "README*"
   ],
   "repository": {
     "type": "git",
