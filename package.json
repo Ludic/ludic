@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/Ludic/ludic#readme",
   "dependencies": {
-    "@ludic/ein": "github:Ludic/ein",
+    "@ludic/ein": "dev",
     "@vue/reactivity": "^3.2.26"
   },
   "devDependencies": {
