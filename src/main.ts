@@ -41,8 +41,8 @@ export * from './events/EventBus'
 // Worker
 export * from './worker/DataBus'
 
-// reactivity
-export * from './reactivity/reactivity'
+// re-export ein
+export * from '@ludic/ein'
 
 export default Ludic
 

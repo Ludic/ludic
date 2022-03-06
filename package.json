@@ -31,8 +31,7 @@
   },
   "homepage": "https://github.com/Ludic/ludic#readme",
   "dependencies": {
-    "@ludic/ein": "dev",
-    "@vue/reactivity": "^3.2.26"
+    "@ludic/ein": "dev"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^8.0.0",

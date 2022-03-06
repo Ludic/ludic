@@ -1,5 +1,5 @@
 import { LudicConstructor, LudicPluginClass, LudicPluginFunction, LudicWorker } from '../core/app'
-import { isRef, ref, effect, Ref, ToRef, ToRefs, UnwrapRef, TrackOpTypes } from '@vue/reactivity'
+import { isRef, toRaw, ref, effect, Ref, ToRef, ToRefs, UnwrapRef, TrackOpTypes } from '@ludic/ein'
 
 export interface DataBusSyncEvent {
   key: string
@@ -10,6 +10,7 @@ export interface DataBusOptions {
   reactivity?: {
     ref: typeof ref,
     effect: typeof effect,
+    toRaw: typeof toRaw,
   }
 }
 
@@ -33,7 +34,12 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
     return this.reactivity?.ref || ref
   }
   private get effect(): typeof effect {
+    console.log('using effect from', this.reactivity?.effect ? 'reactivity' : 'import')
     return this.reactivity?.effect || effect
+  }
+  private get toRaw(): typeof toRaw {
+    console.log('using toRaw from', this.reactivity?.toRaw ? 'reactivity' : 'import')
+    return this.reactivity?.toRaw || toRaw
   }
 
   watch<K extends keyof Store>(prop: K, cb: (val: UnwrapRef<Store[K]>)=>void){
@@ -80,6 +86,7 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
           : bus.ref(value)
 
         const e = bus.effect(()=>{
+          console.log('getter', app.isWorker ? 'worker' : 'main', prop)
           return val.value
         }, {
           scheduler(...args){
@@ -90,12 +97,12 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
               } as DataBusSyncEvent, getWorker())
             }
           },
-          // onTrack(event){
-          //   console.log('on track from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
-          // },
-          // onTrigger(event){
-          //   console.log('on trigger from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
-          // },
+          onTrack(event){
+            console.log('on track from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
+          },
+          onTrigger(event){
+            console.log('on trigger from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
+          },
         })
 
         // set the value
@@ -103,9 +110,11 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
 
         // initial value
         if(!syncing){
+          console.log('notify', prop, bus.toRaw(val.value))
           app.events.notify('ludic:data:sync', {
             key: prop,
-            value: val.value,
+            value: bus.toRaw(val.value),
+            // value: val.value,
           } as DataBusSyncEvent, getWorker())
         }
 

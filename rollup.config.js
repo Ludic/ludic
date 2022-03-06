@@ -34,6 +34,6 @@ export default {
     resolve(),
   ],
   external: [
-    'vue',
+    'vue'
   ],
 };
