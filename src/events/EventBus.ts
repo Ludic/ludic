@@ -34,7 +34,6 @@ export default class EventBus {
             (this.instance.workers?.[`$${worker}`] as unknown as LudicWorker).channel.port1.postMessage({ name, data, })
           }
         } else {
-          // console.log('postMessage', name, data)
           worker.postMessage({ name, data, })
         }
       } catch (error) {

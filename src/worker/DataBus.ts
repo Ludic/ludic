@@ -1,5 +1,5 @@
 import { LudicConstructor, LudicPluginClass, LudicPluginFunction, LudicWorker } from '../core/app'
-import { isRef, toRaw, ref, effect, Ref, ToRef, ToRefs, UnwrapRef, TrackOpTypes } from '@ludic/ein'
+import { isRef, toRaw, ref, effect, Ref, ToRef, ToRefs, UnwrapRef, TrackOpTypes, watch, ReactiveEffectRunner, isReactive, traverse } from '@ludic/ein'
 
 export interface DataBusSyncEvent {
   key: string
@@ -22,6 +22,7 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
   private delayedWatchers
 
   private reactivity: DataBusOptions['reactivity']|undefined
+  private effectRunners: Map<string|symbol, ReactiveEffectRunner<any>> = new Map()
 
   constructor(workerName?: string, options?: DataBusOptions){
     this.workerName = workerName
@@ -31,14 +32,15 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
 
   // reactivity abstractions
   private get ref(): typeof ref {
+    // console.log('using ref from', this.reactivity?.effect ? 'reactivity' : 'import')
     return this.reactivity?.ref || ref
   }
   private get effect(): typeof effect {
-    console.log('using effect from', this.reactivity?.effect ? 'reactivity' : 'import')
+    // console.log('using effect from', this.reactivity?.effect ? 'reactivity' : 'import')
     return this.reactivity?.effect || effect
   }
   private get toRaw(): typeof toRaw {
-    console.log('using toRaw from', this.reactivity?.toRaw ? 'reactivity' : 'import')
+    // console.log('using toRaw from', this.reactivity?.toRaw ? 'reactivity' : 'import')
     return this.reactivity?.toRaw || toRaw
   }
 
@@ -46,13 +48,22 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
     // @ts-ignore
     const value: Ref<any> = this.store[prop] ?? ((this.store[prop] = null) || this.store[prop])
 
+    // console.log('watch', prop)
     const e = this.effect(()=>{
+      // console.log('watcher getter', prop, value)
       return value.value
     }, {
       lazy: false,
       scheduler: ()=>{
+        // console.log('watcher scheduler', prop, value.value)
         cb(value.value)
-      }
+      },
+      // onTrack(event){
+      //   console.log('on track from', 'watcher', prop, value.value, event)
+      // },
+      // onTrigger(event){
+      //   console.log('on trigger from', 'watcher', prop, value.value, event)
+      // },
     })
   }
 
@@ -70,6 +81,7 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
   }
 
   install(app: LudicConstructor&{data: any}) {
+    // console.log('install databus', app.isWorker ? 'worker' : 'main')
     let syncing = false
 
     if(!app.isWorker && this.workerName == null){
@@ -80,37 +92,39 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
 
     this.store = new Proxy({}, {
       set(this: undefined, target, prop, value, receiver){
-        const _isRef = isRef(value)
-        const val: Ref<any> = _isRef
-          ? value
-          : bus.ref(value)
+        const val: Ref<any> = isRef(value)
+          ? value // ()=>value.value
+          : bus.ref(value) // ()=>value
 
-        const e = bus.effect(()=>{
-          console.log('getter', app.isWorker ? 'worker' : 'main', prop)
-          return val.value
+        const runner = bus.effect(()=>{
+          const v = val.value
+          // console.log('getter', app.isWorker ? 'worker' : 'main', prop, val, isRef(val), isReactive(val))
+          // console.log(' >', isRef(v), isReactive(v))
+          return traverse(v)
         }, {
           scheduler(...args){
+            // console.log('notify', prop, val.value, app.isWorker ? 'worker' : 'main')
             if(!syncing){
               app.events.notify('ludic:data:sync', {
                 key: prop,
-                value: val.value,
+                value: bus.toRaw(val.value),
               } as DataBusSyncEvent, getWorker())
             }
           },
-          onTrack(event){
-            console.log('on track from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
-          },
-          onTrigger(event){
-            console.log('on trigger from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
-          },
+          // onTrack(event){
+          //   console.log('on track from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
+          // },
+          // onTrigger(event){
+          //   console.log('on trigger from', app.isWorker ? 'worker' : 'main', prop, val.value, event)
+          // },
         })
+        bus.effectRunners.set(prop, runner)
 
         // set the value
         const ret = Reflect.set(target, prop, val, receiver)
 
         // initial value
         if(!syncing){
-          console.log('notify', prop, bus.toRaw(val.value))
           app.events.notify('ludic:data:sync', {
             key: prop,
             value: bus.toRaw(val.value),
@@ -128,6 +142,7 @@ export class DataBus<Store extends object={[key: string]: any}> implements Ludic
 
 
     app.events.listen('ludic:data:sync', (event: DataBusSyncEvent)=>{
+      // console.log('on sync', app.isWorker ? 'worker' : 'main', event.key, event.value)
       syncing = true
       if(!(event.key in this.store)){
         this.store[event.key] = event.value
