@@ -3,14 +3,11 @@ import { FullGamepadState, GamepadState, Vector2 } from '@src/main'
 
 export class InputManager {
   inputControllers: InputController[] = []
-  private inputActions: {
-    [key: string]: {
-      value: any
-      getter: InputActionGetter<any>
-    }
+  private inputActionConfigs: {
+    [key: string]: InputActionConfig<any>
   } = {}
   // private inputActions: {[key: string]: InputActionConfig} = {}
-  actions: {[key: string]: any} = {}
+  actionsCache: {[action: string]: {[id: number|string]: any}} = {}
   active: boolean = true
 
   constructor(controllers: InputController[] = []) {
@@ -22,20 +19,24 @@ export class InputManager {
     this.inputControllers.push(controller)
   }
 
-  registerAction<V>(key: string, getter: InputActionGetter<any>): void
-  registerAction<V>(key: string, getter: InputActionGetter<V>, value: V): void
-  registerAction<V>(key: string, getter: InputActionGetter<V>, value?: V){
-    this.inputActions[key] = {
-      getter,
-      value,
-    }
+  // registerAction<V>(key: string, getter: InputActionGetter<any>): void
+  // registerAction<V>(key: string, getter: InputActionGetter<V>, value: V): void
+  registerAction<V>(action: string, config: InputActionConfig<V>){
+    this.inputActionConfigs[action] = config
   }
   // registerAction(key: string, config: InputActionConfig){
   //   this.inputActions[key] = config
   // }
 
-  readAction<T>(key: string): T {
-    return this.actions[key] as T
+  readAction<T>(action: string, id: number|string=0): T {
+    // TODO: impl cache and reset cache every update
+    // const cache = this.actionsCache[action] ?? (this.actionsCache[action] = {})
+    // if(cache[id]){
+    //   return cache[id]
+    // }
+    const value = this.inputActionConfigs[action].value
+    const retVal = this.inputActionConfigs[action].get(this, value, id)
+    return retVal !== undefined ? retVal : value
   }
 
   // initTouch(){
@@ -62,9 +63,10 @@ export class InputManager {
       this.inputControllers.forEach((controller)=>{
         controller.update && controller.update(time, delta)
       })
-      Object.entries(this.inputActions).forEach(([key, {getter, value}])=>{
-        this.actions[key] = getter(this, value)
-      })
+      // Object.entries(this.inputActionConfigs).forEach(([key, config])=>{
+      //   const value = config.get(this, value)
+      //   this.actions[key] = getter(this, value)
+      // })
     }
     // Object.entries(this.inputActions).forEach(([key, config])=>{
     //   const state: InputState<any>|undefined = this[config.binding]
@@ -134,21 +136,12 @@ export interface InputController {
 }
 
 export interface InputActionGetter<V> {
-  (input: InputManager, value: V): V
+  (input: InputManager, value: V, id: number|string): V|void
 }
 
-export interface InputActionConfig {
-  type: 'Vector3'|'Vector2'|'value',
-  binding: string,
-  values: {
-    [key: string]: InputActionButton
-  }
-  // buttons: InputActionButton[]
-}
-export interface InputActionButton {
-  button: string
-  action: string
-  negative?: boolean
+export interface InputActionConfig<V> {
+  value: V
+  get: InputActionGetter<V>
 }
 
 const getActionValue = function(type: string){
