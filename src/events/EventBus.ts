@@ -44,7 +44,7 @@ export default class EventBus {
    * @param data event data
    * @param worker optionally send this event to a worker
    */
-  notify(name: string, data?: any, worker?: Worker|MessagePort|string){
+  notify<D=any>(name: string, data?: D, worker?: Worker|MessagePort|string){
     this.listeners.get(name)?.forEach((fn)=>{
       fn(data)
     })
