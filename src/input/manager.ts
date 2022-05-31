@@ -1,17 +1,31 @@
 import { Pool } from '@ludic/ein'
-import { FullGamepadState, GamepadState, Vector2 } from '@src/main'
+// import { FullGamepadState, GamepadState, Vector2 } from '@src/main'
 
 export class InputManager {
   inputControllers: InputController[] = []
-  private inputActionConfigs: {
-    [key: string]: InputActionConfig<any>
+  private inputActions: {
+    [key: string]: InputAction<unknown>
   } = {}
   // private inputActions: {[key: string]: InputActionConfig} = {}
   actionsCache: {[action: string]: {[id: number|string]: any}} = {}
   active: boolean = true
 
+  private mode: string = 'value'
+
   constructor(controllers: InputController[] = []) {
     controllers.forEach(c => this.addController(c))
+  }
+
+  update(time: number, delta: number){
+    if(this.active){
+      this.inputControllers.forEach((controller)=>{
+        controller.update && controller.update(time, delta)
+      })
+      // update all of the actions
+      // Object.values(this.inputActions).forEach((action)=>{
+      //   action.update(this.mode, this)
+      // })
+    }
   }
 
   addController(controller: InputController){
@@ -21,77 +35,36 @@ export class InputManager {
 
   // registerAction<V>(key: string, getter: InputActionGetter<any>): void
   // registerAction<V>(key: string, getter: InputActionGetter<V>, value: V): void
-  registerAction<V>(action: string, config: InputActionConfig<V>){
-    this.inputActionConfigs[action] = config
+  registerAction<V>(name: string, config: InputActionConfig<V>){
+    this.inputActions[name] = new InputAction(config)
   }
   // registerAction(key: string, config: InputActionConfig){
   //   this.inputActions[key] = config
   // }
 
-  readAction<T>(action: string, id: number|string=0): T {
+  readAction<T>(name: string, id: number|string=0): T {
     // TODO: impl cache and reset cache every update
     // const cache = this.actionsCache[action] ?? (this.actionsCache[action] = {})
     // if(cache[id]){
     //   return cache[id]
     // }
-    const value = this.inputActionConfigs[action].value
-    const retVal = this.inputActionConfigs[action].get(this, value, id)
-    return retVal !== undefined ? retVal : value
+    // const config: InputActionConfig<T> = this.inputActionConfigs[action]
+    // const value = config.value
+    // let newValue: T|undefined = undefined
+    // if(typeof config.get === 'function'){
+    //   newValue = config.get(this, value, id)
+    // } else {
+    //   Object.entries(config.get)
+    // }
+    // if(newValue !== undefined){
+    //   config.value = newValue
+    // }
+    // return newValue !== undefined ? newValue : value
+    return this.inputActions[name].compute(this.mode, this, id) as T
   }
 
-  // initTouch(){
-  //   // touch events
-  //   this.canvas.addEventListener('touchstart', function(evt) {
-  //     this.onMouseEvent('touchStart',this.canvas.el,evt)
-  //   }.bind(this), false)
-
-  //   this.canvas.addEventListener('touchend', function(evt) {
-  //     this.onMouseEvent('touchEnd',this.canvas.el,evt)
-  //   }.bind(this), false)
-
-  //   this.canvas.addEventListener('touchmove', function(evt) {
-  //     this.onMouseEvent('touchMove',this.canvas.el,evt)
-  //   }.bind(this), false)
-
-  //   this.canvas.addEventListener('touchcancel', function(evt) {
-  //     this.onMouseEvent('touchCancel',this.canvas,evt)
-  //   }.bind(this), false)
-  // }
-
-  update(time: number, delta: number){
-    if(this.active){
-      this.inputControllers.forEach((controller)=>{
-        controller.update && controller.update(time, delta)
-      })
-      // Object.entries(this.inputActionConfigs).forEach(([key, config])=>{
-      //   const value = config.get(this, value)
-      //   this.actions[key] = getter(this, value)
-      // })
-    }
-    // Object.entries(this.inputActions).forEach(([key, config])=>{
-    //   const state: InputState<any>|undefined = this[config.binding]
-    //   const value = getActionValue(config.type)
-    //   if(state != null && value != null){
-    //     Object.entries(config.values).forEach(([valueKey, btn])=>{
-    //       const button = state.get(btn.button)
-    //       // const valueKey = btn.value ?? 'value'
-    //       const val = button[btn.action]
-    //       // console.log(btn.button, button, btn.action, val)
-    //       if(btn.button == 'KeyW'){
-    //         console.log(val)
-    //         if(typeof val === 'boolean'){
-    //           value[valueKey] = val === true ? 1 : 0
-    //         }
-    //         console.log(value)
-    //       }
-
-    //       // if(btn.negative){
-    //       //   value[valueKey] = -value[valueKey]
-    //       // }
-    //     })
-    //   }
-    //   this.actions[key] = value
-    // })
+  setMode(mode: string){
+    this.mode = mode
   }
 
 }
@@ -135,13 +108,47 @@ export interface InputController {
   transferToWorker?(worker: Worker): void
 }
 
-export interface InputActionGetter<V> {
-  (input: InputManager, value: V, id: number|string): V|void
+// export interface InputActionGetter<V> extends Function {
+//   (input: InputManager, value: V, id: number|string): V|void
+// }
+export type InputActionGetter<V> = (input: InputManager, value: V, id: number|string) => V|void
+export interface InputActionGetterMap<V> {
+  [key: string]: InputActionGetter<V>
 }
 
 export interface InputActionConfig<V> {
   value: V
-  get: InputActionGetter<V>
+  get: InputActionGetter<V>|InputActionGetterMap<V>
+}
+
+export class InputAction<V> {
+  value: V
+  private getters: InputActionGetterMap<V>
+  constructor(config: InputActionConfig<V>){
+    this.value = config.value
+    if(typeof config.get === 'function'){
+      this.getters = {
+        value: config.get,
+      }
+    } else {
+      this.getters = config.get
+    }
+  }
+
+  compute(mode: string, input: InputManager, id: number|string){
+    const value = this.getters[mode](input, this.value, id)
+    if(value !== undefined){
+      this.value = value
+    }
+    return this.value
+  }
+
+  // update(mode: string, input: InputManager){
+  //   const value = this.getters[mode](input, this.value, 0)
+  //   if(value !== undefined){
+  //     this.value = value
+  //   }
+  // }
 }
 
 const getActionValue = function(type: string){

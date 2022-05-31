@@ -4,8 +4,10 @@ export interface GamepadMapConfig {
   name: string
   buttons: {[K in GamepadButtonName]: number}
   axes: {[K in GamepadAxisName]: number}
-  test: (gamepad: Gamepad) => boolean
   deadzone: number
+  test?: string|RegExp|((gamepad: Gamepad) => boolean)
+  vendor?: string[]
+  product?: string[]
 }
 export interface GamepadMap {
   [key: string]: GamepadMapConfig
@@ -46,9 +48,8 @@ const MAPS: GamepadMap = {
     buttons: makeMap(['cross', 'circle', 'square', 'triangle', 'l1', 'r1', 'l2', 'r2', 'select', 'start', 'l3', 'r3', 'up', 'down', 'left', 'right', 'home', 'extra']),
     axes: makeMap(['lx', 'ly', 'rx', 'ry']),
     deadzone: 0.08,
-    test(gamepad){
-      return gamepad.id.includes('Xbox Wireless Controller')
-    }
+    vendor: ['045e'],
+    product: ['0b13'],
   },
 }
 export default MAPS

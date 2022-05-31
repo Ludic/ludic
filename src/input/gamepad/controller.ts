@@ -228,6 +228,8 @@ export default class GamepadController implements InputController {
 
   active = true
 
+  private gamepadIdRegEx = new RegExp('Vendor: ([0-9a-f]{4}) Product: ([0-9a-f]{4})')
+
   constructor() {
     this.gamepadStates = [
       new GamepadState(0),
@@ -277,7 +279,21 @@ export default class GamepadController implements InputController {
   }
 
   findMappingForGamepad(gamepad: Gamepad){
-    return Object.values(GamepadMaps).find((mapping) => mapping.test(gamepad))
+    return Object.values(GamepadMaps).find((mapping) => {
+      if(mapping.vendor?.length && mapping.product?.length){
+        const [_, vendor, product] = this.gamepadIdRegEx.exec(gamepad.id) ?? []
+        const hasVendor = mapping.vendor.some(v => v == vendor)
+        const hasProduct = mapping.product.some(p => p == product)
+        return hasVendor && hasProduct
+      } else if(mapping.test != null){
+        if(typeof mapping.test === 'function'){
+          return mapping.test(gamepad)
+        } else {
+          const re = new RegExp(mapping.test)
+          return re.test(gamepad.id)
+        }
+      }
+    })
   }
 
   addMapping(name: string, mapping: GamepadMapConfig){
