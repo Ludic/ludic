@@ -39,6 +39,9 @@ export interface LudicOptions {
   update?: UpdateFunction
   start?: boolean
   config?: string|LudicConfig|{[key: string]: any}
+  load?: {
+    [key: string]: PromiseLike<any> // delays app init until all promises in this array are resolve
+  }
 }
 
 // export type LudicOptions = ConstructorArgs
@@ -92,6 +95,7 @@ export class LudicInstance {
   private readyPromise: Promise<boolean>
   observer: PerformanceObserver
   workerPort: MessagePort
+  loaded: {[key: string]: any}
 
   static registerUpdateFunction(fn: UpdateFunction){
     this.$instance.updateFunctions.push(fn)
@@ -101,11 +105,18 @@ export class LudicInstance {
     if(Ludic.$instance) return Ludic.$instance
     Ludic.$instance = this
 
-    let {el, plugins=[], inputControllers=[], globals={}, worker=false} = opts
+    let {el, plugins=[], inputControllers=[], globals={}, worker=false, load={}} = opts
 
     if(el != null){
       Ludic.canvas = new Canvas(el)
     }
+
+    // const load
+    const readyPromises: PromiseLike<any>[] = Object.entries(load).map(([key, promise])=>{
+      return promise.then((value)=>{
+        this.loaded[key] = value
+      })
+    })
 
     LudicInstance.isWorker = worker
     LudicInstance.input = new InputManager(inputControllers)
@@ -181,9 +192,9 @@ export class LudicInstance {
     // listeners for initialization and data transfer.
     if(opts.worker && typeof self === 'object'){
       let resolve;
-      this.readyPromise = new Promise((res)=>{
+      readyPromises.push(new Promise((res)=>{
         resolve = res
-      })
+      }))
       let canvasInitialized = false
       let workerInitialized = false
       self.addEventListener('message', ({data, ports})=>{
@@ -203,8 +214,7 @@ export class LudicInstance {
           // }
         }
       })
-    } else {
-      this.readyPromise = Promise.resolve(true)
+
     }
 
     plugins.forEach(p => this.install(p))
@@ -231,8 +241,12 @@ export class LudicInstance {
     this.observer.observe({entryTypes: ['measure']});
 
     // initialize everything
-    this.readyPromise.then(()=>{
+    this.readyPromise = Promise.allSettled(readyPromises).then(()=>{
       this.init()
+      return true
+    }, ()=>{
+      // TODO: throw error and/or error event for bad initialization
+      return false
     })
 
     if(opts.start){
